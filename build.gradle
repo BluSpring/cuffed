@@ -104,6 +104,8 @@ dependencies {
     
     compileOnly fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:5377916") // Iron spell n' spellbooks
     compileOnly fg.deobf("curse.maven:ars-nouveau-401955:5371927") // Ars Nouveau
+    compileOnly fg.deobf("curse.maven:mana-and-artifice-406360:6847805") // Mana and Artifice
+    compileOnly fg.deobf("curse.maven:knights-of-britannia-1111064:7377347") // Knights of Britannia
 
     compileOnly fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6654541") // TacZ
 

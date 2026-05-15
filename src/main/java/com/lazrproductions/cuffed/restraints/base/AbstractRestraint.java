@@ -10,6 +10,8 @@ import javax.annotation.Nullable;
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.compat.ArsNouveauCompat;
 import com.lazrproductions.cuffed.compat.IronsSpellsnSpellbooksCompat;
+import com.lazrproductions.cuffed.compat.KnightsOfBritanniaCompat;
+import com.lazrproductions.cuffed.compat.ManaAndArtificeCompat;
 import com.lazrproductions.cuffed.entity.animation.ArmRestraintAnimationFlags;
 import com.lazrproductions.cuffed.entity.animation.LegRestraintAnimationFlags;
 import com.lazrproductions.cuffed.init.ModEnchantments;
@@ -157,6 +159,8 @@ public abstract class AbstractRestraint {
                 double drainPercentage = 0.005D; // 0.5% per tick, so drains 10% per second TODO: make this a config option
                 if(CuffedMod.ArsNouveauInstalled) ArsNouveauCompat.DrainMana(player, drainPercentage);
                 if(CuffedMod.IronsSpellsnSpellbooksInstalled) IronsSpellsnSpellbooksCompat.DrainMana(player, drainPercentage);
+                if(CuffedMod.ManaAndArtificeInstalled) ManaAndArtificeCompat.DrainMana(player, drainPercentage);
+                //if(CuffedMod.KnightsOfBritanniaInstalled) KnightsOfBritanniaCompat.DrainMana(player, drainPercentage); Hold off on this
             }
         }
     }

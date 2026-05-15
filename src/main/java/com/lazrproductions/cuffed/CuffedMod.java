@@ -20,6 +20,8 @@ import com.lazrproductions.cuffed.compat.BetterCombatCompat;
 import com.lazrproductions.cuffed.compat.ElenaiDodge2Compat;
 import com.lazrproductions.cuffed.compat.EpicFightCompat;
 import com.lazrproductions.cuffed.compat.IronsSpellsnSpellbooksCompat;
+import com.lazrproductions.cuffed.compat.KnightsOfBritanniaCompat;
+import com.lazrproductions.cuffed.compat.ManaAndArtificeCompat;
 import com.lazrproductions.cuffed.compat.ParcoolCompat;
 import com.lazrproductions.cuffed.compat.PlayerReviveCompat;
 import com.lazrproductions.cuffed.compat.SimpleVoiceChatCompat;
@@ -53,6 +55,7 @@ import com.lazrproductions.cuffed.items.TrayItem;
 import com.lazrproductions.cuffed.items.base.AbstractRestraintItem;
 import com.lazrproductions.cuffed.restraints.RestraintAPI;
 import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
+import com.mna.ManaAndArtifice;
 
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -98,6 +101,8 @@ public class CuffedMod {
     public static boolean ParcoolInstalled = false;
     public static boolean ElenaiDodge2Installed = false;
     public static boolean IronsSpellsnSpellbooksInstalled = false;
+    public static boolean ManaAndArtificeInstalled = false;
+    public static boolean KnightsOfBritanniaInstalled = false;
     public static boolean ArsNouveauInstalled = false;
     public static boolean PlayerReviveInstalled = false;
     public static boolean VoiceChatInstalled = false;
@@ -152,6 +157,14 @@ public class CuffedMod {
             ArsNouveauInstalled = true;
             ArsNouveauCompat.load();
         }
+        if (ModList.get().isLoaded("mna")) {
+            ManaAndArtificeInstalled = true;
+            ManaAndArtificeCompat.load();
+        }
+        // if (ModList.get().isLoaded("knights_of_britannia")) {
+        //     KnightsOfBritanniaInstalled = true;
+        //     KnightsOfBritanniaCompat.load();
+        // }
         if (ModList.get().isLoaded("playerrevive")) {
             PlayerReviveInstalled = true;
             PlayerReviveCompat.load();

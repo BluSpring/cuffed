@@ -33,6 +33,7 @@ import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.commands.TeleportCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -105,7 +106,9 @@ public class RestrainableCapability implements IRestrainableCapability {
             Vec3 escortPivot = MathUtilities.GetPositionFromTowardsRotationInDegrees(playerEscortingMe.position(), playerEscortingMe.getYRot() + 90, 0, 0.45f);
             Vec3 escortTarget = MathUtilities.GetPositionFromTowardsRotationInDegrees(escortPivot, playerEscortingMe.getYRot(), 0, 0.9f);
             
-            player.connection.teleport(escortTarget.x(), escortTarget.y(), escortTarget.z(), playerEscortingMe.getYRot(), player.getXRot(), RelativeMovement.ROTATION);
+            //TODO: this implementation is desynced
+            //player.connection.teleport(escortTarget.x(), escortTarget.y(), escortTarget.z(), playerEscortingMe.getYRot(), player.getXRot(), RelativeMovement.ROTATION);
+            player.teleportTo((ServerLevel)playerEscortingMe.level(), escortTarget.x(), escortTarget.y(), escortTarget.z(), playerEscortingMe.getYRot(), player.getXRot());
 
             if (!isRestrained()) {
                 CuffedAPI.Capabilities.getRestrainableCapability(playerEscortingMe).stopEscortingPlayer();
