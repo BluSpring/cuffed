@@ -1,6 +1,6 @@
 package com.lazrproductions.cuffed.blocks;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,32 +45,32 @@ public class ReinforcedBarsGappedBlock extends Block implements SimpleWaterlogge
     }
 
     @Override
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos,
-            @Nonnull CollisionContext context) {
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+            @NotNull CollisionContext context) {
         if (state.getValue(FACING) == Direction.EAST || state.getValue(FACING) == Direction.WEST)
             return SHAPE_EW;
         return SHAPE_NS;
     }
 
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, WATERLOGGED);
     }
 
-    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection())
                 .setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 
-    public FluidState getFluidState(@Nonnull BlockState state) {
+    public FluidState getFluidState(@NotNull BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
     @Deprecated
-    public BlockState updateShape(@Nonnull BlockState blockState, @Nonnull Direction direction,
-            @Nonnull BlockState facingState,
-            @Nonnull LevelAccessor levelAccessor, @Nonnull BlockPos currentPos, @Nonnull BlockPos facingPos) {
+    public BlockState updateShape(@NotNull BlockState blockState, @NotNull Direction direction,
+            @NotNull BlockState facingState,
+            @NotNull LevelAccessor levelAccessor, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         if (blockState.getValue(WATERLOGGED)) {
             levelAccessor.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
         }

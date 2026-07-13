@@ -1,6 +1,12 @@
 package com.lazrproductions.cuffed.blocks;
 
+import java.util.Optional;
+
 import com.lazrproductions.cuffed.blocks.entity.BunkBlockEntity;
+import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -19,7 +25,11 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.CollisionGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoubleBlockCombiner;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,11 +44,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.apache.commons.lang3.ArrayUtils;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Optional;
 
 
 @SuppressWarnings("deprecation")
@@ -75,8 +80,8 @@ public class BunkBlock extends HorizontalDirectionalBlock implements EntityBlock
         return blockstate.getBlock() instanceof BunkBlock ? blockstate.getValue(FACING) : null;
     }
 
-    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
-            @Nonnull Player interactor, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
+    public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+            @NotNull Player interactor, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (level.isClientSide) {
             return InteractionResult.CONSUME;
         } else {
@@ -127,12 +132,12 @@ public class BunkBlock extends HorizontalDirectionalBlock implements EntityBlock
         return level.dimensionType().bedWorks();
     }
 
-    public void fallOn(@Nonnull Level level, @Nonnull BlockState state, @Nonnull BlockPos pos, @Nonnull Entity entity,
+    public void fallOn(@NotNull Level level, @NotNull BlockState state, @NotNull BlockPos pos, @NotNull Entity entity,
             float f) {
         super.fallOn(level, state, pos, entity, f * 0.5F);
     }
 
-    public void updateEntityAfterFallOn(@Nonnull BlockGetter getter, @Nonnull Entity entity) {
+    public void updateEntityAfterFallOn(@NotNull BlockGetter getter, @NotNull Entity entity) {
         if (entity.isSuppressingBounce()) {
             super.updateEntityAfterFallOn(getter, entity);
         } else {
@@ -149,9 +154,9 @@ public class BunkBlock extends HorizontalDirectionalBlock implements EntityBlock
         }
     }
 
-    public BlockState updateShape(@Nonnull BlockState state, @Nonnull Direction direction,
-            @Nonnull BlockState otherState, @Nonnull LevelAccessor level, @Nonnull BlockPos pos,
-            @Nonnull BlockPos otherPos) {
+    public BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction,
+            @NotNull BlockState otherState, @NotNull LevelAccessor level, @NotNull BlockPos pos,
+            @NotNull BlockPos otherPos) {
         if (direction == getNeighbourDirection(state.getValue(PART), state.getValue(FACING))) {
             return otherState.is(this) && otherState.getValue(PART) != state.getValue(PART)
                     ? state.setValue(OCCUPIED, otherState.getValue(OCCUPIED))
@@ -165,8 +170,8 @@ public class BunkBlock extends HorizontalDirectionalBlock implements EntityBlock
         return p_49534_ == BedPart.FOOT ? p_49535_ : p_49535_.getOpposite();
     }
 
-    public void playerWillDestroy(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state,
-            @Nonnull Player player) {
+    public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
+            @NotNull Player player) {
         if (!level.isClientSide && player.isCreative()) {
             BedPart bedpart = state.getValue(PART);
             if (bedpart == BedPart.FOOT) {
@@ -183,7 +188,7 @@ public class BunkBlock extends HorizontalDirectionalBlock implements EntityBlock
     }
 
     @Nullable
-    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
         Direction direction = context.getHorizontalDirection().getCounterClockWise(Axis.Y);
         BlockPos blockpos = context.getClickedPos();
         BlockPos blockpos1 = blockpos.relative(direction);
@@ -198,8 +203,8 @@ public class BunkBlock extends HorizontalDirectionalBlock implements EntityBlock
                 : null;
     }
 
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos,
-            @Nonnull CollisionContext collisionContext) {
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+            @NotNull CollisionContext collisionContext) {
         Direction direction = state.getValue(FACING);
         switch (direction) {
             case NORTH:
@@ -250,16 +255,16 @@ public class BunkBlock extends HorizontalDirectionalBlock implements EntityBlock
         return Optional.empty();
     }
 
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, PART, OCCUPIED);
     }
 
-    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new BunkBlockEntity(pos, state);
     }
 
-    public void setPlacedBy(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state,
-            @Nullable LivingEntity entity, @Nonnull ItemStack stack) {
+    public void setPlacedBy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
+            @Nullable LivingEntity entity, @NotNull ItemStack stack) {
         super.setPlacedBy(level, pos, state, entity, stack);
         if (!level.isClientSide) {
             BlockPos blockpos = pos.relative(state.getValue(FACING));
@@ -270,14 +275,14 @@ public class BunkBlock extends HorizontalDirectionalBlock implements EntityBlock
 
     }
 
-    public long getSeed(@Nonnull BlockState p_49522_, @Nonnull BlockPos p_49523_) {
+    public long getSeed(@NotNull BlockState p_49522_, @NotNull BlockPos p_49523_) {
         BlockPos blockpos = p_49523_.relative(p_49522_.getValue(FACING),
                 p_49522_.getValue(PART) == BedPart.HEAD ? 0 : 1);
         return Mth.getSeed(blockpos.getX(), p_49523_.getY(), blockpos.getZ());
     }
 
-    public boolean isPathfindable(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos,
-            @Nonnull PathComputationType path) {
+    public boolean isPathfindable(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+            @NotNull PathComputationType path) {
         return false;
     }
 

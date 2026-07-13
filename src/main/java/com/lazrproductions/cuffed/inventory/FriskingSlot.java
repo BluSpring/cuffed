@@ -1,6 +1,6 @@
 package com.lazrproductions.cuffed.inventory;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -14,12 +14,12 @@ public class FriskingSlot extends Slot {
     }
 
     @Override
-    public boolean mayPlace(@Nonnull ItemStack p_40231_) {
+    public boolean mayPlace(@NotNull ItemStack p_40231_) {
         return false;
     }
 
     @Override
-    public void onTake(@Nonnull Player player, @Nonnull ItemStack stack) {
+    public void onTake(@NotNull Player player, @NotNull ItemStack stack) {
         super.onTake(player, stack);
     }
 }

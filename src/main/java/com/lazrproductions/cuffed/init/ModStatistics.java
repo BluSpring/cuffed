@@ -1,20 +1,25 @@
 package com.lazrproductions.cuffed.init;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
-import com.lazrproductions.cuffed.restraints.custom.*;
+import com.lazrproductions.cuffed.restraints.custom.FuzzyHandcuffsRestraint;
+import com.lazrproductions.cuffed.restraints.custom.HandcuffsArmsRestraint;
+import com.lazrproductions.cuffed.restraints.custom.HandcuffsLegsRestraint;
+import com.lazrproductions.cuffed.restraints.custom.ShacklesArmsRestraint;
+import com.lazrproductions.cuffed.restraints.custom.ShacklesLegsRestraint;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ModStatistics {
     private static final DeferredRegister<ResourceLocation> REGISTER = DeferredRegister.create(
@@ -75,10 +80,10 @@ public class ModStatistics {
 	}
 
 
-	public static void awardRestraintItemUsed(@Nonnull ServerPlayer player, @Nonnull ItemStack stack) {
+	public static void awardRestraintItemUsed(@NotNull ServerPlayer player, @NotNull ItemStack stack) {
 		player.awardStat(Stats.ITEM_USED.get(stack.getItem()), 1);
 	}
-	public static void awardRestrained(@Nonnull ServerPlayer player, @Nonnull AbstractRestraint restraint) {
+	public static void awardRestrained(@NotNull ServerPlayer player, @NotNull AbstractRestraint restraint) {
 		if(restraint instanceof HandcuffsArmsRestraint)
 			player.awardStat(HANDCUFFS_TIME_RESTRAINED.get(), 1);
 		else if(restraint instanceof FuzzyHandcuffsRestraint)
@@ -90,7 +95,7 @@ public class ModStatistics {
 		else if(restraint instanceof ShacklesLegsRestraint)
 			player.awardStat(LEG_SHACKLES_TIME_RESTRAINED.get(), 1);
 	}
-	public static void awardRestraintBroken(@Nonnull ServerPlayer player, @Nonnull AbstractRestraint restraint) {
+	public static void awardRestraintBroken(@NotNull ServerPlayer player, @NotNull AbstractRestraint restraint) {
 		if(restraint instanceof HandcuffsArmsRestraint)
 			player.awardStat(HANDCUFFS_BROKEN.get(), 1);
 		else if(restraint instanceof FuzzyHandcuffsRestraint)
@@ -102,7 +107,7 @@ public class ModStatistics {
 		else if(restraint instanceof ShacklesLegsRestraint)
 			player.awardStat(LEG_SHACKLES_BROKEN.get(), 1);
 	}
-	public static void awardTimeSpentRestrained(@Nonnull ServerPlayer player, @Nonnull AbstractRestraint restraint) {
+	public static void awardTimeSpentRestrained(@NotNull ServerPlayer player, @NotNull AbstractRestraint restraint) {
 		if(restraint instanceof HandcuffsArmsRestraint)
 			player.awardStat(HANDCUFFS_TIME_SPENT_RESTRAINED.get(), 1);
 		else if(restraint instanceof FuzzyHandcuffsRestraint)

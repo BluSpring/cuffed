@@ -1,6 +1,8 @@
 package com.lazrproductions.cuffed.blocks;
 
 import com.lazrproductions.cuffed.init.ModBlocks;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -11,8 +13,6 @@ import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-
-import javax.annotation.Nonnull;
 
 public class ReinforcedBarsBlock extends IronBarsBlock {
 
@@ -28,12 +28,12 @@ public class ReinforcedBarsBlock extends IronBarsBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(@Nonnull Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@NotNull Builder<Block, BlockState> builder) {
         builder.add(NORTH, EAST, WEST, SOUTH, WATERLOGGED, COLUMN);
     }
 
     @Override
-    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext ctx) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext ctx) {
         Level level = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
 
@@ -53,10 +53,10 @@ public class ReinforcedBarsBlock extends IronBarsBlock {
     }
 
     @Override
-    public BlockState updateShape(@Nonnull BlockState state, @Nonnull Direction updateDirection,
-            @Nonnull BlockState otherState,
-            @Nonnull LevelAccessor level,
-            @Nonnull BlockPos pos, @Nonnull BlockPos otherPos) {
+    public BlockState updateShape(@NotNull BlockState state, @NotNull Direction updateDirection,
+            @NotNull BlockState otherState,
+            @NotNull LevelAccessor level,
+            @NotNull BlockPos pos, @NotNull BlockPos otherPos) {
 
         if (updateDirection == Direction.DOWN || updateDirection == Direction.UP) {
             boolean up = level.getBlockState(pos.above()).is(ModBlocks.REINFORCED_BARS)

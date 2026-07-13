@@ -1,7 +1,14 @@
 package com.lazrproductions.cuffed.cap.base;
 
-import com.lazrproductions.cuffed.restraints.base.*;
+import com.lazrproductions.cuffed.restraints.base.AbstractArmRestraint;
+import com.lazrproductions.cuffed.restraints.base.AbstractHeadRestraint;
+import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
+import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
+import com.lazrproductions.cuffed.restraints.base.RestraintType;
 import com.mojang.blaze3d.platform.Window;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -11,9 +18,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public interface IRestrainableCapability {
 
@@ -106,13 +110,13 @@ public interface IRestrainableCapability {
     @Nullable
     AbstractRestraint getRestraint(RestraintType type);
     /** Set this player's leg restraint without sending any events. */
-    void setHeadRestraintWithoutWarning(@Nonnull ServerPlayer player, @Nullable AbstractHeadRestraint newValue);
+    void setHeadRestraintWithoutWarning(@NotNull ServerPlayer player, @Nullable AbstractHeadRestraint newValue);
     /** Set this player's arm restraint without sending any events. */
-    void setArmRestraintWithoutWarning(@Nonnull ServerPlayer player, @Nullable AbstractArmRestraint newValue);
+    void setArmRestraintWithoutWarning(@NotNull ServerPlayer player, @Nullable AbstractArmRestraint newValue);
     /** Set this player's leg restraint without sending any events. */
-    void setLegRestraintWithoutWarning(@Nonnull ServerPlayer player, @Nullable AbstractLegRestraint newValue);
+    void setLegRestraintWithoutWarning(@NotNull ServerPlayer player, @Nullable AbstractLegRestraint newValue);
     /** Set this player's restraint with the given type without sending any events. */
-    void setRestraintWithoutWarning(@Nonnull ServerPlayer player, @Nonnull AbstractRestraint newValue, RestraintType type);
+    void setRestraintWithoutWarning(@NotNull ServerPlayer player, @NotNull AbstractRestraint newValue, RestraintType type);
 
     //#endregion
 
@@ -121,11 +125,11 @@ public interface IRestrainableCapability {
     /**
      * Start escorting another player, and notify them that they are being escorted.
      */
-    void startEscortingPlayer(@Nonnull ServerPlayer self, @Nonnull ServerPlayer other);
+    void startEscortingPlayer(@NotNull ServerPlayer self, @NotNull ServerPlayer other);
     /**
      * Notify this player that they have started to be escorted..
      */
-    void startGettingEscortedByPlayer(@Nonnull ServerPlayer other);
+    void startGettingEscortedByPlayer(@NotNull ServerPlayer other);
 
     /**
      * Stop escorting who you were, and notify them that they are no longer being escorted.

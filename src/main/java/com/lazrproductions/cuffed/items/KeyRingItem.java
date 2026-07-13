@@ -1,14 +1,23 @@
 package com.lazrproductions.cuffed.items;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
 import com.lazrproductions.cuffed.blocks.CellDoor;
 import com.lazrproductions.cuffed.blocks.SafeBlock;
 import com.lazrproductions.cuffed.blocks.entity.LockableBlockEntity;
 import com.lazrproductions.cuffed.blocks.entity.SafeBlockEntity;
+import com.lazrproductions.cuffed.component.CuffedDataComponents;
+import com.lazrproductions.cuffed.component.KeyData;
 import com.lazrproductions.cuffed.init.ModItems;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -25,22 +34,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.UUID;
-
 public class KeyRingItem extends Item {
-
-    public static final String TAG_BOUND_LOCKS = "BoundLocks";
-    public static final String TAG_KEYS = "Keys";
-
     public KeyRingItem(Properties p) {
-        super(p);
+        super(p.component(CuffedDataComponents.KEY_COUNT, 2));
     }
 
     @Override
-    public InteractionResult useOn(@Nonnull UseOnContext context) {
+    public InteractionResult useOn(@NotNull UseOnContext context) {
         if (context.getPlayer() == null)
             return InteractionResult.FAIL;
 
@@ -95,33 +95,17 @@ public class KeyRingItem extends Item {
     }
 
     public static void addBoundId(ItemStack stack, UUID id) {
-        CompoundTag compoundtag = stack.getOrCreateTag();
-        ListTag listtag;
-        if (compoundtag.contains(TAG_BOUND_LOCKS, 9))
-            listtag = compoundtag.getList(TAG_BOUND_LOCKS, 10);
-        else
-            listtag = new ListTag();
+        var set = new HashSet<>(stack.getOrDefault(CuffedDataComponents.BOUND_LOCKS, Set.of()));
+        set.add(new KeyData(id));
 
-        CompoundTag compoundtag1 = new CompoundTag();
-        compoundtag1.putUUID(KeyItem.TAG_ID, id);
-        listtag.add(compoundtag1);
-        compoundtag.put(TAG_BOUND_LOCKS, listtag);
+        stack.set(CuffedDataComponents.BOUND_LOCKS, set);
     }
 
     public static void addKey(ItemStack stack, ItemStack key) {
-        CompoundTag compoundtag = stack.getOrCreateTag();
-        ListTag listtag;
-        if (compoundtag.contains(TAG_BOUND_LOCKS, 9))
-            listtag = compoundtag.getList(TAG_BOUND_LOCKS, 10);
-        else
-            listtag = new ListTag();
+        var set = new HashSet<>(stack.getOrDefault(CuffedDataComponents.BOUND_LOCKS, Set.of()));
+        set.add(new KeyData(key.get(CuffedDataComponents.KEY), Optional.ofNullable(key.get(DataComponents.CUSTOM_NAME))));
 
-        CompoundTag compoundtag1 = new CompoundTag();
-        compoundtag1.putUUID(KeyItem.TAG_ID, key.getOrCreateTag().getUUID(KeyItem.TAG_ID));
-        if(key.getOrCreateTag().contains("display"))
-            compoundtag1.putString(KeyMoldItem.TAG_NAME, key.getOrCreateTag().getCompound("display").getString("Name"));
-        listtag.add(compoundtag1);
-        compoundtag.put(TAG_BOUND_LOCKS, listtag);
+        stack.set(CuffedDataComponents.BOUND_LOCKS, set);
     }
 
     public static boolean tryToAddBoundId(Player player, ItemStack stack, UUID id, String lockName) {
@@ -142,92 +126,46 @@ public class KeyRingItem extends Item {
     }
 
     public static void removeBoundId(ItemStack stack, UUID id) {
-        CompoundTag compoundtag = stack.getOrCreateTag();
-        ListTag listtag;
-        if (compoundtag.contains(TAG_BOUND_LOCKS, 9)) {
-            listtag = compoundtag.getList(TAG_BOUND_LOCKS, 10);
-        } else {
-            listtag = new ListTag();
-        }
+        var set = new HashSet<>(stack.getOrDefault(CuffedDataComponents.BOUND_LOCKS, Set.of()));
+        set.removeIf(data -> data.id().equals(id));
 
-        int index = getBoundIdIndex(stack, id);
-        if (index >= 0)
-            listtag.remove(index);
-        compoundtag.put(TAG_BOUND_LOCKS, listtag);
+        stack.set(CuffedDataComponents.BOUND_LOCKS, set);
     }
 
     public static boolean hasBoundId(ItemStack stack, UUID id) {
-        CompoundTag compoundTag = stack.getOrCreateTag();
-        if (compoundTag == null)
-            return false;
+        Set<KeyData> set = stack.getOrDefault(CuffedDataComponents.BOUND_LOCKS, Set.of());
 
-        if (compoundTag.contains(TAG_BOUND_LOCKS, 9)) {
-            ListTag boundPos = compoundTag.getList(TAG_BOUND_LOCKS, 10);
-            for (int i = 0; i < boundPos.size(); i++)
-                if (boundPos.getCompound(i).getUUID(KeyItem.TAG_ID).equals(id))
-                    return true;
+        for (KeyData data : set) {
+            if (data.id().equals(id))
+                return true;
         }
+
         return false;
     }
 
-    public static int getBoundIdIndex(ItemStack stack, UUID id) {
-        CompoundTag compoundTag = stack.getTag();
-        if (compoundTag == null)
-            return -1;
-
-        if (compoundTag.contains(TAG_BOUND_LOCKS, 9)) {
-            ListTag boundPos = compoundTag.getList(TAG_BOUND_LOCKS, 10);
-            for (int i = 0; i < boundPos.size(); i++)
-                if (boundPos.getCompound(i).getUUID(KeyItem.TAG_ID) == id)
-                    return i;
-        }
-        return -1;
-    }
-
     public static boolean canBindLock(ItemStack stack) {
-        CompoundTag compoundTag = stack.getTag();
-        if (compoundTag == null)
+        Set<KeyData> set = stack.getOrDefault(CuffedDataComponents.BOUND_LOCKS, Set.of());
+        if (set.isEmpty())
             return true;
 
-        int bindings = 0;
-        int keys = 0;
-        if (compoundTag.contains(TAG_BOUND_LOCKS, 9)) {
-            ListTag boundPos = compoundTag.getList(TAG_BOUND_LOCKS, 10);
-
-            bindings = boundPos.size();
-
-            var tag = stack.getTag();
-            if (tag != null && tag.contains(TAG_KEYS))
-                keys = tag.getInt(TAG_KEYS);
-        } else {
-            return true;
-        }
+        int bindings = set.size();
+        int keys = stack.getOrDefault(CuffedDataComponents.KEY_COUNT, 2);
 
         return bindings < keys;
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level pLevel,
-            @Nonnull List<Component> pTooltipComponents,
-            @Nonnull TooltipFlag pIsAdvanced) {
-        super.appendHoverText(stack, pLevel, pTooltipComponents, pIsAdvanced);
+    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context,
+            @NotNull List<Component> pTooltipComponents,
+            @NotNull TooltipFlag pIsAdvanced) {
+        super.appendHoverText(stack, context, pTooltipComponents, pIsAdvanced);
 
-        int amount = 0;
-        var tag = stack.getTag();
-        if (tag != null && tag.contains(TAG_KEYS))
-            amount = tag.getInt(TAG_KEYS);
+        int amount = stack.getOrDefault(CuffedDataComponents.KEY_COUNT, 0);
 
         pTooltipComponents.add(Component.translatable("item.cuffed.key_ring.description.amount", amount)
                 .withStyle(ChatFormatting.GRAY));
 
-        int bindings = 0;
-        CompoundTag compoundTag = stack.getTag();
-        if (compoundTag != null) {
-            if (compoundTag.contains(TAG_BOUND_LOCKS, 9)) {
-                ListTag boundPos = compoundTag.getList(TAG_BOUND_LOCKS, 10);
-                bindings = boundPos.size();
-            }
-        }
+        int bindings = stack.getOrDefault(CuffedDataComponents.BOUND_LOCKS, Set.of()).size();
         if (bindings == amount)
             pTooltipComponents.add(Component.translatable("item.cuffed.key_ring.description.amount", bindings)
                     .withStyle(ChatFormatting.GRAY));
@@ -237,17 +175,10 @@ public class KeyRingItem extends Item {
     }
 
     @Override
-    public ItemStack getDefaultInstance() {
-        ItemStack itemstack = new ItemStack(this);
-        itemstack.getOrCreateTag().putInt(TAG_KEYS, 2);
-        return itemstack;
-    }
-
-    @Override
-    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull Entity entity, int num,
+    public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int num,
             boolean boo) {
-        if (stack.getTag() == null)
-            stack.getOrCreateTag().putInt(TAG_KEYS, 1);
+        if (!stack.has(CuffedDataComponents.KEY_COUNT))
+            stack.set(CuffedDataComponents.KEY_COUNT, 1);
         super.inventoryTick(stack, level, entity, num, boo);
     }
 }

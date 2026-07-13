@@ -1,11 +1,17 @@
 package com.lazrproductions.cuffed.restraints.custom;
 
+import java.util.Random;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.base.IRestrainableCapability;
 import com.lazrproductions.cuffed.entity.animation.ArmRestraintAnimationFlags;
 import com.lazrproductions.cuffed.entity.animation.LegRestraintAnimationFlags;
-import com.lazrproductions.cuffed.init.*;
+import com.lazrproductions.cuffed.init.ModItems;
+import com.lazrproductions.cuffed.init.ModModelLayers;
+import com.lazrproductions.cuffed.init.ModRestraints;
+import com.lazrproductions.cuffed.init.ModSounds;
+import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.restraints.base.AbstractArmRestraint;
 import com.lazrproductions.cuffed.restraints.base.IBreakableRestraint;
 import com.lazrproductions.cuffed.restraints.base.IEnchantableRestraint;
@@ -17,6 +23,10 @@ import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.lazrproductions.lazrslib.common.math.MathUtilities;
 import com.mojang.blaze3d.platform.Window;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.HumanoidModel;
@@ -37,11 +47,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nonnull;
-import java.util.Random;
 
 public class FuzzyHandcuffsRestraint extends AbstractArmRestraint implements IBreakableRestraint, IEnchantableRestraint {
 
@@ -216,7 +221,7 @@ public class FuzzyHandcuffsRestraint extends AbstractArmRestraint implements IBr
         super.onMouseInput(player, keyCode, action);
     }
 
-    @Nonnull
+    @NotNull
     @OnlyIn(Dist.CLIENT)
     @Override
     public RestraintModelInterface getModelInterface() {

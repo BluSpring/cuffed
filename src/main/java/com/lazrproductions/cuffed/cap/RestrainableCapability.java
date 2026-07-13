@@ -1,18 +1,32 @@
 package com.lazrproductions.cuffed.cap;
 
+import java.util.ArrayList;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.base.IRestrainableCapability;
-import com.lazrproductions.cuffed.compat.*;
+import com.lazrproductions.cuffed.compat.BetterCombatCompat;
+import com.lazrproductions.cuffed.compat.ElenaiDodge2Compat;
+import com.lazrproductions.cuffed.compat.EpicFightCompat;
+import com.lazrproductions.cuffed.compat.ParcoolCompat;
+import com.lazrproductions.cuffed.compat.PlayerReviveCompat;
 import com.lazrproductions.cuffed.effect.RestrainedEffectInstance;
 import com.lazrproductions.cuffed.init.ModEffects;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.items.base.AbstractRestraintKeyItem;
 import com.lazrproductions.cuffed.restraints.RestraintAPI;
-import com.lazrproductions.cuffed.restraints.base.*;
+import com.lazrproductions.cuffed.restraints.base.AbstractArmRestraint;
+import com.lazrproductions.cuffed.restraints.base.AbstractHeadRestraint;
+import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
+import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
+import com.lazrproductions.cuffed.restraints.base.IEnchantableRestraint;
+import com.lazrproductions.cuffed.restraints.base.RestraintType;
 import com.lazrproductions.lazrslib.common.math.MathUtilities;
 import com.mojang.blaze3d.platform.Window;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -29,10 +43,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
 
 public class RestrainableCapability implements IRestrainableCapability {
 
@@ -416,25 +426,25 @@ public class RestrainableCapability implements IRestrainableCapability {
         return getLegRestraint();
     }
 
-    public void setArmRestraintWithoutWarning(@Nonnull ServerPlayer player,
+    public void setArmRestraintWithoutWarning(@NotNull ServerPlayer player,
             @Nullable AbstractArmRestraint newRestraint) {
         armRestraint = newRestraint;
         CuffedAPI.Networking.sendRestraintSyncPacket(player);
     }
 
-    public void setLegRestraintWithoutWarning(@Nonnull ServerPlayer player,
+    public void setLegRestraintWithoutWarning(@NotNull ServerPlayer player,
             @Nullable AbstractLegRestraint newRestraint) {
         legRestraint = newRestraint;
         CuffedAPI.Networking.sendRestraintSyncPacket(player);
     }
 
-    public void setHeadRestraintWithoutWarning(@Nonnull ServerPlayer player,
+    public void setHeadRestraintWithoutWarning(@NotNull ServerPlayer player,
             @Nullable AbstractHeadRestraint newRestraint) {
         headRestraint = newRestraint;
         CuffedAPI.Networking.sendRestraintSyncPacket(player);
     }
 
-    public void setRestraintWithoutWarning(@Nonnull ServerPlayer player, @Nonnull AbstractRestraint newValue,
+    public void setRestraintWithoutWarning(@NotNull ServerPlayer player, @NotNull AbstractRestraint newValue,
             RestraintType type) {
         if (type == RestraintType.Arm) {
             if (newValue instanceof AbstractArmRestraint arm)
@@ -450,7 +460,7 @@ public class RestrainableCapability implements IRestrainableCapability {
         CuffedAPI.Networking.sendRestraintSyncPacket(player);
     }
 
-    public boolean TryEquipRestraint(@Nonnull ServerPlayer player, @Nullable ServerPlayer captor,
+    public boolean TryEquipRestraint(@NotNull ServerPlayer player, @Nullable ServerPlayer captor,
             AbstractArmRestraint restraint) {
         if (armRestraint == null) {
             if (CuffedMod.SERVER_CONFIG.REQUIRE_LOW_HEALTH_TO_RESTRAIN.get() && !isRestrained()) {
@@ -476,7 +486,7 @@ public class RestrainableCapability implements IRestrainableCapability {
         return false;
     }
 
-    public boolean TryEquipRestraint(@Nonnull ServerPlayer player, @Nullable ServerPlayer captor,
+    public boolean TryEquipRestraint(@NotNull ServerPlayer player, @Nullable ServerPlayer captor,
             AbstractLegRestraint restraint) {
         if (legRestraint == null) {
             if (CuffedMod.SERVER_CONFIG.REQUIRE_LOW_HEALTH_TO_RESTRAIN.get() && !isRestrained()) {
@@ -502,7 +512,7 @@ public class RestrainableCapability implements IRestrainableCapability {
         return false;
     }
 
-    public boolean TryEquipRestraint(@Nonnull ServerPlayer player, @Nullable ServerPlayer captor,
+    public boolean TryEquipRestraint(@NotNull ServerPlayer player, @Nullable ServerPlayer captor,
             AbstractHeadRestraint restraint) {
         if (headRestraint == null) {
             if (CuffedMod.SERVER_CONFIG.REQUIRE_LOW_HEALTH_TO_RESTRAIN.get() && !isRestrained()) {
@@ -528,7 +538,7 @@ public class RestrainableCapability implements IRestrainableCapability {
         return false;
     }
 
-    public void EquipRestraint(@Nonnull ServerPlayer player, @Nullable ServerPlayer captor,
+    public void EquipRestraint(@NotNull ServerPlayer player, @Nullable ServerPlayer captor,
             AbstractArmRestraint restraint) {
         AbstractLegRestraint oldRestraint = legRestraint; // is supposed to always be null
 
@@ -539,7 +549,7 @@ public class RestrainableCapability implements IRestrainableCapability {
         CuffedAPI.Networking.sendRestraintEquipPacket(player, captor, RestraintType.Arm, armRestraint, oldRestraint);
     }
 
-    public void EquipRestraint(@Nonnull ServerPlayer player, @Nullable ServerPlayer captor,
+    public void EquipRestraint(@NotNull ServerPlayer player, @Nullable ServerPlayer captor,
             AbstractLegRestraint restraint) {
         AbstractLegRestraint oldRestraint = legRestraint; // is supposed to always be null
 
@@ -550,7 +560,7 @@ public class RestrainableCapability implements IRestrainableCapability {
         CuffedAPI.Networking.sendRestraintEquipPacket(player, captor, RestraintType.Leg, legRestraint, oldRestraint);
     }
 
-    public void EquipRestraint(@Nonnull ServerPlayer player, @Nullable ServerPlayer captor,
+    public void EquipRestraint(@NotNull ServerPlayer player, @Nullable ServerPlayer captor,
             AbstractHeadRestraint restraint) {
         AbstractHeadRestraint oldRestraint = headRestraint; // is supposed to always be null
 
@@ -561,7 +571,7 @@ public class RestrainableCapability implements IRestrainableCapability {
         CuffedAPI.Networking.sendRestraintEquipPacket(player, captor, RestraintType.Head, headRestraint, oldRestraint);
     }
 
-    public boolean TryUnequipRestraint(@Nonnull ServerPlayer player, @Nullable ServerPlayer releaser,
+    public boolean TryUnequipRestraint(@NotNull ServerPlayer player, @Nullable ServerPlayer releaser,
             RestraintType type) {
         if ((type == RestraintType.Arm && armRestraint != null)
                 || (type == RestraintType.Leg && legRestraint != null)
@@ -572,7 +582,7 @@ public class RestrainableCapability implements IRestrainableCapability {
         return false;
     }
 
-    public void UnequipRestraint(@Nonnull ServerPlayer player, @Nullable ServerPlayer releaser, RestraintType type) {
+    public void UnequipRestraint(@NotNull ServerPlayer player, @Nullable ServerPlayer releaser, RestraintType type) {
         AbstractRestraint oldRestraint = null;
         if (type == RestraintType.Arm)
             oldRestraint = armRestraint;
@@ -616,13 +626,13 @@ public class RestrainableCapability implements IRestrainableCapability {
 
     // #region Escort Management
 
-    public void startEscortingPlayer(@Nonnull ServerPlayer self, @Nonnull ServerPlayer playerToEscort) {
+    public void startEscortingPlayer(@NotNull ServerPlayer self, @NotNull ServerPlayer playerToEscort) {
         playerToEscort.removeVehicle();
         CuffedAPI.Capabilities.getRestrainableCapability(playerToEscort).startGettingEscortedByPlayer(self);
         whoImEscorting = playerToEscort;
     }
 
-    public void startGettingEscortedByPlayer(@Nonnull ServerPlayer other) {
+    public void startGettingEscortedByPlayer(@NotNull ServerPlayer other) {
         playerEscortingMe = other;
     }
 

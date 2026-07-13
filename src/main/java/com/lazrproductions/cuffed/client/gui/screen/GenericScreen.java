@@ -1,15 +1,14 @@
 package com.lazrproductions.cuffed.client.gui.screen;
 
-import javax.annotation.Nonnull;
-
 import com.mojang.blaze3d.platform.Window;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class GenericScreen extends Screen {
@@ -26,7 +25,7 @@ public class GenericScreen extends Screen {
     protected GenericScreen(Component title) {
         super(title);
     }
-    public GenericScreen(@Nonnull Minecraft instance) {
+    public GenericScreen(@NotNull Minecraft instance) {
         super(Component.literal(""));
         this.minecraft = instance;
         this.window = minecraft.getWindow();
@@ -35,7 +34,7 @@ public class GenericScreen extends Screen {
     }
 
     @Override
-    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
 
         this.mouseX = mouseX;

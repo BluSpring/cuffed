@@ -3,6 +3,8 @@ package com.lazrproductions.cuffed.items;
 import com.lazrproductions.cuffed.entity.base.INicknamable;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModStatistics;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -11,15 +13,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nonnull;
-
 public class PrisonerTagItem extends Item {
    public PrisonerTagItem(Properties p) {
       super(p);
    }
 
-   public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player,
-         @Nonnull LivingEntity entity, @Nonnull InteractionHand hand) {
+   public InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player,
+         @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
       if (entity instanceof Player other) {
          if (hand == InteractionHand.MAIN_HAND && !player.level().isClientSide()) {
             INicknamable nicknamable = (INicknamable) other;

@@ -5,6 +5,8 @@ import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.restraints.custom.PilloryRestraint;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,8 +16,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nonnull;
-
 public class PilloryEntityLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
    private final ItemInHandRenderer itemInHandRenderer;
 
@@ -24,7 +24,7 @@ public class PilloryEntityLayer<T extends LivingEntity, M extends HumanoidModel<
         this.itemInHandRenderer = itemInHandRenderer;
     }
 
-    public void render(@Nonnull PoseStack stack, @Nonnull MultiBufferSource buffer, int lighting, @Nonnull T entity,
+    public void render(@NotNull PoseStack stack, @NotNull MultiBufferSource buffer, int lighting, @NotNull T entity,
             float p_116987_,
             float p_116988_, float p_116989_, float p_116990_, float p_116991_, float p_116992_) {
 

@@ -3,6 +3,8 @@ package com.lazrproductions.cuffed.items;
 import com.lazrproductions.cuffed.entity.PadlockEntity;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModTags;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -11,11 +13,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-
-import javax.annotation.Nonnull;
 
 public class Padlock extends Item {
     public Padlock(Properties p) {
@@ -23,7 +22,7 @@ public class Padlock extends Item {
     }
 
     @Override
-    public InteractionResult useOn(@Nonnull UseOnContext context) {
+    public InteractionResult useOn(@NotNull UseOnContext context) {
         Player player = context.getPlayer();
         if (player == null)
             return InteractionResult.FAIL;
@@ -44,11 +43,5 @@ public class Padlock extends Item {
             }
 
         return InteractionResult.FAIL;
-    }
-
-    @Override
-    public ItemStack getDefaultInstance() {
-        ItemStack itemstack = new ItemStack(this);
-        return itemstack;
     }
 }

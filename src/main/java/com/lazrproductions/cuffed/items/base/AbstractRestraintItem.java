@@ -1,28 +1,44 @@
 package com.lazrproductions.cuffed.items.base;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.RestrainableCapability;
 import com.lazrproductions.cuffed.cap.base.IRestrainableCapability;
 import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.restraints.RestraintAPI;
-import com.lazrproductions.cuffed.restraints.base.*;
+import com.lazrproductions.cuffed.restraints.base.AbstractArmRestraint;
+import com.lazrproductions.cuffed.restraints.base.AbstractHeadRestraint;
+import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
+import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
+import com.lazrproductions.cuffed.restraints.base.RestraintType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BundleItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.AABB;
 
-import java.util.List;
-import java.util.function.Predicate;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 
 public class AbstractRestraintItem extends Item {
     public AbstractRestraintItem(Properties p) {
@@ -30,47 +46,35 @@ public class AbstractRestraintItem extends Item {
     }
 
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        if (enchantment == Enchantments.UNBREAKING)
-            return true;
-        if (enchantment == Enchantments.BINDING_CURSE)
-            return true;
-        if (enchantment == ModEnchantments.IMBUE)
-            return true;
-        if (enchantment == ModEnchantments.FAMINE)
-            return true;
-        if (enchantment == ModEnchantments.SHROUD)
-            return true;
-        if (enchantment == ModEnchantments.EXHAUST)
-            return true;
-        return super.canApplyAtEnchantingTable(stack, enchantment);
+    public boolean canBeEnchantedWith(ItemStack stack, Holder<Enchantment> enchantment, EnchantingContext context) {
+        if (context == EnchantingContext.PRIMARY) {
+            return enchantment.is(Enchantments.UNBREAKING) || enchantment.is(Enchantments.BINDING_CURSE)
+                || enchantment.is(ModEnchantments.IMBUE) || enchantment.is(ModEnchantments.FAMINE)
+                || enchantment.is(ModEnchantments.SHROUD) || enchantment.is(ModEnchantments.EXHAUST);
+        }
+
+        return super.canBeEnchantedWith(stack, enchantment, context);
     }
 
     @Override
-    public boolean isEnchantable(@Nonnull ItemStack stack) {
+    public boolean isEnchantable(@NotNull ItemStack stack) {
         return true;
     }
 
     @Override
-    public int getEnchantmentValue(ItemStack stack) {
+    public int getEnchantmentValue() {
         return 1;
     }
 
-
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level level, @Nonnull List<Component> components,
-            @Nonnull TooltipFlag tooltipFlag) {
-
-
-        Client.ShowExtendedInfo(components);
-
-            
-        super.appendHoverText(stack, level, components, tooltipFlag);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        Client.showExtendedInfo(tooltipComponents);
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
     
     
     public static boolean dispenseRestraint(BlockSource source, ItemStack stack) {
-        BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
+        BlockPos blockpos = source.pos().relative(source.state().getValue(DispenserBlock.FACING));
         
         
         Predicate<Entity> restraintSelector = new PlayerCanEquipArmRestraintEntitySelector(stack);
@@ -95,7 +99,7 @@ public class AbstractRestraintItem extends Item {
         }
 
 
-        List<Player> list = source.getLevel().getEntitiesOfClass(Player.class, new AABB(blockpos),
+        List<Player> list = source.level().getEntitiesOfClass(Player.class, new AABB(blockpos),
                 EntitySelector.NO_SPECTATORS.and(restraintSelector));
         if (list.isEmpty()) {
             return false;
@@ -225,8 +229,8 @@ public class AbstractRestraintItem extends Item {
 
 
     public static class Client {
-        @OnlyIn(Dist.CLIENT)
-        public static void ShowExtendedInfo(@Nonnull List<Component> components) {
+        @Environment(EnvType.CLIENT)
+        public static void showExtendedInfo(@NotNull List<Component> components) {
             components.add(Component.empty());
             if(Screen.hasShiftDown())
                 components.add(Component.translatable("info.cuffed.restraint_type.extra").withStyle(ChatFormatting.WHITE));

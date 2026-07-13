@@ -1,5 +1,8 @@
 package com.lazrproductions.cuffed.client.gui.screen;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.lazrslib.client.font.FontUtilities;
 import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
@@ -10,6 +13,11 @@ import com.lazrproductions.lazrslib.client.ui.Alignment;
 import com.lazrproductions.lazrslib.client.ui.UIUtilities;
 import com.lazrproductions.lazrslib.client.ui.element.*;
 import com.mojang.blaze3d.platform.Window;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2i;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,13 +28,6 @@ import net.minecraft.util.FastColor.ARGB32;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.joml.Vector2i;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 @OnlyIn(Dist.CLIENT)
 public class InformationBookletScreen extends GenericScreen {
@@ -71,7 +72,7 @@ public class InformationBookletScreen extends GenericScreen {
     }
 
     @Override
-    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
 
         pageHeight = FIXED_PAGE_HEIGHT;
         pageWidth = Mth.floor(pageHeight * (146f / 180f));
@@ -84,7 +85,7 @@ public class InformationBookletScreen extends GenericScreen {
     }
 
     @SuppressWarnings("null")
-    public void drawContent(@Nonnull GuiGraphics graphics, float partialTick) {
+    public void drawContent(@NotNull GuiGraphics graphics, float partialTick) {
         assemblePages(minecraft);
         
         var page = pages.get(currentPage);
@@ -179,14 +180,14 @@ public class InformationBookletScreen extends GenericScreen {
     }
 
     @SuppressWarnings("null")
-    public void setPage(@Nonnull Minecraft insance, int value) {
+    public void setPage(@NotNull Minecraft insance, int value) {
         previousPage = currentPage;
         currentPage = value;
         insance.player.playSound(SoundEvents.BOOK_PAGE_TURN);
     }
 
 
-    public void assemblePages(@Nonnull Minecraft instance) {
+    public void assemblePages(@NotNull Minecraft instance) {
         pageHeight = FIXED_PAGE_HEIGHT;
         pageWidth = Mth.floor(pageHeight * (146f / 180f));
 
@@ -234,13 +235,13 @@ public class InformationBookletScreen extends GenericScreen {
     public int getItemEncyclopediaPage(String path) {
         return encyclopediaMap.containsKey(path) ? encyclopediaMap.get(path) : 0;
     }
-    public DoublePage createItemEncyclopediaPage(int wouldBeIndex, @Nonnull Minecraft instance, Item item, int contentWidth) {
+    public DoublePage createItemEncyclopediaPage(int wouldBeIndex, @NotNull Minecraft instance, Item item, int contentWidth) {
         return createItemEncyclopediaPage(wouldBeIndex, instance, new ItemStack(item), contentWidth);
     }
-    public DoublePage createItemEncyclopediaPage(int wouldBeIndex, @Nonnull Minecraft instance, ItemStack stack, int contentWidth) {
+    public DoublePage createItemEncyclopediaPage(int wouldBeIndex, @NotNull Minecraft instance, ItemStack stack, int contentWidth) {
         return createItemEncyclopediaPage(wouldBeIndex, instance, stack.getItem().getDescriptionId(), stack, contentWidth);
     }
-    public DoublePage createItemEncyclopediaPage(int wouldBeIndex, @Nonnull Minecraft instance, String path, ItemStack stack, int contentWidth) {
+    public DoublePage createItemEncyclopediaPage(int wouldBeIndex, @NotNull Minecraft instance, String path, ItemStack stack, int contentWidth) {
         if(!encyclopediaMap.containsKey(path))
             encyclopediaMap.put(path, wouldBeIndex);
         else
@@ -302,24 +303,24 @@ public class InformationBookletScreen extends GenericScreen {
             calibratePage(Minecraft.getInstance());
         }
 
-        public void renderPage(@Nonnull Minecraft instance, @Nonnull GuiGraphics graphics, float partialTick,
+        public void renderPage(@NotNull Minecraft instance, @NotNull GuiGraphics graphics, float partialTick,
                 int mouseX, int mouseY, boolean mouseDown) {
             calibratePage(instance);
             renderBackground(instance, graphics, partialTick, mouseX, mouseY, mouseDown);
             renderContent(instance, graphics, partialTick, mouseX, mouseY, mouseDown);
         }
 
-        protected void renderBackground(@Nonnull Minecraft instance, @Nonnull GuiGraphics graphics, float partialTick,
+        protected void renderBackground(@NotNull Minecraft instance, @NotNull GuiGraphics graphics, float partialTick,
                 int mouseX, int mouseY, boolean mouseDown) {
             ScreenUtilities.drawTexture(graphics, getPageBlitCoords(), backgroundtexture);
 
         }
 
-        protected abstract void renderContent(@Nonnull Minecraft instance, @Nonnull GuiGraphics graphics,
+        protected abstract void renderContent(@NotNull Minecraft instance, @NotNull GuiGraphics graphics,
                 float partialTick, int mouseX, int mouseY, boolean mouseDown);
 
         
-        private final void calibratePage(@Nonnull Minecraft instance) {
+        private final void calibratePage(@NotNull Minecraft instance) {
             Window window = Minecraft.getInstance().getWindow();
             screenWidth = window.getGuiScaledWidth();
             screenHeight = window.getGuiScaledHeight();
@@ -379,7 +380,7 @@ public class InformationBookletScreen extends GenericScreen {
         }
 
         @Override
-        protected void renderContent(@Nonnull Minecraft instance, @Nonnull GuiGraphics graphics, float partialTick,
+        protected void renderContent(@NotNull Minecraft instance, @NotNull GuiGraphics graphics, float partialTick,
                 int mouseX, int mouseY, boolean mouseDown) {
             BlitCoordinates pos = new BlitCoordinates(
                 getContentBlitCoords().toRect().getCenter().x() - (ICON_WIDTH/2), 
@@ -396,7 +397,7 @@ public class InformationBookletScreen extends GenericScreen {
             super(background);
         }
 
-        protected void renderContent(@Nonnull Minecraft instance, @Nonnull GuiGraphics graphics, float partialTick, int mouseX, int mouseY, boolean mouseDown) {
+        protected void renderContent(@NotNull Minecraft instance, @NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY, boolean mouseDown) {
         }
     }
 
@@ -409,7 +410,7 @@ public class InformationBookletScreen extends GenericScreen {
         }
 
         @Override
-        protected void renderContent(@Nonnull Minecraft instance, @Nonnull GuiGraphics graphics, float partialTick,
+        protected void renderContent(@NotNull Minecraft instance, @NotNull GuiGraphics graphics, float partialTick,
                 int mouseX, int mouseY, boolean mouseDown) {
             element.setAvailableArea(getContentBlitCoords());
             UIUtilities.drawPage(instance, graphics, mouseX, mouseY, mouseDown, element);
@@ -429,7 +430,7 @@ public class InformationBookletScreen extends GenericScreen {
         }
 
 
-        public void renderPage(@Nonnull Minecraft instance, @Nonnull GuiGraphics graphics, float partialTick,
+        public void renderPage(@NotNull Minecraft instance, @NotNull GuiGraphics graphics, float partialTick,
                 int mouseX, int mouseY, boolean mouseDown) {
             super.renderPage(instance, graphics, partialTick, mouseX, mouseY, mouseDown);
 
@@ -437,8 +438,8 @@ public class InformationBookletScreen extends GenericScreen {
             rightPage.renderPage(instance, graphics, partialTick, mouseX, mouseY, mouseDown);
         }
 
-        protected void renderBackground(@Nonnull Minecraft instance, @Nonnull GuiGraphics graphics, float partialTick, int mouseX, int mouseY, boolean mouseDown) { }
-        protected void renderContent(@Nonnull Minecraft instance, @Nonnull GuiGraphics graphics, float partialTick, int mouseX, int mouseY, boolean mouseDown) { }
+        protected void renderBackground(@NotNull Minecraft instance, @NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY, boolean mouseDown) { }
+        protected void renderContent(@NotNull Minecraft instance, @NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY, boolean mouseDown) { }
 
         @Override
         public ScreenRect getPageRect() {

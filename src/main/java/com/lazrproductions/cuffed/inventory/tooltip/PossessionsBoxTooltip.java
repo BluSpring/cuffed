@@ -1,6 +1,10 @@
 package com.lazrproductions.cuffed.inventory.tooltip;
 
 import com.lazrproductions.cuffed.CuffedMod;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -9,10 +13,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nonnull;
 
 public record PossessionsBoxTooltip(NonNullList<ItemStack> items) implements ClientTooltipComponent, TooltipComponent {
     public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID,
@@ -22,11 +22,11 @@ public record PossessionsBoxTooltip(NonNullList<ItemStack> items) implements Cli
         return this.gridSizeY() * 20 + 4;
     }
 
-    public int getWidth(@Nonnull Font font) {
+    public int getWidth(@NotNull Font font) {
         return this.gridSizeX() * 18;
     }
 
-    public void renderImage(@Nonnull Font font, int x, int y, @Nonnull GuiGraphics gui) {
+    public void renderImage(@NotNull Font font, int x, int y, @NotNull GuiGraphics gui) {
         int horzontalSlots = this.gridSizeX();
         int verticalSlots = this.gridSizeY();
         int k = 0;

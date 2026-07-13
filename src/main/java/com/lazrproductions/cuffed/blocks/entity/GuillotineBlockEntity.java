@@ -6,6 +6,9 @@ import com.lazrproductions.cuffed.compat.PlayerReviveCompat;
 import com.lazrproductions.cuffed.init.ModBlockEntities;
 import com.lazrproductions.cuffed.init.ModDamageTypes;
 import com.lazrproductions.cuffed.init.ModSounds;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -21,9 +24,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 public class GuillotineBlockEntity extends BlockEntity {
 
     static final String TAG_IS_DOWN = "IsDown"; 
@@ -36,7 +36,7 @@ public class GuillotineBlockEntity extends BlockEntity {
         super(ModBlockEntities.GUILLOTINE, pos, state);
     }
 
-    public void interact(@Nonnull Level l, @Nonnull BlockPos pos, @Nonnull BlockState state) {
+    public void interact(@NotNull Level l, @NotNull BlockPos pos, @NotNull BlockState state) {
         if(!l.isClientSide()) {
             this.isDown = !isDown;
             l.playSound(null, pos, isDown ? ModSounds.GUILLOTINE_USE : ModSounds.PILLORY_USE, SoundSource.BLOCKS, 1, 1);
@@ -49,7 +49,7 @@ public class GuillotineBlockEntity extends BlockEntity {
         }
     }
 
-    public void chop(@Nonnull Level l, @Nonnull BlockPos pos, @Nonnull BlockState state) {
+    public void chop(@NotNull Level l, @NotNull BlockPos pos, @NotNull BlockState state) {
         Player player = PilloryBlock.getDetainedEntity(l, state, pos);
         if(player != null) {
             if(CuffedMod.PlayerReviveInstalled) {
@@ -71,7 +71,7 @@ public class GuillotineBlockEntity extends BlockEntity {
     }
 
     int chopDelay = 0;
-    public void tick(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state) {
+    public void tick(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state) {
         if(chopDelay > 0) {
             chopDelay--;
             if(chopDelay == 0) {
@@ -82,7 +82,7 @@ public class GuillotineBlockEntity extends BlockEntity {
 
     
     @Override
-    protected void saveAdditional(@Nonnull CompoundTag tag) {
+    protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
 
         tag.putBoolean(TAG_IS_DOWN, isDown);
@@ -90,7 +90,7 @@ public class GuillotineBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(@Nonnull CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
 
         isDown = tag.getBoolean(TAG_IS_DOWN);

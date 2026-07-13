@@ -1,13 +1,12 @@
 package com.lazrproductions.cuffed.mixin;
 
+import java.util.List;
+
+import com.lazrproductions.cuffed.items.base.AbstractRestraintItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.lazrproductions.cuffed.items.base.AbstractRestraintItem;
-
-import java.util.List;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -33,7 +32,7 @@ public class BundleItemMixin {
                                     Component.translatable("info.cuffed.empty_hand")
                                             .withStyle(ChatFormatting.WHITE)));
 
-            AbstractRestraintItem.Client.ShowExtendedInfo(lore);
+            AbstractRestraintItem.Client.showExtendedInfo(lore);
         }
     }
 }

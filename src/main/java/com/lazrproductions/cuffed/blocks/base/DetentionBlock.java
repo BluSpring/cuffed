@@ -1,6 +1,6 @@
 package com.lazrproductions.cuffed.blocks.base;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -13,5 +13,5 @@ public abstract class DetentionBlock extends Block {
         super(properties);
     }
 
-    public abstract boolean canDetainPlayer(@Nonnull Level level, @Nonnull BlockState state, @Nonnull BlockPos pos, @Nonnull Player player, boolean ignoreState);
+    public abstract boolean canDetainPlayer(@NotNull Level level, @NotNull BlockState state, @NotNull BlockPos pos, @NotNull Player player, boolean ignoreState);
 }

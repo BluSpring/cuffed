@@ -1,5 +1,8 @@
 package com.lazrproductions.cuffed.entity;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.init.ModEntityTypes;
@@ -7,6 +10,10 @@ import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModTags;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyRingItem;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -35,12 +42,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.UUID;
 
 public class PadlockEntity extends HangingEntity {
 
@@ -90,7 +91,7 @@ public class PadlockEntity extends HangingEntity {
     }
 
     @Override
-    public InteractionResult interact(@Nonnull Player interactor, @Nonnull InteractionHand hand) {
+    public InteractionResult interact(@NotNull Player interactor, @NotNull InteractionHand hand) {
         if (this.level().isClientSide()) {
             return InteractionResult.SUCCESS;
         } else {
@@ -262,7 +263,7 @@ public class PadlockEntity extends HangingEntity {
     }
 
     @Override
-    public boolean hurt(@Nonnull DamageSource source, float amount) {
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         return false;
     }
 
@@ -282,7 +283,7 @@ public class PadlockEntity extends HangingEntity {
     }
 
     @Override
-    protected float getEyeHeight(@Nonnull Pose p_31839_, @Nonnull EntityDimensions p_31840_) {
+    protected float getEyeHeight(@NotNull Pose p_31839_, @NotNull EntityDimensions p_31840_) {
         return 0.0625F;
     }
 
@@ -302,7 +303,7 @@ public class PadlockEntity extends HangingEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundTag tag) {
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("Locked", this.isLocked());
         tag.putBoolean("Reinforced", this.isReinforced());
@@ -312,7 +313,7 @@ public class PadlockEntity extends HangingEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundTag tag) {
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
 
         this.entityData.set(DATA_LOCKED, tag.getBoolean("Locked"));

@@ -1,9 +1,8 @@
 package com.lazrproductions.cuffed.restraints.client.model;
 
-import javax.annotation.Nonnull;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -43,7 +42,7 @@ public class DuckTapeHeadModel<T extends LivingEntity> extends HumanoidModel<T> 
 	}
 
 	@Override
-	public void renderToBuffer(@Nonnull PoseStack stack, @Nonnull VertexConsumer buffer, int packedLight, int blockLight,
+	public void renderToBuffer(@NotNull PoseStack stack, @NotNull VertexConsumer buffer, int packedLight, int blockLight,
 			float partialTick, float r, float g, float b) {
 		_root.render(stack, buffer, packedLight, blockLight);
 

@@ -4,6 +4,9 @@ import com.lazrproductions.cuffed.init.ModBlockEntities;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.items.TrayItem;
 import com.mojang.datafixers.util.Pair;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -31,9 +34,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 public class TrayBlockEntity extends BlockEntity {
     private NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
 
@@ -41,9 +41,9 @@ public class TrayBlockEntity extends BlockEntity {
         super(ModBlockEntities.TRAY, pos, state);
     }
 
-    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
-            @Nonnull Player interacting,
-            @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
+    public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+            @NotNull Player interacting,
+            @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (hand == InteractionHand.MAIN_HAND) {
             ItemStack itemInMainHand = interacting.getItemInHand(hand);
             if(itemInMainHand.isEmpty()) {
@@ -183,7 +183,7 @@ public class TrayBlockEntity extends BlockEntity {
         }
     }
 
-    @Nonnull
+    @NotNull
     public ItemStack getFoodStack() {
         for (ItemStack itemStack : items) {
             if (TrayItem.itemIsFood(itemStack))
@@ -192,7 +192,7 @@ public class TrayBlockEntity extends BlockEntity {
         return ItemStack.EMPTY;
     }
 
-    @Nonnull
+    @NotNull
     public ItemStack getForkStack() {
         for (ItemStack itemStack : items) {
             if (itemStack.is(ModItems.FORK))
@@ -201,7 +201,7 @@ public class TrayBlockEntity extends BlockEntity {
         return ItemStack.EMPTY;
     }
 
-    @Nonnull
+    @NotNull
     public ItemStack getSpoonStack() {
         for (ItemStack itemStack : items) {
             if (itemStack.is(ModItems.SPOON))
@@ -210,7 +210,7 @@ public class TrayBlockEntity extends BlockEntity {
         return ItemStack.EMPTY;
     }
 
-    @Nonnull
+    @NotNull
     public ItemStack getKnifeStack() {
         for (ItemStack itemStack : items) {
             if (itemStack.is(ModItems.KNIFE))
@@ -219,7 +219,7 @@ public class TrayBlockEntity extends BlockEntity {
         return ItemStack.EMPTY;
     }
 
-    protected boolean addItem(@Nonnull ItemStack stack) {
+    protected boolean addItem(@NotNull ItemStack stack) {
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).isEmpty()) {
                 items.set(i, stack);
@@ -229,7 +229,7 @@ public class TrayBlockEntity extends BlockEntity {
         return false;
     }
 
-    protected boolean setItem(@Nonnull ItemStack stack, int index) {
+    protected boolean setItem(@NotNull ItemStack stack, int index) {
         if (items.get(index).isEmpty()) {
             items.set(index, stack);
             return true;
@@ -251,20 +251,20 @@ public class TrayBlockEntity extends BlockEntity {
         level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
     }
 
-    public void loadFromItem(@Nonnull ItemStack stack, Level level, BlockPos pos, BlockState state) {
+    public void loadFromItem(@NotNull ItemStack stack, Level level, BlockPos pos, BlockState state) {
         items = TrayItem.getContents(stack);
         sendUpdate(level, pos, state);
     }
 
     @Override
-    protected void saveAdditional(@Nonnull CompoundTag tag) {
+    protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
 
         tag.put(TrayItem.TAG_ITEMS, TrayItem.saveItemToTagList(items));
     }
 
     @Override
-    public void load(@Nonnull CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
 
         if(tag.contains(TrayItem.TAG_ITEMS))
@@ -273,7 +273,7 @@ public class TrayBlockEntity extends BlockEntity {
 
 
 
-    public void dropItem(@Nonnull Level level, @Nonnull BlockPos pos) {
+    public void dropItem(@NotNull Level level, @NotNull BlockPos pos) {
         ItemStack i = TrayItem.createTrayFrom(items);
         double d0 = EntityType.ITEM.getWidth();
         double d1 = 0.2D;

@@ -1,12 +1,11 @@
 package com.lazrproductions.cuffed.blocks.entity.renderer;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.blocks.entity.GuillotineBlockEntity;
 import com.lazrproductions.cuffed.blocks.entity.model.GuillotineBlockEntityModel;
 import com.lazrproductions.cuffed.init.ModModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -25,8 +24,8 @@ public class GuillotineBlockEntityRenderer implements BlockEntityRenderer<Guillo
     }
 
     @Override
-    public void render(@Nonnull GuillotineBlockEntity entity, float partialTick, @Nonnull PoseStack stack,
-        @Nonnull MultiBufferSource buffer, int light, int overlay) {
+    public void render(@NotNull GuillotineBlockEntity entity, float partialTick, @NotNull PoseStack stack,
+        @NotNull MultiBufferSource buffer, int light, int overlay) {
         model.setupAnim(entity, partialTick);
         model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityCutout(TEXTURE_LOCATION)), light, overlay, 1, 1, 1, 1);
 

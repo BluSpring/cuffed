@@ -1,11 +1,10 @@
 package com.lazrproductions.cuffed.blocks.entity.renderer;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.blocks.TrayBlock;
 import com.lazrproductions.cuffed.blocks.entity.TrayBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -27,8 +26,8 @@ public class TrayBlockEntityRenderer implements BlockEntityRenderer<TrayBlockEnt
     }
 
     @Override
-    public void render(@Nonnull TrayBlockEntity entity, float partialTick, @Nonnull PoseStack stack,
-        @Nonnull MultiBufferSource buffer, int light, int overlay) {
+    public void render(@NotNull TrayBlockEntity entity, float partialTick, @NotNull PoseStack stack,
+        @NotNull MultiBufferSource buffer, int light, int overlay) {
 
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         ItemStack foodStack = entity.getFoodStack();

@@ -1,9 +1,14 @@
 package com.lazrproductions.cuffed.items;
 
+import java.util.List;
+
 import com.lazrproductions.cuffed.blocks.PosterBlock;
 import com.lazrproductions.cuffed.blocks.base.PosterType;
 import com.lazrproductions.cuffed.init.ModBlocks;
 import com.lazrproductions.cuffed.init.ModItems;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -16,10 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-
 public class PosterBlockItem extends BlockItem {
     public static final String POSTER_TYPE_TAG = "Poster"; 
     
@@ -29,14 +30,14 @@ public class PosterBlockItem extends BlockItem {
 
     @Override
     @Nullable
-    protected BlockState getPlacementState(@Nonnull BlockPlaceContext ctx) {
+    protected BlockState getPlacementState(@NotNull BlockPlaceContext ctx) {
         BlockState state = super.getPlacementState(ctx);
         if(state != null && state.is(ModBlocks.POSTER))
             state = state.setValue(PosterBlock.POSTER_TYPE, getPosterType(ctx.getItemInHand()));
         return state;
     }
 
-    public static PosterType getPosterType(@Nonnull ItemStack stack) {
+    public static PosterType getPosterType(@NotNull ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         if(tag.contains(POSTER_TYPE_TAG))
             return PosterType.fromString(tag.getString(POSTER_TYPE_TAG));
@@ -44,8 +45,8 @@ public class PosterBlockItem extends BlockItem {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level level, @Nonnull List<Component> lines,
-            @Nonnull TooltipFlag tooltipFlag) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> lines,
+            @NotNull TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, level, lines, tooltipFlag);
 
         lines.add(Component.translatable(getDescriptionId() +"."+getPosterType(stack).getSerializedName()).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));

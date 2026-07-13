@@ -2,12 +2,10 @@ package com.lazrproductions.cuffed.items;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.RestrainableCapability;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -19,15 +17,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 public class CreativeRestraintCutter extends Item {
     public CreativeRestraintCutter(Properties p) {
         super(p);
     }
 
-    public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player,
-            @Nonnull LivingEntity entity, @Nonnull InteractionHand hand) {
+    @Override
+    public InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player,
+                                                  @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
         if(!player.level().isClientSide()) {
             if (entity instanceof Player other) {
                 RestrainableCapability cap = (RestrainableCapability)CuffedAPI.Capabilities.getRestrainableCapability(other);
@@ -42,13 +40,13 @@ public class CreativeRestraintCutter extends Item {
         return InteractionResult.PASS;
     }
 
-    public boolean isFoil(@Nonnull ItemStack stack) {
+    @Override
+    public boolean isFoil(@NotNull ItemStack stack) {
         return true;
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level level, @Nonnull List<Component> lore,
-            @Nonnull TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lore, TooltipFlag tooltipFlag) {
         lore.add(Component.translatable(getDescriptionId()+".lore").withStyle(ChatFormatting.GRAY));
     }
 }

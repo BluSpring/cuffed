@@ -1,5 +1,9 @@
 package com.lazrproductions.cuffed.restraints.base;
 
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.UUID;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.compat.ArsNouveauCompat;
 import com.lazrproductions.cuffed.compat.IronsSpellsnSpellbooksCompat;
@@ -10,6 +14,11 @@ import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.restraints.client.RestraintModelInterface;
 import com.mojang.blaze3d.platform.Window;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
@@ -25,21 +34,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.UUID;
 
 public abstract class AbstractRestraint {
 
     private ServerPlayer s_player;
     private Player c_player;
     private CompoundTag itemData;
-    @Nonnull private UUID captor;
+    @NotNull private UUID captor;
 
 
 
@@ -120,7 +121,7 @@ public abstract class AbstractRestraint {
     }
     /** Get the captor of this restraint, server-side only */
     @Nullable
-    public Player getCaptor(@Nonnull ServerLevel level) {
+    public Player getCaptor(@NotNull ServerLevel level) {
         return level.getPlayerByUUID(captor);
     }
     /** Get whether or not this instance is client-side or not. */
@@ -243,7 +244,7 @@ public abstract class AbstractRestraint {
                 breakable.attemptToBreak(player, keyCode, action, instance.options);
     }
 
-    @Nonnull
+    @NotNull
     @OnlyIn(Dist.CLIENT)
     public abstract RestraintModelInterface getModelInterface();
 

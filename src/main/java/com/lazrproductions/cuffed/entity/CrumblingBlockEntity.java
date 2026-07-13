@@ -2,6 +2,8 @@ package com.lazrproductions.cuffed.entity;
 
 
 import com.lazrproductions.cuffed.init.ModEntityTypes;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -13,8 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-
-import javax.annotation.Nonnull;
 
 public class CrumblingBlockEntity extends Entity {
     static int CRUMBLE_STAGE_TIME = 20;
@@ -117,13 +117,13 @@ public class CrumblingBlockEntity extends Entity {
 
 
     @Override
-    protected void addAdditionalSaveData(@Nonnull CompoundTag tag) {
+    protected void addAdditionalSaveData(@NotNull CompoundTag tag) {
         tag.putInt("Time", this.time);
         tag.putInt("CrumbleProgress", getCrumbleProgress());
     }
 
     @Override
-    protected void readAdditionalSaveData(@Nonnull CompoundTag tag) {
+    protected void readAdditionalSaveData(@NotNull CompoundTag tag) {
         this.time = tag.getInt("Time");
         setCrumbleProgress(tag.getInt("CrumbleProgress"), 1);
     }

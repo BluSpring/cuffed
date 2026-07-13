@@ -2,6 +2,8 @@ package com.lazrproductions.cuffed.items;
 
 import com.lazrproductions.cuffed.effect.WoundedEffect;
 import com.lazrproductions.cuffed.init.ModEffects;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -11,8 +13,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nonnull;
-
 public class BandageItem extends Item {
 
     public BandageItem(Properties properties) {
@@ -20,7 +20,7 @@ public class BandageItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
         if(player.isCrouching()) {
             if(player.hasEffect(ModEffects.WOUNDED_EFFECT)) {
                 WoundedEffect.treatEntity(player);
@@ -32,9 +32,9 @@ public class BandageItem extends Item {
     }
 
     @Override
-    public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player,
-            @Nonnull LivingEntity entity,
-            @Nonnull InteractionHand hand) {
+    public InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player,
+            @NotNull LivingEntity entity,
+            @NotNull InteractionHand hand) {
         if(entity.hasEffect(ModEffects.WOUNDED_EFFECT)) {
             WoundedEffect.treatEntity(entity);
             stack.shrink(1);

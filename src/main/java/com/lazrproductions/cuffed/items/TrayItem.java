@@ -1,7 +1,11 @@
 package com.lazrproductions.cuffed.items;
 
+import java.util.Optional;
+
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.inventory.tooltip.TrayTooltip;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -22,9 +26,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
-import javax.annotation.Nonnull;
-import java.util.Optional;
-
 public class TrayItem extends BlockItem {
     public static final String TAG_ITEMS = "Items";
     public static final int MAX_WEIGHT = 4;
@@ -33,8 +34,8 @@ public class TrayItem extends BlockItem {
         super(block, properties);
     }
 
-    public boolean overrideStackedOnOther(@Nonnull ItemStack stack, @Nonnull Slot slot,
-            @Nonnull ClickAction clickAction, @Nonnull Player player) {
+    public boolean overrideStackedOnOther(@NotNull ItemStack stack, @NotNull Slot slot,
+            @NotNull ClickAction clickAction, @NotNull Player player) {
         if (stack.getCount() != 1 || clickAction != ClickAction.SECONDARY) {
             return false;
         } else {
@@ -55,8 +56,8 @@ public class TrayItem extends BlockItem {
         }
     }
 
-    public boolean overrideOtherStackedOnMe(@Nonnull ItemStack stack, @Nonnull ItemStack otherStack, @Nonnull Slot slot,
-            @Nonnull ClickAction clickAction, @Nonnull Player player, @Nonnull SlotAccess slotAccess) {
+    public boolean overrideOtherStackedOnMe(@NotNull ItemStack stack, @NotNull ItemStack otherStack, @NotNull Slot slot,
+            @NotNull ClickAction clickAction, @NotNull Player player, @NotNull SlotAccess slotAccess) {
         if (stack.getCount() != 1)
             return false;
         if (clickAction == ClickAction.SECONDARY && slot.allowModification(player)) {
@@ -79,8 +80,8 @@ public class TrayItem extends BlockItem {
         }
     }
 
-    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player,
-            @Nonnull InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player,
+            @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (player.isCrouching() && dropContents(itemstack, player)) {
             this.playDropContentsSound(player);
@@ -92,7 +93,7 @@ public class TrayItem extends BlockItem {
     }
 
 
-    private static int add(@Nonnull ItemStack stack, @Nonnull ItemStack stackToAdd) {
+    private static int add(@NotNull ItemStack stack, @NotNull ItemStack stackToAdd) {
         if (!stackToAdd.isEmpty() && canFitInTray(stack, stackToAdd)) {
             CompoundTag tag = stack.getOrCreateTag();
             if (!tag.contains(TAG_ITEMS)) {
@@ -171,7 +172,7 @@ public class TrayItem extends BlockItem {
 
 
 
-    public Optional<TooltipComponent> getTooltipImage(@Nonnull ItemStack stack) {
+    public Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack stack) {
         NonNullList<ItemStack> nonnulllist = NonNullList.create();
         getContents(stack).forEach(nonnulllist::add);
         return Optional.of(new TrayTooltip(nonnulllist));
@@ -192,7 +193,7 @@ public class TrayItem extends BlockItem {
     }
 
 
-    public static NonNullList<ItemStack> getContents(@Nonnull ItemStack stack) {
+    public static NonNullList<ItemStack> getContents(@NotNull ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         var list = NonNullList.withSize(MAX_WEIGHT, ItemStack.EMPTY);
         
@@ -227,7 +228,7 @@ public class TrayItem extends BlockItem {
         }
         return list;
     }
-    public static NonNullList<ItemStack> getContents(@Nonnull ListTag listtag) {
+    public static NonNullList<ItemStack> getContents(@NotNull ListTag listtag) {
         var list = NonNullList.withSize(MAX_WEIGHT, ItemStack.EMPTY);
         
         CompoundTag food = listtag.getCompound(0);
@@ -259,7 +260,7 @@ public class TrayItem extends BlockItem {
     }
     
 
-    public static int getNextStackIndex(@Nonnull ItemStack stack) {
+    public static int getNextStackIndex(@NotNull ItemStack stack) {
         var list = getContents(stack);
         for (int i = 0; i < list.size(); i++) {
             if(!list.get(i).isEmpty())
@@ -267,7 +268,7 @@ public class TrayItem extends BlockItem {
         }
         return -1;
     }
-    public static int getNextAvailableIndex(@Nonnull ItemStack stack) {
+    public static int getNextAvailableIndex(@NotNull ItemStack stack) {
         var list = getContents(stack);
         for (int i = 0; i < list.size(); i++) {
             if(list.get(i).isEmpty())
@@ -330,7 +331,7 @@ public class TrayItem extends BlockItem {
 
 
 
-    private static boolean canFitInTray(@Nonnull ItemStack tray, @Nonnull ItemStack stack) {
+    private static boolean canFitInTray(@NotNull ItemStack tray, @NotNull ItemStack stack) {
 
         boolean trayHasFood = trayHasFoodItem(tray);
         boolean trayHasSpoon = trayHasSpoon(tray);
@@ -348,7 +349,7 @@ public class TrayItem extends BlockItem {
             return !trayHasKnife;
         return false;
     }
-    public static boolean trayHasFoodItem(@Nonnull ItemStack stack) {
+    public static boolean trayHasFoodItem(@NotNull ItemStack stack) {
         var stacks = getContents(stack);
         for (ItemStack itemStack : stacks) {
             if (itemStack.isEdible())
@@ -356,37 +357,37 @@ public class TrayItem extends BlockItem {
         }
         return false;
     }
-    public static boolean trayHasSpoon(@Nonnull ItemStack stack) {
+    public static boolean trayHasSpoon(@NotNull ItemStack stack) {
         var stacks = getContents(stack);
         for (ItemStack itemStack : stacks)
             if (itemStack.is(ModItems.SPOON))
                 return true;
         return false;
     }
-    public static boolean trayHasFork(@Nonnull ItemStack stack) {
+    public static boolean trayHasFork(@NotNull ItemStack stack) {
         var stacks = getContents(stack);
         for (ItemStack itemStack : stacks)
             if (itemStack.is(ModItems.FORK))
                 return true;
         return false;
     }
-    public static boolean trayHasKnife(@Nonnull ItemStack stack) {
+    public static boolean trayHasKnife(@NotNull ItemStack stack) {
         var stacks = getContents(stack);
         for (ItemStack itemStack : stacks)
             if (itemStack.is(ModItems.KNIFE))
                 return true;
         return false;
     }
-    public static boolean itemIsFood(@Nonnull ItemStack stack) {
+    public static boolean itemIsFood(@NotNull ItemStack stack) {
         return stack.isEdible();
     }
-    public static boolean itemIsSpoon(@Nonnull ItemStack stack) {
+    public static boolean itemIsSpoon(@NotNull ItemStack stack) {
         return stack.is(ModItems.SPOON);
     }
-    public static boolean itemIsFork(@Nonnull ItemStack stack) {
+    public static boolean itemIsFork(@NotNull ItemStack stack) {
         return stack.is(ModItems.FORK);
     }
-    public static boolean itemIsKnife(@Nonnull ItemStack stack) {
+    public static boolean itemIsKnife(@NotNull ItemStack stack) {
         return stack.is(ModItems.KNIFE);
     }
 }

@@ -1,13 +1,17 @@
 package com.lazrproductions.cuffed.client.particle;
 
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.core.particles.SimpleParticleType;
 
 @OnlyIn(Dist.CLIENT)
 public class BloodDripParticle extends TextureSheetParticle {
@@ -66,7 +70,7 @@ public class BloodDripParticle extends TextureSheetParticle {
 
         @Override
         @Nullable
-        public Particle createParticle(@Nonnull SimpleParticleType type, @Nonnull ClientLevel level, double x,
+        public Particle createParticle(@NotNull SimpleParticleType type, @NotNull ClientLevel level, double x,
                 double y, double z, double f, double f1, double f2) {
             BloodDripParticle dripparticle = new BloodDripParticle(level, x, y, z, sprites);
             dripparticle.setColor(0.74F, 0.074F, 0.074F);

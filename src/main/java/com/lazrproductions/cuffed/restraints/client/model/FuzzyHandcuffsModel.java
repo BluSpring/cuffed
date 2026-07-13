@@ -1,11 +1,8 @@
 package com.lazrproductions.cuffed.restraints.client.model;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
-
-import com.lazrproductions.cuffed.CuffedMod;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -15,7 +12,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
 @SuppressWarnings("unused")
@@ -60,7 +56,7 @@ public class FuzzyHandcuffsModel<T extends LivingEntity> extends HumanoidModel<T
 	}
 
 	@Override
-	public void renderToBuffer(@Nonnull PoseStack stack, @Nonnull VertexConsumer buffer, int packedLight, int blockLight,
+	public void renderToBuffer(@NotNull PoseStack stack, @NotNull VertexConsumer buffer, int packedLight, int blockLight,
 			float partialTick, float r, float g, float b) {		
 		_root.render(stack, buffer, packedLight, blockLight);
 

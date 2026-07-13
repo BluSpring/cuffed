@@ -1,5 +1,8 @@
 package com.lazrproductions.cuffed.packet;
 
+import java.util.UUID;
+import java.util.function.Supplier;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.RestrainableCapability;
@@ -10,17 +13,15 @@ import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
 import com.lazrproductions.lazrslib.common.network.packet.ParameterizedLazrPacket;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.network.NetworkEvent;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.UUID;
-import java.util.function.Supplier;
 
 /**
  * A packet to sync the equipping and unequipping of restraints to the
@@ -38,7 +39,7 @@ public class RestraintEquippedPacket extends ParameterizedLazrPacket {
     String captorUUID;
 
     public RestraintEquippedPacket(int playerId, String playerUUID,
-            @Nonnull RestraintType type, @Nullable CompoundTag oldData, @Nullable CompoundTag newData,
+            @NotNull RestraintType type, @Nullable CompoundTag oldData, @Nullable CompoundTag newData,
             String captorUUID) {
         super(playerId, playerUUID, type.toInteger(), oldData != null ? oldData.getAsString() : "null", newData != null ? newData.getAsString() : "null", captorUUID);
         

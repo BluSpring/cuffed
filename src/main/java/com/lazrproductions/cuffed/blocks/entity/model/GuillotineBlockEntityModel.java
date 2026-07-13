@@ -1,11 +1,10 @@
 package com.lazrproductions.cuffed.blocks.entity.model;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.blocks.GuillotineBlock;
 import com.lazrproductions.cuffed.blocks.entity.GuillotineBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -51,7 +50,7 @@ public class GuillotineBlockEntityModel<T extends GuillotineBlockEntity> {
 	}
 
 	float prevDownProgress = 0;
-	public void setupAnim(@Nonnull GuillotineBlockEntity entity, float partialTick) {
+	public void setupAnim(@NotNull GuillotineBlockEntity entity, float partialTick) {
 		guillotine.setRotation(0, (entity.getBlockState().getValue(GuillotineBlock.FACING).toYRot() - 180) * Mth.DEG_TO_RAD, Mth.PI);
 		
 		float offset = 0;
@@ -67,7 +66,7 @@ public class GuillotineBlockEntityModel<T extends GuillotineBlockEntity> {
 		guillotine.getChild("blade").getChild("bloody_blade").visible = entity.isBloody;
 	}
 
-	public void renderToBuffer(@Nonnull PoseStack poseStack, @Nonnull VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		guillotine.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 
 	}

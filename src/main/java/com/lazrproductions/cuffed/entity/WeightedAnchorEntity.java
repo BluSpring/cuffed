@@ -1,10 +1,16 @@
 package com.lazrproductions.cuffed.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.base.IAnchorableEntity;
 import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.init.ModEntityTypes;
 import com.lazrproductions.cuffed.init.ModItems;
+import net.minecraftforge.fluids.FluidType;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -34,11 +40,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fluids.FluidType;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 public class WeightedAnchorEntity extends LivingEntity {
 
@@ -53,7 +54,7 @@ public class WeightedAnchorEntity extends LivingEntity {
         this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D);
     }
 
-    public static WeightedAnchorEntity createFromItem(@Nonnull Level level, @Nonnull ItemStack stack, @Nonnull BlockPos pos) {
+    public static WeightedAnchorEntity createFromItem(@NotNull Level level, @NotNull ItemStack stack, @NotNull BlockPos pos) {
         WeightedAnchorEntity entity = new WeightedAnchorEntity(level, pos);
 
         entity.setEnchantments(stack.getEnchantmentTags());
@@ -89,7 +90,7 @@ public class WeightedAnchorEntity extends LivingEntity {
         return true;
     }
     @Override
-    public boolean isInvulnerableTo(@Nonnull DamageSource source) {
+    public boolean isInvulnerableTo(@NotNull DamageSource source) {
 
         return !source.is(DamageTypes.GENERIC_KILL);
     }
@@ -124,7 +125,7 @@ public class WeightedAnchorEntity extends LivingEntity {
     }
 
     @Override
-    public InteractionResult interact(@Nonnull Player interactor, @Nonnull InteractionHand hand) {
+    public InteractionResult interact(@NotNull Player interactor, @NotNull InteractionHand hand) {
 
         if (this.level().isClientSide()) {
             return InteractionResult.SUCCESS;
@@ -182,12 +183,12 @@ public class WeightedAnchorEntity extends LivingEntity {
 
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundTag tag) {
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         tag.put("Enchantments", enchantments);
         super.addAdditionalSaveData(tag);
     }
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundTag tag) {
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         if(tag.contains("Enchantments"))
            enchantments = tag.getList("Enchantments", 10);
         else
@@ -254,12 +255,12 @@ public class WeightedAnchorEntity extends LivingEntity {
     }
 
     @Override
-    public ItemStack getItemBySlot(@Nonnull EquipmentSlot p_21127_) {
+    public ItemStack getItemBySlot(@NotNull EquipmentSlot p_21127_) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemSlot(@Nonnull EquipmentSlot p_21036_, @Nonnull ItemStack p_21037_) {
+    public void setItemSlot(@NotNull EquipmentSlot p_21036_, @NotNull ItemStack p_21037_) {
         
     }
 

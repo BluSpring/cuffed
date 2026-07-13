@@ -3,6 +3,8 @@ package com.lazrproductions.cuffed.items;
 import com.lazrproductions.cuffed.entity.WeightedAnchorEntity;
 import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.init.ModItems;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -12,8 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-import javax.annotation.Nonnull;
-
 public class WeightedAnchorItem extends Item {
 
     public WeightedAnchorItem(Properties properties) {
@@ -21,7 +21,7 @@ public class WeightedAnchorItem extends Item {
     }
 
     @Override
-    public InteractionResult useOn(@Nonnull UseOnContext ctx) {
+    public InteractionResult useOn(@NotNull UseOnContext ctx) {
         if(!ctx.getLevel().isClientSide() && ctx.getHand() == InteractionHand.MAIN_HAND && ctx.getItemInHand().is(ModItems.WEIGHTED_ANCHOR_ITEM)) {
             WeightedAnchorEntity entity = WeightedAnchorEntity.createFromItem(ctx.getLevel(), ctx.getItemInHand(), ctx.getClickedPos().offset(ctx.getClickedFace().getNormal()));
             Player player = ctx.getPlayer();
@@ -43,7 +43,7 @@ public class WeightedAnchorItem extends Item {
     }
 
     @Override
-    public boolean isEnchantable(@Nonnull ItemStack stack) {
+    public boolean isEnchantable(@NotNull ItemStack stack) {
         return true;
     }
     

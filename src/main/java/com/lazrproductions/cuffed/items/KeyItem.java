@@ -1,12 +1,18 @@
 package com.lazrproductions.cuffed.items;
 
+import java.util.List;
+import java.util.UUID;
+
 import com.lazrproductions.cuffed.blocks.CellDoor;
 import com.lazrproductions.cuffed.blocks.entity.LockableBlockEntity;
 import com.lazrproductions.cuffed.blocks.entity.SafeBlockEntity;
+import com.lazrproductions.cuffed.component.CuffedDataComponents;
 import com.lazrproductions.cuffed.init.ModItems;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -22,21 +28,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.UUID;
-
 public class KeyItem extends Item {
-
-    public static final String TAG_ID = "Id";
 
     public KeyItem(Properties p) {
         super(p);
     }
 
     @Override
-    public InteractionResult useOn(@Nonnull UseOnContext context) {
+    public InteractionResult useOn(@NotNull UseOnContext context) {
         if (context.getPlayer() == null)
             return InteractionResult.FAIL;
 
@@ -91,7 +90,7 @@ public class KeyItem extends Item {
     }
 
     public static boolean tryToSetBoundId(Player player, ItemStack stack, UUID id, String lockName) {
-        if (!stack.getOrCreateTag().contains(TAG_ID)) {
+        if (!stack.has(CuffedDataComponents.KEY)) {
             setBoundId(stack, id);
             if (!player.level().getGameRules().getBoolean(GameRules.RULE_REDUCEDDEBUGINFO))
                 player.displayClientMessage(Component.translatable("item.cuffed.key.info.bound").append(Component.literal(""+id)), false);
@@ -104,47 +103,34 @@ public class KeyItem extends Item {
     }
 
     public static void setBoundId(ItemStack stack, UUID id) {
-        stack.getOrCreateTag().putUUID(TAG_ID, id);
+        stack.set(CuffedDataComponents.KEY, id);
     }
 
     public static void removeBoundLock(ItemStack stack) {
-        if (stack.getOrCreateTag().contains(TAG_ID))
-            stack.removeTagKey(TAG_ID);
+        if (stack.has(CuffedDataComponents.KEY))
+            stack.remove(CuffedDataComponents.KEY);
     }
 
     @Nullable
     public static UUID getBoundLock(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains(TAG_ID))
-            return null;
-        return tag.getUUID(TAG_ID);
+        return stack.get(CuffedDataComponents.KEY);
     }
 
-    public static boolean isBoundToLock(@Nonnull ItemStack stack, @Nonnull UUID id) {
-        CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains(TAG_ID))
-            return false;
-        return tag.getUUID(TAG_ID).equals(id);
+    public static boolean isBoundToLock(@NotNull ItemStack stack, @NotNull UUID id) {
+        return id.equals(stack.get(CuffedDataComponents.KEY));
     }
 
-    public static boolean isBoundToALock(@Nonnull ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        return tag.contains(TAG_ID);
+    public static boolean isBoundToALock(@NotNull ItemStack stack) {
+        return stack.has(CuffedDataComponents.KEY);
     }
 
     @Override
-    public ItemStack getDefaultInstance() {
-        ItemStack itemstack = new ItemStack(this);
-        return itemstack;
-    }
+    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context,
+            @NotNull List<Component> pTooltipComponents,
+            @NotNull TooltipFlag pIsAdvanced) {
+        super.appendHoverText(stack, context, pTooltipComponents, pIsAdvanced);
 
-    @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level pLevel,
-            @Nonnull List<Component> pTooltipComponents,
-            @Nonnull TooltipFlag pIsAdvanced) {
-        super.appendHoverText(stack, pLevel, pTooltipComponents, pIsAdvanced);
-
-        if (stack.getOrCreateTag().contains(TAG_ID))
+        if (stack.has(CuffedDataComponents.KEY))
             pTooltipComponents.add(Component.translatable("item.cuffed.key.description.bound").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

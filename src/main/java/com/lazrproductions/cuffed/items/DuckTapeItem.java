@@ -2,17 +2,13 @@ package com.lazrproductions.cuffed.items;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.items.base.AbstractRestraintItem;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 public class DuckTapeItem extends AbstractRestraintItem {
 
@@ -21,8 +17,8 @@ public class DuckTapeItem extends AbstractRestraintItem {
     }
     
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level level, @Nonnull List<Component> components,
-            @Nonnull TooltipFlag tooltipFlag) {
+    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, @NotNull List<Component> components,
+            @NotNull TooltipFlag tooltipFlag) {
         components.add(Component.translatable("info.cuffed.restraint_type.head").withStyle(ChatFormatting.GRAY));
         components.add(Component.translatable("info.cuffed.restraint_type.arm").withStyle(ChatFormatting.GRAY));
         components.add(Component.translatable("info.cuffed.restraint_type.leg").withStyle(ChatFormatting.GRAY));
@@ -37,6 +33,6 @@ public class DuckTapeItem extends AbstractRestraintItem {
                 .withStyle(ChatFormatting.WHITE)));
         
 
-        super.appendHoverText(stack, level, components, tooltipFlag);
+        super.appendHoverText(stack, context, components, tooltipFlag);
     }
 }

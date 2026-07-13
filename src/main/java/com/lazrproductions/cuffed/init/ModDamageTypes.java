@@ -1,8 +1,7 @@
 package com.lazrproductions.cuffed.init;
 
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.CuffedMod;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;

@@ -1,9 +1,8 @@
 package com.lazrproductions.cuffed.blocks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.blocks.entity.TrayBlockEntity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -49,21 +48,21 @@ public class TrayBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
                 .setValue(WATERLOGGED, Boolean.FALSE));
     }
 
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, WATERLOGGED);
     }
 
     @Override
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos,
-            @Nonnull CollisionContext ctx) {
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+            @NotNull CollisionContext ctx) {
         if(state.getValue(FACING) == Direction.EAST || state.getValue(FACING) == Direction.WEST)
                 return SHAPE_EW;
         return SHAPE_NS;
     }
 
     @Override
-    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player interacting,
-        @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
+    public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player interacting,
+        @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if(level.getBlockEntity(pos) instanceof TrayBlockEntity entity) {
             return entity.use(state, level, pos, interacting, hand, hitResult);
         }
@@ -72,13 +71,13 @@ public class TrayBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new TrayBlockEntity(pos, state);
     }
 
     @SuppressWarnings("deprecation")
-    public void onRemove(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
-            @Nonnull BlockState newState,
+    public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+            @NotNull BlockState newState,
             boolean flag) {
         if (!state.is(newState.getBlock())) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
@@ -91,24 +90,24 @@ public class TrayBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
         super.onRemove(state, level, pos, newState, flag);
     }
 
-    public RenderShape getRenderShape(@Nonnull BlockState state) {
+    public RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
     }
 
-    public boolean isPathfindable(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos,
-            @Nonnull PathComputationType path) {
+    public boolean isPathfindable(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+            @NotNull PathComputationType path) {
         return false;
     }
 
-    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite())
                 .setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 
     @Override
-    public void setPlacedBy(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity entity,
-            @Nonnull ItemStack stack) {
+    public void setPlacedBy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity entity,
+            @NotNull ItemStack stack) {
         if(level.getBlockEntity(pos) instanceof TrayBlockEntity e) {
             e.loadFromItem(stack, level, pos, state);
         }
@@ -117,15 +116,15 @@ public class TrayBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
     }
 
     @SuppressWarnings("deprecation")
-    public FluidState getFluidState(@Nonnull BlockState state) {
+    public FluidState getFluidState(@NotNull BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
     @Deprecated
-    public BlockState updateShape(@Nonnull BlockState blockState, @Nonnull Direction direction,
-            @Nonnull BlockState facingState,
-            @Nonnull LevelAccessor levelAccessor, @Nonnull BlockPos currentPos, @Nonnull BlockPos facingPos) {
+    public BlockState updateShape(@NotNull BlockState blockState, @NotNull Direction direction,
+            @NotNull BlockState facingState,
+            @NotNull LevelAccessor levelAccessor, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         if (blockState.getValue(WATERLOGGED)) {
             levelAccessor.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
         }

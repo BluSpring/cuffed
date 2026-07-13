@@ -1,17 +1,18 @@
 package com.lazrproductions.cuffed.items;
 
+import java.util.List;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.items.base.AbstractRestraintItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ShacklesItem extends AbstractRestraintItem {
 
@@ -25,8 +26,8 @@ public class ShacklesItem extends AbstractRestraintItem {
     }
     
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level level, @Nonnull List<Component> components,
-            @Nonnull TooltipFlag tooltipFlag) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components,
+            @NotNull TooltipFlag tooltipFlag) {
         components.add(Component.translatable("info.cuffed.restraint_type.arm").withStyle(ChatFormatting.GRAY));
         components.add(Component.translatable("info.cuffed.restraint_type.leg").withStyle(ChatFormatting.GRAY));
         

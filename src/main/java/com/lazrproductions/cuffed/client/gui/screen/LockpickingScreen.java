@@ -7,6 +7,11 @@ import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.lazrproductions.lazrslib.common.math.MathUtilities;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
@@ -15,11 +20,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.joml.Random;
-
-import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 public class LockpickingScreen extends GenericScreen{
@@ -53,7 +53,7 @@ public class LockpickingScreen extends GenericScreen{
     }
 
     @Override
-    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if(minecraft!=null)
             renderContent(minecraft, graphics, mouseX, mouseY, partialTick);
 
@@ -65,7 +65,7 @@ public class LockpickingScreen extends GenericScreen{
 
     float lerpedGhostAngle = 0;
 
-    public void renderContent(@Nonnull Minecraft instance, @Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void renderContent(@NotNull Minecraft instance, @NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
 
         if(!isAnimating) {
             if(ticksLeftToPick > 0) {
@@ -156,7 +156,7 @@ public class LockpickingScreen extends GenericScreen{
         }
     }
 
-    void beginNewPhase(@Nonnull Minecraft instance) {
+    void beginNewPhase(@NotNull Minecraft instance) {
         currentPhase++;
         ticksLeftToPick += progressPerPick;
 
@@ -178,7 +178,7 @@ public class LockpickingScreen extends GenericScreen{
         assignNewGhost();
     }
 
-    void failLockpicking(@Nonnull Minecraft instance) {
+    void failLockpicking(@NotNull Minecraft instance) {
         LocalPlayer player = instance.player;
         if(player != null) {
             switch (type) {
@@ -196,7 +196,7 @@ public class LockpickingScreen extends GenericScreen{
         }
     }
 
-    void completeLockpicking(@Nonnull Minecraft instance) {
+    void completeLockpicking(@NotNull Minecraft instance) {
         LocalPlayer player = instance.player;
         if(player != null) {
             switch (type) {

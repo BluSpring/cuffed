@@ -1,8 +1,7 @@
 package com.lazrproductions.cuffed.enchantment;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.restraints.RestraintAPI;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +29,7 @@ public class ExhaustEnchantment extends Enchantment {
     }
 
     @Override
-	public boolean canApplyAtEnchantingTable(@Nonnull ItemStack stack) {
+	public boolean canApplyAtEnchantingTable(@NotNull ItemStack stack) {
 		return RestraintAPI.isRestraintItem(stack);
 	}
 }

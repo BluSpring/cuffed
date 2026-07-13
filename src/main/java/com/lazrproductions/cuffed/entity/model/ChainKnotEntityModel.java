@@ -1,12 +1,10 @@
 package com.lazrproductions.cuffed.entity.model;
 
-import javax.annotation.Nonnull;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.model.EntityModel;
-
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -41,7 +39,7 @@ public class ChainKnotEntityModel<T extends Entity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void setupAnim(@Nonnull T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(@NotNull T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
 	}
 
@@ -49,7 +47,7 @@ public class ChainKnotEntityModel<T extends Entity> extends EntityModel<T> {
 	public void setOnFence(boolean v) { onFence = v; }
 
 	@Override
-	public void renderToBuffer(@Nonnull PoseStack poseStack, @Nonnull VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		if(onFence)
 			fence.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 		else

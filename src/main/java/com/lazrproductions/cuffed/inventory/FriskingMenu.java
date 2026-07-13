@@ -1,6 +1,8 @@
 package com.lazrproductions.cuffed.inventory;
 
 import com.lazrproductions.cuffed.init.ModMenuTypes;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,8 +12,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-
-import javax.annotation.Nonnull;
 
 public class FriskingMenu extends AbstractContainerMenu {
     private final Container container;
@@ -75,7 +75,7 @@ public class FriskingMenu extends AbstractContainerMenu {
         this(ModMenuTypes.FRISKING_MENU, containerId, inv, 0, 5);
     }
 
-    public boolean stillValid(@Nonnull Player player) {
+    public boolean stillValid(@NotNull Player player) {
         Level level = player.level();
         if(level != null) {
             if(level.getEntity(otherPlayerId) instanceof Player other) {
@@ -87,15 +87,15 @@ public class FriskingMenu extends AbstractContainerMenu {
         return this.container.stillValid(player);
     }
 
-    public ItemStack quickMoveStack(@Nonnull Player player, int count) {
+    public ItemStack quickMoveStack(@NotNull Player player, int count) {
         return ItemStack.EMPTY;
     }
 
-    public boolean canDragTo(@Nonnull Slot slot) {
+    public boolean canDragTo(@NotNull Slot slot) {
         return false;
     }
 
-    public void removed(@Nonnull Player player) {
+    public void removed(@NotNull Player player) {
         super.removed(player);
         this.container.stopOpen(player);
     }

@@ -1,23 +1,19 @@
 package com.lazrproductions.cuffed.items;
 
+import java.util.List;
+
+import com.lazrproductions.cuffed.component.CuffedDataComponents;
 import com.lazrproductions.cuffed.init.ModItems;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class KeyMoldItem extends Item {
-    
-    public static final String TAG_COPIED_KEY = "CopiedKey";
-    public static final String TAG_NAME = "Name";
-
     public KeyMoldItem(Properties properties) {
         super(properties);
     }
@@ -26,33 +22,23 @@ public class KeyMoldItem extends Item {
     public static ItemStack createFromKey(ItemStack keyStack) {
         ItemStack newMold = new ItemStack(ModItems.KEY_MOLD, 1);
         
-        if(!keyStack.getOrCreateTag().contains(KeyItem.TAG_ID))
+        if(!keyStack.has(CuffedDataComponents.KEY))
             return newMold;
 
-        CompoundTag tag = new CompoundTag();
-        if(keyStack.getOrCreateTag().contains(KeyItem.TAG_ID))
-            tag.putUUID(KeyItem.TAG_ID, keyStack.getOrCreateTag().getUUID(KeyItem.TAG_ID));
-        if(keyStack.getOrCreateTag().contains("display"))
-            tag.putString(TAG_NAME, keyStack.getOrCreateTag().getCompound("display").getString("Name"));
-        newMold.getOrCreateTag().put(TAG_COPIED_KEY, tag);
+        if(keyStack.has(CuffedDataComponents.KEY))
+            newMold.set(CuffedDataComponents.KEY, keyStack.get(CuffedDataComponents.KEY));
+        if (keyStack.has(DataComponents.CUSTOM_NAME))
+            newMold.set(CuffedDataComponents.KEY_NAME, keyStack.get(DataComponents.CUSTOM_NAME));
 
         return newMold;
     }
 
-
     @Override
-    public ItemStack getDefaultInstance() {
-        ItemStack itemstack = new ItemStack(this);
-        return itemstack;
-    }
+    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, @NotNull List<Component> pTooltipComponents,
+            @NotNull TooltipFlag pIsAdvanced) {
+        super.appendHoverText(stack, context, pTooltipComponents, pIsAdvanced);
 
-    @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level pLevel, @Nonnull List<Component> pTooltipComponents,
-            @Nonnull TooltipFlag pIsAdvanced) {
-        super.appendHoverText(stack, pLevel, pTooltipComponents, pIsAdvanced);
-
-        CompoundTag tag = stack.getOrCreateTag().getCompound(TAG_COPIED_KEY);
-        if (tag != null) {
+        if (stack.has(CuffedDataComponents.KEY)) {
             pTooltipComponents.add(Component.translatable("item.cuffed.key_mold.description.bound").withStyle(ChatFormatting.GRAY));
         } else {
             pTooltipComponents.add(Component.translatable("item.cuffed.key_mold.description.unbound").withStyle(ChatFormatting.GRAY));

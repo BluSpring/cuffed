@@ -1,20 +1,20 @@
 package com.lazrproductions.cuffed.entity.renderer;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.CrumblingBlockEntity;
 import com.lazrproductions.cuffed.entity.model.CrumblingBlockModel;
 import com.lazrproductions.cuffed.init.ModModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class CrumblingBlockRenderer extends EntityRenderer<CrumblingBlockEntity> {
@@ -36,8 +36,8 @@ public class CrumblingBlockRenderer extends EntityRenderer<CrumblingBlockEntity>
 
     
     @Override
-    public void render(@Nonnull CrumblingBlockEntity entity, float p_114486_, float deltaTick, @Nonnull PoseStack stack,
-            @Nonnull MultiBufferSource buffer,
+    public void render(@NotNull CrumblingBlockEntity entity, float p_114486_, float deltaTick, @NotNull PoseStack stack,
+            @NotNull MultiBufferSource buffer,
             int bakedLight) {
         super.render(entity, p_114486_, deltaTick, stack, buffer, bakedLight);
         model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity))), 15,
@@ -45,7 +45,7 @@ public class CrumblingBlockRenderer extends EntityRenderer<CrumblingBlockEntity>
     }
 
     @Override
-    public ResourceLocation getTextureLocation(@Nonnull CrumblingBlockEntity entity) {
+    public ResourceLocation getTextureLocation(@NotNull CrumblingBlockEntity entity) {
         switch (entity.getCrumbleProgress()) {
             case 1:
                 return TEXTURE_LOCATION_1;

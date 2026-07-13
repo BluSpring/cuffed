@@ -3,6 +3,9 @@ package com.lazrproductions.cuffed.blocks;
 import com.lazrproductions.cuffed.blocks.entity.GuillotineBlockEntity;
 import com.lazrproductions.cuffed.init.ModBlockEntities;
 import com.lazrproductions.cuffed.init.ModBlocks;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -13,7 +16,12 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -25,9 +33,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class GuillotineBlock extends BaseEntityBlock {
 
@@ -50,23 +55,23 @@ public class GuillotineBlock extends BaseEntityBlock {
 
     
     @Override
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos,
-            @Nonnull CollisionContext ctx) {
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos,
+            @NotNull CollisionContext ctx) {
         return (state.getValue(FACING) == Direction.NORTH || state.getValue(FACING) == Direction.SOUTH)
                 ? SHAPE_NS_BASE
                 : SHAPE_EW_BASE;
     }
 
     @Override
-    public VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos,
-            @Nonnull CollisionContext ctx) {
+    public VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos,
+            @NotNull CollisionContext ctx) {
         return getShape(state, getter, pos, ctx);
     }
 
 
     @Override
     @Nullable
-    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext ctx) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext ctx) {
         BlockPos blockpos = ctx.getClickedPos();
         Level level = ctx.getLevel();
         BlockState stateBelow = level.getBlockState(blockpos.below()); 
@@ -77,46 +82,46 @@ public class GuillotineBlock extends BaseEntityBlock {
     }
 
     @Override
-    public BlockState rotate(@Nonnull BlockState state, @Nonnull Rotation r) {
+    public BlockState rotate(@NotNull BlockState state, @NotNull Rotation r) {
         return state.setValue(FACING, r.rotate(state.getValue(FACING)));
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public BlockState mirror(@Nonnull BlockState state, @Nonnull Mirror m) {
+    public BlockState mirror(@NotNull BlockState state, @NotNull Mirror m) {
         return state.rotate(m.getRotation(state.getValue(FACING)));
     }
 
     @Override
-    public boolean canSurvive(@Nonnull BlockState state, @Nonnull LevelReader level, @Nonnull BlockPos pos) {
+    public boolean canSurvive(@NotNull BlockState state, @NotNull LevelReader level, @NotNull BlockPos pos) {
         BlockPos blockpos = pos.below();
         BlockState blockstate = level.getBlockState(blockpos);
         return blockstate.is(ModBlocks.PILLORY);
     }
 
    @Override
-   public BlockState updateShape(@Nonnull BlockState state, @Nonnull Direction direction,  @Nonnull BlockState otherState, @Nonnull LevelAccessor level,
-           @Nonnull BlockPos pos, @Nonnull BlockPos otherPos) {
+   public BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction,  @NotNull BlockState otherState, @NotNull LevelAccessor level,
+           @NotNull BlockPos pos, @NotNull BlockPos otherPos) {
        if(!state.canSurvive(level, pos))
             return Blocks.AIR.defaultBlockState();
        return state;
    }
 
     @Override
-    protected void createBlockStateDefinition(@Nonnull Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FACING);
     }
 
     @Override
-    public RenderShape getRenderShape(@Nonnull BlockState p_49232_) {
+    public RenderShape getRenderShape(@NotNull BlockState p_49232_) {
         return RenderShape.MODEL;
     }
 
 
     @Override
-    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player,
-            @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
+    public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player,
+            @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if(hand == InteractionHand.MAIN_HAND)
             if(!level.isClientSide()) {
                 BlockEntity entity = level.getBlockEntity(pos);
@@ -130,13 +135,13 @@ public class GuillotineBlock extends BaseEntityBlock {
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new GuillotineBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@Nonnull Level level, @Nonnull BlockState state, @Nonnull BlockEntityType<T> blockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
         if(level.isClientSide()) {
             return null;
         }

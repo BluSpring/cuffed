@@ -1,8 +1,12 @@
 package com.lazrproductions.cuffed.recipes;
 
+import java.util.ArrayList;
+
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModRecipes;
 import com.lazrproductions.cuffed.items.PosterBlockItem;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -12,22 +16,19 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-
 public class PosterChangeRecipe extends CustomRecipe {
     public PosterChangeRecipe(ResourceLocation idIn, CraftingBookCategory category) {
         super(idIn, category);
     }
 
     @Override
-    public boolean matches(@Nonnull CraftingContainer inv, @Nonnull Level level) {
+    public boolean matches(@NotNull CraftingContainer inv, @NotNull Level level) {
         return isGridValid(inv);
     }
 
     @SuppressWarnings("null")
     @Override
-    public ItemStack assemble(@Nonnull CraftingContainer inv, @Nonnull RegistryAccess access) {
+    public ItemStack assemble(@NotNull CraftingContainer inv, @NotNull RegistryAccess access) {
 
         if (matches(inv, null)) {
             ItemStack posterStack = getPosterFromGrid(inv);
@@ -37,7 +38,7 @@ public class PosterChangeRecipe extends CustomRecipe {
         return ItemStack.EMPTY;
     }
 
-    public ArrayList<ItemStack> getAllValidItemsInGrid(@Nonnull CraftingContainer inv) {
+    public ArrayList<ItemStack> getAllValidItemsInGrid(@NotNull CraftingContainer inv) {
         ArrayList<ItemStack> validInGrid = new ArrayList<ItemStack>(0);
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -50,12 +51,12 @@ public class PosterChangeRecipe extends CustomRecipe {
         return validInGrid;
     }
 
-    public ItemStack getPosterFromGrid(@Nonnull CraftingContainer inv) {
+    public ItemStack getPosterFromGrid(@NotNull CraftingContainer inv) {
         ArrayList<ItemStack> moldsInGrid = getAllValidItemsInGrid(inv);
         return moldsInGrid.get(0);
     }
 
-    public boolean isGridValid(@Nonnull CraftingContainer inv) {
+    public boolean isGridValid(@NotNull CraftingContainer inv) {
         int numOfPosters = 0;
 
         for (int i = 0; i < inv.getContainerSize(); i++) {

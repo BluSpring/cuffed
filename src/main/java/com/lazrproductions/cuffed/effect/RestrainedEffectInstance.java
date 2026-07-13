@@ -1,16 +1,17 @@
 package com.lazrproductions.cuffed.effect;
 
+import java.util.UUID;
+
 import com.lazrproductions.cuffed.init.ModEffects;
+import net.minecraftforge.common.ForgeMod;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.common.ForgeMod;
-
-import javax.annotation.Nonnull;
-import java.util.UUID;
 
 public class RestrainedEffectInstance extends MobEffectInstance {
 
@@ -38,7 +39,7 @@ public class RestrainedEffectInstance extends MobEffectInstance {
     }
 
     @Override
-    public void applyEffect(@Nonnull LivingEntity entity) {
+    public void applyEffect(@NotNull LivingEntity entity) {
         if (this.hasRemainingDuration()) {
             super.applyEffect(entity);
 

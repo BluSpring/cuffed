@@ -1,8 +1,8 @@
 package com.lazrproductions.cuffed.entity.base;
 
-import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
+import net.minecraft.world.entity.Entity;
 
 public interface IAnchorableEntity {
     boolean isAnchored();

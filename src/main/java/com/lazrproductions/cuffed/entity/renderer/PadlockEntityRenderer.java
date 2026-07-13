@@ -1,7 +1,5 @@
 package com.lazrproductions.cuffed.entity.renderer;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.PadlockEntity;
 import com.lazrproductions.cuffed.entity.model.PadlockEntityModel;
@@ -9,14 +7,15 @@ import com.lazrproductions.cuffed.init.ModModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PadlockEntityRenderer extends EntityRenderer<PadlockEntity> {
@@ -40,7 +39,7 @@ public class PadlockEntityRenderer extends EntityRenderer<PadlockEntity> {
    }
 
 
-    public void render(@Nonnull PadlockEntity entity, float yaw, float partialTicks, @Nonnull PoseStack stack, @Nonnull MultiBufferSource buffer,
+    public void render(@NotNull PadlockEntity entity, float yaw, float partialTicks, @NotNull PoseStack stack, @NotNull MultiBufferSource buffer,
             int light) {
         super.render(entity, yaw, partialTicks, stack, buffer, light);
 
@@ -61,7 +60,7 @@ public class PadlockEntityRenderer extends EntityRenderer<PadlockEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(@Nonnull PadlockEntity entity) {
+    public ResourceLocation getTextureLocation(@NotNull PadlockEntity entity) {
         return TEXTURE_LOCATION;
     }
 }

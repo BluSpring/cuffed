@@ -1,14 +1,13 @@
 package com.lazrproductions.cuffed.mixin;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
+import com.lazrproductions.cuffed.init.ModTags;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.lazrproductions.cuffed.init.ModTags;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

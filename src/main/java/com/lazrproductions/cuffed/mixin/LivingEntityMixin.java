@@ -2,16 +2,14 @@ package com.lazrproductions.cuffed.mixin;
 
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
+import com.lazrproductions.cuffed.CuffedMod;
+import com.lazrproductions.cuffed.entity.base.IAnchorableEntity;
+import com.lazrproductions.cuffed.init.ModDamageTypes;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.lazrproductions.cuffed.CuffedMod;
-import com.lazrproductions.cuffed.entity.base.IAnchorableEntity;
-import com.lazrproductions.cuffed.init.ModDamageTypes;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;

@@ -1,5 +1,8 @@
 package com.lazrproductions.cuffed.client.gui.screen;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.inventory.FriskingMenu;
 import com.lazrproductions.cuffed.inventory.FriskingSlot;
@@ -8,6 +11,11 @@ import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,13 +31,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class FriskingScreen extends AbstractContainerScreen<FriskingMenu> {
@@ -46,7 +47,7 @@ public class FriskingScreen extends AbstractContainerScreen<FriskingMenu> {
       this.inventoryLabelY = this.imageHeight - 94;
    }
 
-   public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+   public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
       this.renderBackground(graphics);
       super.render(graphics, mouseX, mouseY, partialTick);
 
@@ -64,7 +65,7 @@ public class FriskingScreen extends AbstractContainerScreen<FriskingMenu> {
 
    @SuppressWarnings("null")
    @Override
-   protected void renderTooltip(@Nonnull GuiGraphics graphics, int mouseX, int mouseY) {
+   protected void renderTooltip(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
       if (this.menu.getCarried().isEmpty() && this.hoveredSlot != null && this.hoveredSlot.hasItem()) {
          ItemStack itemstack = this.hoveredSlot.getItem();
          ArrayList<Component> tooltips = new ArrayList<Component>(this.getTooltipFromContainerItem(itemstack));
@@ -75,7 +76,7 @@ public class FriskingScreen extends AbstractContainerScreen<FriskingMenu> {
 
    }
 
-   protected void renderBg(@Nonnull GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+   protected void renderBg(@NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
       imageWidth = 176;
       imageHeight = 256;
       int i = (this.width - this.imageWidth) / 2;
@@ -161,7 +162,7 @@ public class FriskingScreen extends AbstractContainerScreen<FriskingMenu> {
    }
 
    @Override
-   protected void renderLabels(@Nonnull GuiGraphics graphics, int mouseX, int mouseY) {
+   protected void renderLabels(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
       graphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752,
             false);
       graphics.drawString(this.font, this.title, this.titleLabelX + 110 - (this.font.width(this.title) / 2),

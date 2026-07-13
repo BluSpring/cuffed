@@ -1,9 +1,16 @@
 package com.lazrproductions.cuffed.items;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import com.lazrproductions.cuffed.init.ModMenuTypes;
 import com.lazrproductions.cuffed.inventory.FriskingContainer;
 import com.lazrproductions.cuffed.inventory.FriskingMenu;
 import com.lazrproductions.cuffed.inventory.tooltip.PossessionsBoxTooltip;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -28,12 +35,6 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 public class PossessionsBox extends Item {
 
    public final static String TAG_ITEMS = "Items";
@@ -43,8 +44,8 @@ public class PossessionsBox extends Item {
    }
 
    @Override
-   public boolean overrideStackedOnOther(@Nonnull ItemStack thisStack, @Nonnull Slot slot, @Nonnull ClickAction click,
-         @Nonnull Player player) {
+   public boolean overrideStackedOnOther(@NotNull ItemStack thisStack, @NotNull Slot slot, @NotNull ClickAction click,
+         @NotNull Player player) {
       if (thisStack.getCount() != 1 || click != ClickAction.SECONDARY) {
          return false;
       } else {
@@ -61,8 +62,8 @@ public class PossessionsBox extends Item {
    }
 
    @Override
-   public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player,
-         @Nonnull InteractionHand hand) {
+   public InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player,
+         @NotNull InteractionHand hand) {
       ItemStack itemstack = player.getItemInHand(hand);
       if (dropContents(itemstack, player) && player.isCrouching()) {
          this.playDropContentsSound(player);
@@ -152,7 +153,7 @@ public class PossessionsBox extends Item {
    }
 
    @Override
-   public Component getName(@Nonnull ItemStack stack) {
+   public Component getName(@NotNull ItemStack stack) {
       CompoundTag compoundtag = stack.getOrCreateTag();
       if (compoundtag.contains(TAG_ITEMS)) {
          ListTag listtag = compoundtag.getList(TAG_ITEMS, 10);
@@ -163,7 +164,7 @@ public class PossessionsBox extends Item {
    }
 
    @Override
-   public Optional<TooltipComponent> getTooltipImage(@Nonnull ItemStack p_150775_) {
+   public Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack p_150775_) {
       NonNullList<ItemStack> nonnulllist = NonNullList.create();
       getContents(p_150775_).forEach(nonnulllist::add);
       if (nonnulllist.size() > 0) {
@@ -174,8 +175,8 @@ public class PossessionsBox extends Item {
    }
 
    @Override
-   public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level p_150750_, @Nonnull List<Component> component,
-         @Nonnull TooltipFlag p_150752_) {
+   public void appendHoverText(@NotNull ItemStack stack, @Nullable Level p_150750_, @NotNull List<Component> component,
+         @NotNull TooltipFlag p_150752_) {
       CompoundTag compoundtag = stack.getOrCreateTag();
       if (!compoundtag.contains(TAG_ITEMS)) {
          component.add(Component.translatable("item.cuffed.possessions_box.lore.empty").withStyle(ChatFormatting.GRAY));
@@ -188,7 +189,7 @@ public class PossessionsBox extends Item {
    }
 
    @Override
-   public void onDestroyed(@Nonnull ItemEntity p_150728_) {
+   public void onDestroyed(@NotNull ItemEntity p_150728_) {
       ItemUtils.onContainerDestroyed(p_150728_, getContents(p_150728_.getItem()));
    }
 
@@ -200,7 +201,7 @@ public class PossessionsBox extends Item {
       entity.playSound(SoundEvents.BUNDLE_DROP_CONTENTS, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
    }
 
-   public static void frisk(@Nonnull ServerPlayer frisker, @Nonnull ServerPlayer player, @Nonnull ItemStack boxStack) {
+   public static void frisk(@NotNull ServerPlayer frisker, @NotNull ServerPlayer player, @NotNull ItemStack boxStack) {
       frisker.openMenu(new MenuProvider() {
          @Override
          public Component getDisplayName() {
@@ -208,7 +209,7 @@ public class PossessionsBox extends Item {
          }
 
          @Override
-         public AbstractContainerMenu createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player p) {
+         public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player p) {
             return new FriskingMenu(ModMenuTypes.FRISKING_MENU, id, playerInventory, player.getId(), new FriskingContainer(player, boxStack), 5);
          }
       });

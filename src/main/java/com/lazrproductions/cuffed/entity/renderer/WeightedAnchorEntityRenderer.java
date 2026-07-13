@@ -1,7 +1,5 @@
 package com.lazrproductions.cuffed.entity.renderer;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.WeightedAnchorEntity;
 import com.lazrproductions.cuffed.entity.model.WeightedAnchorModel;
@@ -9,6 +7,9 @@ import com.lazrproductions.cuffed.init.ModModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -16,8 +17,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class WeightedAnchorEntityRenderer extends EntityRenderer<WeightedAnchorEntity> {
@@ -38,7 +37,7 @@ public class WeightedAnchorEntityRenderer extends EntityRenderer<WeightedAnchorE
    }
 
 
-    public void render(@Nonnull WeightedAnchorEntity entity, float yaw, float partialTicks, @Nonnull PoseStack stack, @Nonnull MultiBufferSource buffer,
+    public void render(@NotNull WeightedAnchorEntity entity, float yaw, float partialTicks, @NotNull PoseStack stack, @NotNull MultiBufferSource buffer,
             int light) {
         super.render(entity, yaw, partialTicks, stack, buffer, light);
 
@@ -67,7 +66,7 @@ public class WeightedAnchorEntityRenderer extends EntityRenderer<WeightedAnchorE
     }
 
     @Override
-    public ResourceLocation getTextureLocation(@Nonnull WeightedAnchorEntity entity) {
+    public ResourceLocation getTextureLocation(@NotNull WeightedAnchorEntity entity) {
         return TEXTURE_LOCATION;
     }
 }

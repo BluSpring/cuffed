@@ -1,8 +1,7 @@
 package com.lazrproductions.cuffed.inventory;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.items.PossessionsBox;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -37,7 +36,7 @@ public class FriskingContainer implements Container {
 	}
 
 	@Override
-	public boolean canTakeItem(@Nonnull Container p_273520_, int p_272681_, @Nonnull ItemStack p_273702_) {
+	public boolean canTakeItem(@NotNull Container p_273520_, int p_272681_, @NotNull ItemStack p_273702_) {
 		return false;
 	}	
 
@@ -102,7 +101,7 @@ public class FriskingContainer implements Container {
 	}
 
 	@Override
-	public void setItem(int index, @Nonnull ItemStack is) {
+	public void setItem(int index, @NotNull ItemStack is) {
 		if (isInvalidSlot(index)) {
 			return;
 		}
@@ -127,12 +126,12 @@ public class FriskingContainer implements Container {
 	}
 
 	@Override
-	public boolean stillValid(@Nonnull Player player) {
+	public boolean stillValid(@NotNull Player player) {
 		return true;
 	}
 
 	@Override
-	public boolean canPlaceItem(int index, @Nonnull ItemStack stack) {
+	public boolean canPlaceItem(int index, @NotNull ItemStack stack) {
 		return false;
 	}
 

@@ -2,8 +2,6 @@ package com.lazrproductions.cuffed.restraints.client.layer;
 
 import java.util.HashMap;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.base.IRestrainableEntity;
 import com.lazrproductions.cuffed.restraints.RestraintAPI;
@@ -11,6 +9,7 @@ import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
 import com.lazrproductions.cuffed.restraints.client.RestraintModelInterface;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -49,7 +48,7 @@ public class RestraintEntityLayer<T extends LivingEntity, M extends HumanoidMode
         }
     }
 
-    public void render(@Nonnull PoseStack stack, @Nonnull MultiBufferSource buffer, int lighting, @Nonnull T entity,
+    public void render(@NotNull PoseStack stack, @NotNull MultiBufferSource buffer, int lighting, @NotNull T entity,
             float p_116987_, float p_116988_, float p_116989_, float p_116990_, float p_116991_, float p_116992_) {
 
 

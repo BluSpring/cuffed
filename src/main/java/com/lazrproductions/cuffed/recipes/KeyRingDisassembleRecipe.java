@@ -5,6 +5,8 @@ import com.lazrproductions.cuffed.init.ModRecipes;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyMoldItem;
 import com.lazrproductions.cuffed.items.KeyRingItem;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
@@ -17,15 +19,13 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nonnull;
-
 public class KeyRingDisassembleRecipe extends CustomRecipe {
     public KeyRingDisassembleRecipe(ResourceLocation idIn, CraftingBookCategory category) {
         super(idIn, category);
     }
 
     @Override
-    public boolean matches(@Nonnull CraftingContainer inv, @Nonnull Level level) {
+    public boolean matches(@NotNull CraftingContainer inv, @NotNull Level level) {
         ItemStack ringStack = null;
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -47,7 +47,7 @@ public class KeyRingDisassembleRecipe extends CustomRecipe {
 
     @SuppressWarnings("null")
     @Override
-    public ItemStack assemble(@Nonnull CraftingContainer inv, @Nonnull RegistryAccess access) {
+    public ItemStack assemble(@NotNull CraftingContainer inv, @NotNull RegistryAccess access) {
 
         ItemStack ringStack = null;
 
@@ -95,7 +95,7 @@ public class KeyRingDisassembleRecipe extends CustomRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(@Nonnull CraftingContainer container) {
+    public NonNullList<ItemStack> getRemainingItems(@NotNull CraftingContainer container) {
         NonNullList<ItemStack> nonnulllist = NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
 
 

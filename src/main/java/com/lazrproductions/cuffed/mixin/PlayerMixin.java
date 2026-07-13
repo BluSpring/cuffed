@@ -1,5 +1,8 @@
 package com.lazrproductions.cuffed.mixin;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.blocks.PilloryBlock;
@@ -13,6 +16,14 @@ import com.lazrproductions.cuffed.entity.base.IPrivacyOperand;
 import com.lazrproductions.cuffed.entity.base.IRestrainableEntity;
 import com.lazrproductions.cuffed.init.ModEffects;
 import com.lazrproductions.cuffed.restraints.base.IEnchantableRestraint;
+import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -36,16 +47,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 @Mixin(Player.class)
 public class PlayerMixin extends LivingEntity implements IRestrainableEntity, IDetainableEntity, INicknamable, IPrivacyOperand {
@@ -363,7 +364,7 @@ public class PlayerMixin extends LivingEntity implements IRestrainableEntity, ID
 
     //#region Detainable Data Management
 
-    public void detainToBlock(@Nonnull Level level, Vector3f detainPos, @Nonnull BlockPos pos, int detaintType, float facingRotation) {
+    public void detainToBlock(@NotNull Level level, Vector3f detainPos, @NotNull BlockPos pos, int detaintType, float facingRotation) {
         setDetained(detaintType);
         setDetainedRotation(facingRotation);
         setBlockDetainedTo(pos);
@@ -390,10 +391,10 @@ public class PlayerMixin extends LivingEntity implements IRestrainableEntity, ID
         entityData.set(DATA_DETAINED_ROTATION, value);
     }
 
-    public BlockState getBlockDetainedTo(@Nonnull Level level) {
+    public BlockState getBlockDetainedTo(@NotNull Level level) {
         return level.getBlockState(entityData.get(DATA_DETAINED_TO_BLOCK));
     }
-    public void setBlockDetainedTo(@Nonnull BlockPos pos) {
+    public void setBlockDetainedTo(@NotNull BlockPos pos) {
         entityData.set(DATA_DETAINED_TO_BLOCK, pos);
     }
 
@@ -488,11 +489,11 @@ public class PlayerMixin extends LivingEntity implements IRestrainableEntity, ID
         return null;
     }
     @Shadow
-    public ItemStack getItemBySlot(@Nonnull EquipmentSlot p_21127_) {
+    public ItemStack getItemBySlot(@NotNull EquipmentSlot p_21127_) {
         return null;
     }
     @Shadow
-    public void setItemSlot(@Nonnull EquipmentSlot p_21036_, @Nonnull ItemStack p_21037_) {
+    public void setItemSlot(@NotNull EquipmentSlot p_21036_, @NotNull ItemStack p_21037_) {
     }
     @Shadow
     public HumanoidArm getMainArm() {

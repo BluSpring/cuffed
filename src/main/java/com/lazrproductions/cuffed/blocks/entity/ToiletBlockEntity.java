@@ -1,7 +1,12 @@
 package com.lazrproductions.cuffed.blocks.entity;
 
+import java.util.List;
+
 import com.lazrproductions.cuffed.init.ModBlockEntities;
 import com.lazrproductions.cuffed.items.TrayItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -21,10 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-
 public class ToiletBlockEntity extends BlockEntity {
     private static final int INVENTORY_SIZE = 1;
     private NonNullList<ItemStack> items = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
@@ -33,9 +34,9 @@ public class ToiletBlockEntity extends BlockEntity {
         super(ModBlockEntities.TRAY, pos, state);
     }
 
-    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
-            @Nonnull Player interacting,
-            @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
+    public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+            @NotNull Player interacting,
+            @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (hand == InteractionHand.MAIN_HAND && !level.isClientSide()) {
             ItemStack stack = interacting.getItemInHand(hand);
             if(stack.isEmpty()) {
@@ -67,7 +68,7 @@ public class ToiletBlockEntity extends BlockEntity {
         return InteractionResult.FAIL;
     }
 
-    @Nonnull
+    @NotNull
     public ItemStack getNextStack() {
         for (ItemStack itemStack : items) {
             if (!itemStack.isEmpty())
@@ -76,7 +77,7 @@ public class ToiletBlockEntity extends BlockEntity {
         return ItemStack.EMPTY;
     }
 
-    protected boolean addItem(@Nonnull ItemStack stack) {
+    protected boolean addItem(@NotNull ItemStack stack) {
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).isEmpty()) {
                 items.set(i, stack);
@@ -86,7 +87,7 @@ public class ToiletBlockEntity extends BlockEntity {
         return false;
     }
 
-    protected boolean setItem(@Nonnull ItemStack stack, int index) {
+    protected boolean setItem(@NotNull ItemStack stack, int index) {
         if (items.get(index).isEmpty()) {
             items.set(index, stack);
             return true;
@@ -129,7 +130,7 @@ public class ToiletBlockEntity extends BlockEntity {
 
 
     @Override
-    protected void saveAdditional(@Nonnull CompoundTag tag) {
+    protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
 
         ListTag list = new ListTag();
@@ -142,7 +143,7 @@ public class ToiletBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(@Nonnull CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
 
         if(tag.contains(TrayItem.TAG_ITEMS)) {
@@ -157,7 +158,7 @@ public class ToiletBlockEntity extends BlockEntity {
 
 
 
-    public List<ItemStack> getDrops(@Nonnull Level level, @Nonnull BlockPos pos) {
+    public List<ItemStack> getDrops(@NotNull Level level, @NotNull BlockPos pos) {
         List<ItemStack> stacks = List.of();
         for (ItemStack itemStack : items) {
             stacks.add(itemStack);

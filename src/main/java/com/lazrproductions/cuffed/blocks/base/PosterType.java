@@ -1,8 +1,7 @@
 package com.lazrproductions.cuffed.blocks.base;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.items.PosterBlockItem;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
@@ -111,7 +110,7 @@ public enum PosterType implements StringRepresentable {
         }
     }
 
-    public static PosterType getfromItem(@Nonnull ItemStack stack) {
+    public static PosterType getfromItem(@NotNull ItemStack stack) {
         return PosterBlockItem.getPosterType(stack);
     }
 }

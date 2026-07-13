@@ -1,5 +1,7 @@
 package com.lazrproductions.cuffed.blocks.base;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -11,17 +13,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-import javax.annotation.Nonnull;
-
 public interface ILockableBlock {
     BooleanProperty LOCKED = BooleanProperty.create("locked");
     BooleanProperty BOUND = BooleanProperty.create("bound");
     
-    static boolean isLocked(@Nonnull BlockState state) {
+    static boolean isLocked(@NotNull BlockState state) {
         return state.getValue(LOCKED);
     }
     
-    static void setIsLocked(@Nonnull Player player, @Nonnull BlockState state, @Nonnull BlockPos pos, boolean locked) {
+    static void setIsLocked(@NotNull Player player, @NotNull BlockState state, @NotNull BlockPos pos, boolean locked) {
         Level level = player.level();
         if(level != null) {
             state = state.setValue(LOCKED, locked);
@@ -34,12 +34,12 @@ public interface ILockableBlock {
         }
     }
 
-    static boolean isBound(@Nonnull BlockState state) {
+    static boolean isBound(@NotNull BlockState state) {
         return state.getValue(BOUND);
     }
     
         
-    static boolean tryToBindToKey(@Nonnull Player player, @Nonnull BlockState state, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
+    static boolean tryToBindToKey(@NotNull Player player, @NotNull BlockState state, @NotNull BlockPos pos, @NotNull ItemStack stack) {
         if(!isBound(state)) {
             Level level = player.level();
             if(level != null) {        
@@ -53,7 +53,7 @@ public interface ILockableBlock {
         return false;
     }
 
-    static void bindToKey(@Nonnull Player player, @Nonnull BlockState state, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
+    static void bindToKey(@NotNull Player player, @NotNull BlockState state, @NotNull BlockPos pos, @NotNull ItemStack stack) {
         Level level = player.level();
         if(level != null) {        
             // if(KeyItem.tryToSetBoundBlock(player, stack, pos)) {

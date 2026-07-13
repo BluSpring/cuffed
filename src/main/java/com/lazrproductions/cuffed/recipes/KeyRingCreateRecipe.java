@@ -1,9 +1,13 @@
 package com.lazrproductions.cuffed.recipes;
 
+import java.util.ArrayList;
+
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModRecipes;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyRingItem;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -14,16 +18,13 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-
 public class KeyRingCreateRecipe extends CustomRecipe {
     public KeyRingCreateRecipe(ResourceLocation idIn, CraftingBookCategory category) {
         super(idIn, category);
     }
 
     @Override
-    public boolean matches(@Nonnull CraftingContainer inv, @Nonnull Level level) {
+    public boolean matches(@NotNull CraftingContainer inv, @NotNull Level level) {
         ArrayList<ItemStack> keyStack = new ArrayList<ItemStack>(0);
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -45,7 +46,7 @@ public class KeyRingCreateRecipe extends CustomRecipe {
 
     @SuppressWarnings("null")
     @Override
-    public ItemStack assemble(@Nonnull CraftingContainer inv, @Nonnull RegistryAccess access) {
+    public ItemStack assemble(@NotNull CraftingContainer inv, @NotNull RegistryAccess access) {
 
         ArrayList<ItemStack> keyStacks = new ArrayList<ItemStack>(0);
 

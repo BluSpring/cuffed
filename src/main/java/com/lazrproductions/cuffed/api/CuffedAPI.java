@@ -1,5 +1,8 @@
 package com.lazrproductions.cuffed.api;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.blocks.PilloryBlock;
 import com.lazrproductions.cuffed.blocks.base.ILockableBlock;
@@ -10,10 +13,24 @@ import com.lazrproductions.cuffed.entity.PadlockEntity;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.init.ModTags;
-import com.lazrproductions.cuffed.packet.*;
+import com.lazrproductions.cuffed.packet.LockpickBlockPacket;
+import com.lazrproductions.cuffed.packet.LockpickLockPacket;
+import com.lazrproductions.cuffed.packet.LockpickRestraintPacket;
+import com.lazrproductions.cuffed.packet.RestraintEquippedPacket;
+import com.lazrproductions.cuffed.packet.RestraintSyncPacket;
+import com.lazrproductions.cuffed.packet.RestraintUtilityPacket;
 import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
 import com.lazrproductions.lazrslib.common.network.LazrNetwork;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,17 +46,6 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.server.ServerLifecycleHooks;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.UUID;
 
 public class CuffedAPI {
     public static class Networking {
@@ -47,7 +53,7 @@ public class CuffedAPI {
         public static final LazrNetwork NETWORK = new LazrNetwork(ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "main"), 1);
 
 
-        public static void sendRestraintSyncPacket(@Nonnull ServerPlayer client) {
+        public static void sendRestraintSyncPacket(@NotNull ServerPlayer client) {
             IRestrainableCapability cap = Capabilities.getRestrainableCapability(client);
             RestraintSyncPacket packet = new RestraintSyncPacket(client.getId(), client.getUUID().toString(),
                     cap.serializeNBT());
@@ -55,7 +61,7 @@ public class CuffedAPI {
         }
         
 
-        public static void sendRestraintEquipPacket(@Nonnull ServerPlayer client, @Nullable ServerPlayer captor,
+        public static void sendRestraintEquipPacket(@NotNull ServerPlayer client, @Nullable ServerPlayer captor,
                 RestraintType type, @Nullable AbstractRestraint newRestraint,
                 @Nullable AbstractRestraint oldRestraint) {
             RestraintEquippedPacket packet = new RestraintEquippedPacket(client.getId(), client.getUUID().toString(),
@@ -94,15 +100,15 @@ public class CuffedAPI {
         }
 
 
-        public static void sendLockpickBeginPickingLockPacketToClient(@Nonnull ServerPlayer player, int lockId, int speedIncreasePerPhase, int progressPerPick) {
+        public static void sendLockpickBeginPickingLockPacketToClient(@NotNull ServerPlayer player, int lockId, int speedIncreasePerPhase, int progressPerPick) {
             LockpickLockPacket packet = new LockpickLockPacket(lockId, speedIncreasePerPhase, progressPerPick, player.getUUID().toString());
             Networking.NETWORK.sendTo(packet, player);
         }
-        public static void sendLockpickBeginPickingRestraintPacketToClient(@Nonnull ServerPlayer player, String restrainedUUID, int restraintType, int speedIncreasePerPhase, int progressPerPick) {
+        public static void sendLockpickBeginPickingRestraintPacketToClient(@NotNull ServerPlayer player, String restrainedUUID, int restraintType, int speedIncreasePerPhase, int progressPerPick) {
             LockpickRestraintPacket packet = new LockpickRestraintPacket(restrainedUUID, restraintType, speedIncreasePerPhase, progressPerPick, player.getUUID().toString());
             Networking.NETWORK.sendTo(packet, player);
         }
-        public static void sendLockpickBeginPickingCellDoorPacketToClient(@Nonnull ServerPlayer player, BlockPos pos, int speedIncreasePerPhase, int progressPerPick) {
+        public static void sendLockpickBeginPickingCellDoorPacketToClient(@NotNull ServerPlayer player, BlockPos pos, int speedIncreasePerPhase, int progressPerPick) {
             LockpickBlockPacket packet = new LockpickBlockPacket(pos, speedIncreasePerPhase, progressPerPick, player.getUUID().toString());
             Networking.NETWORK.sendTo(packet, player);
         }
@@ -120,7 +126,7 @@ public class CuffedAPI {
     }
 
     public static class Lockpicking {
-        public static void finishLockpickingLock(boolean wasFailed, int lockId, @Nonnull UUID lockpickerUUID) {
+        public static void finishLockpickingLock(boolean wasFailed, int lockId, @NotNull UUID lockpickerUUID) {
             ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(lockpickerUUID);
             if (player != null) {
                 Level level = player.level();
@@ -152,7 +158,7 @@ public class CuffedAPI {
                 }
             }
         }
-        public static void finishLockpickingRestraint(boolean wasFailed, RestraintType restraintType, @Nonnull UUID restrainedPlayerUUID, @Nonnull UUID lockpickerUUID) {
+        public static void finishLockpickingRestraint(boolean wasFailed, RestraintType restraintType, @NotNull UUID restrainedPlayerUUID, @NotNull UUID lockpickerUUID) {
             ServerPlayer lockpicker = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(lockpickerUUID);
             ServerPlayer restrained = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(restrainedPlayerUUID);
             if (lockpicker != null && restrained != null) {
@@ -184,7 +190,7 @@ public class CuffedAPI {
                 }
             
         }
-        public static void finishLockpickingCellDoor(boolean wasFailed, @Nonnull BlockPos pos, UUID lockpickerUUID) {
+        public static void finishLockpickingCellDoor(boolean wasFailed, @NotNull BlockPos pos, UUID lockpickerUUID) {
             ServerPlayer lockpicker = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(lockpickerUUID);
             if (lockpicker != null) {
                 Level level = lockpicker.level();
@@ -219,7 +225,7 @@ public class CuffedAPI {
 
 
         @OnlyIn(Dist.CLIENT)
-        public static void beginLockpickingLock(@Nonnull Minecraft instance, int lockId, int speedIncreasePerPhase, int progressPerPick) {
+        public static void beginLockpickingLock(@NotNull Minecraft instance, int lockId, int speedIncreasePerPhase, int progressPerPick) {
             LockpickingScreen overlay = new LockpickingScreen(instance);
             overlay.speedIncreasePerPhase = speedIncreasePerPhase;
             overlay.progressPerPick = progressPerPick;
@@ -230,7 +236,7 @@ public class CuffedAPI {
             instance.setScreen(overlay);
         }
         @OnlyIn(Dist.CLIENT)
-        public static void beginLockpickingRestraint(@Nonnull Minecraft instance, String restrainedUUID, int restraintType, int speedIncreasePerPhase, int progressPerPick) {
+        public static void beginLockpickingRestraint(@NotNull Minecraft instance, String restrainedUUID, int restraintType, int speedIncreasePerPhase, int progressPerPick) {
             LockpickingScreen overlay = new LockpickingScreen(instance);
             overlay.speedIncreasePerPhase = speedIncreasePerPhase;
             overlay.progressPerPick = progressPerPick;
@@ -242,7 +248,7 @@ public class CuffedAPI {
             instance.setScreen(overlay);
         }
         @OnlyIn(Dist.CLIENT)
-        public static void beginLockpickingCellDoor(@Nonnull Minecraft instance, BlockPos pos, int speedIncreasePerPhase, int progressPerPick) {
+        public static void beginLockpickingCellDoor(@NotNull Minecraft instance, BlockPos pos, int speedIncreasePerPhase, int progressPerPick) {
             LockpickingScreen overlay = new LockpickingScreen(instance);
             overlay.speedIncreasePerPhase = speedIncreasePerPhase;
             overlay.progressPerPick = progressPerPick;
@@ -253,7 +259,7 @@ public class CuffedAPI {
             instance.setScreen(overlay);
         }
     
-        public static boolean isLockedAt(@Nonnull Level level, @Nonnull BlockState state, @Nonnull BlockPos pos) {
+        public static boolean isLockedAt(@NotNull Level level, @NotNull BlockState state, @NotNull BlockPos pos) {
             if (state.is(ModTags.Blocks.LOCKABLE_BLOCKS)) {
                 PadlockEntity padlock = PadlockEntity.getLockAt(level, pos);
                 if (padlock != null && padlock.isLocked())
@@ -322,7 +328,7 @@ public class CuffedAPI {
 
     public static class Privacy {
         // TODO: next update's problem
-        // public static boolean attemptToAnchor(@Nonnull ServerPlayer player, @Nonnull ServerPlayer playerAnchoring) {
+        // public static boolean attemptToAnchor(@NotNull ServerPlayer player, @NotNull ServerPlayer playerAnchoring) {
         //     if(playerAnchoring.hasPermissions(1))
         //         return true; // allow moderators and higher to bypass privacy restrictions
             
@@ -344,7 +350,7 @@ public class CuffedAPI {
         // }
 
 
-        // public static void askPlayerForPermission(@Nonnull ServerPlayer player) {
+        // public static void askPlayerForPermission(@NotNull ServerPlayer player) {
 
         // }
     }

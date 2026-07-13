@@ -7,6 +7,9 @@ import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyRingItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -44,9 +47,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 @SuppressWarnings("deprecation")
 public class SafeBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final VoxelShape SHAPE_EW = Block.box(16 * 0.0625F, 16 * 0F, 16 * 0.125F,
@@ -68,16 +68,16 @@ public class SafeBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
     }
 
     @Override
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos,
-            @Nonnull CollisionContext context) {
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+            @NotNull CollisionContext context) {
         if (state.getValue(FACING) == Direction.EAST || state.getValue(FACING) == Direction.WEST)
             return SHAPE_EW;
         return SHAPE_NS;
     }
 
-    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
-            @Nonnull Player player,
-            @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
+    public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+            @NotNull Player player,
+            @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -124,13 +124,13 @@ public class SafeBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
         }
     }
 
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, OPEN, WATERLOGGED);
     }
 
     /* BLOCK ENTITY STUFFS */
-    public void onRemove(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
-            @Nonnull BlockState newState,
+    public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+            @NotNull BlockState newState,
             boolean p_49080_) {
         if (!state.is(newState.getBlock())) {
             BlockEntity blockentity = level.getBlockEntity(pos);
@@ -143,8 +143,8 @@ public class SafeBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
         }
     }
 
-    public void tick(@Nonnull BlockState state, @Nonnull ServerLevel level, @Nonnull BlockPos pos,
-            @Nonnull RandomSource random) {
+    public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos,
+            @NotNull RandomSource random) {
         BlockEntity blockentity = level.getBlockEntity(pos);
         if (blockentity instanceof SafeBlockEntity) {
             ((SafeBlockEntity) blockentity).recheckOpen();
@@ -153,17 +153,17 @@ public class SafeBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
     }
 
     @Nullable
-    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new SafeBlockEntity(pos, state);
     }
 
-    public RenderShape getRenderShape(@Nonnull BlockState state) {
+    public RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
     }
 
-    public void setPlacedBy(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state,
+    public void setPlacedBy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
             @Nullable LivingEntity entity,
-            @Nonnull ItemStack fromStack) {
+            @NotNull ItemStack fromStack) {
         if (fromStack.hasCustomHoverName()) {
             BlockEntity blockentity = level.getBlockEntity(pos);
             if (blockentity instanceof SafeBlockEntity) {
@@ -173,34 +173,34 @@ public class SafeBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
 
     }
 
-    public boolean hasAnalogOutputSignal(@Nonnull BlockState state) {
+    public boolean hasAnalogOutputSignal(@NotNull BlockState state) {
         return true;
     }
 
-    public int getAnalogOutputSignal(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos) {
+    public int getAnalogOutputSignal(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
         return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos));
     }
 
-    public boolean isPathfindable(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos,
-            @Nonnull PathComputationType path) {
+    public boolean isPathfindable(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+            @NotNull PathComputationType path) {
         return false;
     }
 
-    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite())
                 .setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 
-    public FluidState getFluidState(@Nonnull BlockState state) {
+    public FluidState getFluidState(@NotNull BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
     @Deprecated
-    public BlockState updateShape(@Nonnull BlockState blockState, @Nonnull Direction direction,
-            @Nonnull BlockState facingState,
-            @Nonnull LevelAccessor levelAccessor, @Nonnull BlockPos currentPos, @Nonnull BlockPos facingPos) {
+    public BlockState updateShape(@NotNull BlockState blockState, @NotNull Direction direction,
+            @NotNull BlockState facingState,
+            @NotNull LevelAccessor levelAccessor, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         if (blockState.getValue(WATERLOGGED)) {
             levelAccessor.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
         }

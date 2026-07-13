@@ -1,6 +1,10 @@
 package com.lazrproductions.cuffed.blocks.entity;
 
+import java.util.UUID;
+
 import com.lazrproductions.cuffed.init.ModBlockEntities;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -10,9 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-
-import javax.annotation.Nonnull;
-import java.util.UUID;
 
 public class LockableBlockEntity extends BlockEntity {
     private UUID lockId;
@@ -35,7 +36,7 @@ public class LockableBlockEntity extends BlockEntity {
         hasBeenBound = false;
     }
 
-    protected void saveAdditional(@Nonnull CompoundTag tag) {
+    protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.putUUID("LockId", lockId);
         tag.putBoolean("Locked", locked);
@@ -43,7 +44,7 @@ public class LockableBlockEntity extends BlockEntity {
         tag.putBoolean("HasBeenBound", hasBeenBound);
     }
 
-    public void load(@Nonnull CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         lockId = tag.getUUID("LockId");
         locked = tag.getBoolean("Locked");

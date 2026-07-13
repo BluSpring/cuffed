@@ -1,5 +1,5 @@
 package com.lazrproductions.cuffed.compat;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,7 +8,7 @@ public class KnightsOfBritanniaCompat {
         public static void load() {
     }
 
-    public static void DrainMana(@Nonnull ServerPlayer player, int amount) {
+    public static void DrainMana(@NotNull ServerPlayer player, int amount) {
         MinecraftServer server = player.getServer();
         if(server == null)
             return;
@@ -35,7 +35,7 @@ public class KnightsOfBritanniaCompat {
         myManaScore.add(-(int)amount);
     }
 
-    public static void DrainMana(@Nonnull ServerPlayer player, double amountPercentage) {
+    public static void DrainMana(@NotNull ServerPlayer player, double amountPercentage) {
         
         MinecraftServer server = player.getServer();
         if(server == null)

@@ -1,6 +1,7 @@
 package com.lazrproductions.cuffed.effect;
 
-import javax.annotation.Nonnull;
+import net.minecraftforge.common.ForgeMod;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -8,7 +9,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.common.ForgeMod;
 
 public class RestrainedEffect extends MobEffect {
 
@@ -17,7 +17,7 @@ public class RestrainedEffect extends MobEffect {
     }
 
     @Override
-    public void removeAttributeModifiers(@Nonnull LivingEntity entity, @Nonnull AttributeMap attributes, int amplifier) {
+    public void removeAttributeModifiers(@NotNull LivingEntity entity, @NotNull AttributeMap attributes, int amplifier) {
         super.removeAttributeModifiers(entity, attributes, amplifier);
 
         AttributeInstance attackSpeed = attributes.getInstance(Attributes.ATTACK_SPEED);

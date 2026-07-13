@@ -7,6 +7,9 @@ import com.lazrproductions.cuffed.init.ModBlocks;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyRingItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -38,9 +41,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class CellDoor extends DoorBlock implements EntityBlock {
 
@@ -88,8 +88,8 @@ public class CellDoor extends DoorBlock implements EntityBlock {
             9.0D, 16.0D, 16.0D);
 
     @Override
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos,
-            @Nonnull CollisionContext ctx) {
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos,
+            @NotNull CollisionContext ctx) {
         if (isInBars(state)) {
             Direction facing = state.getValue(FACING);
             if (facing == Direction.NORTH || facing == Direction.SOUTH)
@@ -121,7 +121,7 @@ public class CellDoor extends DoorBlock implements EntityBlock {
 
     @Override
     @Nullable
-    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext ctx) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext ctx) {
         BlockPos blockpos = ctx.getClickedPos();
         Level level = ctx.getLevel();
         if (blockpos.getY() < level.getMaxBuildHeight() - 1
@@ -136,9 +136,9 @@ public class CellDoor extends DoorBlock implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
-            @Nonnull Player player,
-            @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
+    public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+            @NotNull Player player,
+            @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
 
         if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND) {
             ItemStack stack = player.getInventory().getSelected();
@@ -191,14 +191,14 @@ public class CellDoor extends DoorBlock implements EntityBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(@Nonnull Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@NotNull Builder<Block, BlockState> builder) {
         builder.add(HALF, FACING, OPEN, HINGE, POWERED, IN_BARS);
     }
 
     @Override
-    public BlockState updateShape(@Nonnull BlockState state, @Nonnull Direction updateDirection,
-            @Nonnull BlockState otherState, @Nonnull LevelAccessor level,
-            @Nonnull BlockPos pos, @Nonnull BlockPos otherPos) {
+    public BlockState updateShape(@NotNull BlockState state, @NotNull Direction updateDirection,
+            @NotNull BlockState otherState, @NotNull LevelAccessor level,
+            @NotNull BlockPos pos, @NotNull BlockPos otherPos) {
 
         Direction facing = state.getValue(FACING);
         boolean isBottom = state.getValue(HALF) == DoubleBlockHalf.LOWER;
@@ -231,8 +231,8 @@ public class CellDoor extends DoorBlock implements EntityBlock {
     }
 
     @Override
-    public void neighborChanged(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
-            @Nonnull Block block, @Nonnull BlockPos pos2,
+    public void neighborChanged(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+            @NotNull Block block, @NotNull BlockPos pos2,
             boolean query) {
         // do nothing, so redstone doesn't effect the door
 
@@ -302,7 +302,7 @@ public class CellDoor extends DoorBlock implements EntityBlock {
 
 
     @Nullable
-    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         if(state.getValue(HALF) == DoubleBlockHalf.LOWER)
             return new LockableBlockEntity(pos, state, getDescriptionId());
         return null;

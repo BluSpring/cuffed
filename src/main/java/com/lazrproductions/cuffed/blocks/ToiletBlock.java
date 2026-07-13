@@ -1,6 +1,9 @@
 package com.lazrproductions.cuffed.blocks;
 
 import com.lazrproductions.cuffed.blocks.entity.ToiletBlockEntity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -29,9 +32,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class ToiletBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 
@@ -63,13 +63,13 @@ public class ToiletBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
                 .setValue(WATERLOGGED, Boolean.FALSE));
     }
 
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, WATERLOGGED);
     }
 
     @Override
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos,
-            @Nonnull CollisionContext ctx) {
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+            @NotNull CollisionContext ctx) {
         switch (state.getValue(FACING)) {
             case NORTH:
                 return SHAPE_NORTH;
@@ -83,9 +83,9 @@ public class ToiletBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
     }
 
     @Override
-    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
-            @Nonnull Player interacting,
-            @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
+    public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+            @NotNull Player interacting,
+            @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if(!interacting.isCrouching()) {
             if (level.getBlockEntity(pos) instanceof ToiletBlockEntity entity) {
                 return entity.use(state, level, pos, interacting, hand, hitResult);
@@ -96,13 +96,13 @@ public class ToiletBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new ToiletBlockEntity(pos, state);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onRemove(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState newState,
+    public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState,
             boolean f) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof ToiletBlockEntity toilet) {
@@ -130,31 +130,31 @@ public class ToiletBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
         
     }
 
-    public RenderShape getRenderShape(@Nonnull BlockState state) {
+    public RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
     }
 
-    public boolean isPathfindable(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos,
-            @Nonnull PathComputationType path) {
+    public boolean isPathfindable(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+            @NotNull PathComputationType path) {
         return false;
     }
 
-    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite())
                 .setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 
     @SuppressWarnings("deprecation")
-    public FluidState getFluidState(@Nonnull BlockState state) {
+    public FluidState getFluidState(@NotNull BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
     @Deprecated
-    public BlockState updateShape(@Nonnull BlockState blockState, @Nonnull Direction direction,
-            @Nonnull BlockState facingState,
-            @Nonnull LevelAccessor levelAccessor, @Nonnull BlockPos currentPos, @Nonnull BlockPos facingPos) {
+    public BlockState updateShape(@NotNull BlockState blockState, @NotNull Direction direction,
+            @NotNull BlockState facingState,
+            @NotNull LevelAccessor levelAccessor, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         if (blockState.getValue(WATERLOGGED)) {
             levelAccessor.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
         }

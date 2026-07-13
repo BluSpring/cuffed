@@ -1,21 +1,20 @@
 package com.lazrproductions.cuffed.entity.renderer;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.ChainKnotEntity;
 import com.lazrproductions.cuffed.entity.model.ChainKnotEntityModel;
 import com.lazrproductions.cuffed.init.ModModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ChainKnotEntityRenderer extends EntityRenderer<ChainKnotEntity> {
@@ -31,7 +30,7 @@ public class ChainKnotEntityRenderer extends EntityRenderer<ChainKnotEntity> {
     public static PoseStack POSESTACK;
     public static MultiBufferSource BUFFER;
 
-    public void render(@Nonnull ChainKnotEntity entity, float yaw, float partialTicks, @Nonnull PoseStack stack, @Nonnull MultiBufferSource buffer,
+    public void render(@NotNull ChainKnotEntity entity, float yaw, float partialTicks, @NotNull PoseStack stack, @NotNull MultiBufferSource buffer,
             int light) {
         super.render(entity, yaw, partialTicks, stack, buffer, light);
 
@@ -50,7 +49,7 @@ public class ChainKnotEntityRenderer extends EntityRenderer<ChainKnotEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(@Nonnull ChainKnotEntity entity) {
+    public ResourceLocation getTextureLocation(@NotNull ChainKnotEntity entity) {
         return TEXTURE_LOCATION;
     }
 }

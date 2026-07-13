@@ -1,7 +1,11 @@
 package com.lazrproductions.cuffed.effect;
 
+import java.util.UUID;
+
 import com.lazrproductions.cuffed.init.ModEffects;
 import com.lazrproductions.cuffed.init.ModParticleTypes;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -14,9 +18,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
-import javax.annotation.Nonnull;
-import java.util.UUID;
-
 public class WoundedEffect extends MobEffect {
 
     static final UUID ATTRIBUTE_HEALTH_UUID = UUID.fromString("b4d14f56-f45a-4966-8b05-59d1862caa5f");
@@ -27,7 +28,7 @@ public class WoundedEffect extends MobEffect {
     }
     
     @Override
-    public void applyEffectTick(@Nonnull LivingEntity entity, int amplifier) {
+    public void applyEffectTick(@NotNull LivingEntity entity, int amplifier) {
         
         if(entity.getRandom().nextFloat() < ((double)amplifier / 100D)) {
             double x = entity.position().x() + (entity.getRandom().nextFloat() * 0.8D) -0.4D;
@@ -38,7 +39,7 @@ public class WoundedEffect extends MobEffect {
     }
 
     @Override
-    public void removeAttributeModifiers(@Nonnull LivingEntity entity, @Nonnull AttributeMap attributes, int amplifier) {
+    public void removeAttributeModifiers(@NotNull LivingEntity entity, @NotNull AttributeMap attributes, int amplifier) {
         super.removeAttributeModifiers(entity, attributes, amplifier);
 
         AttributeInstance health = entity.getAttribute(Attributes.MAX_HEALTH);
@@ -53,7 +54,7 @@ public class WoundedEffect extends MobEffect {
         }
     }
     @Override
-    public void addAttributeModifiers(@Nonnull LivingEntity entity, @Nonnull AttributeMap attributeMap, int amplifier) {
+    public void addAttributeModifiers(@NotNull LivingEntity entity, @NotNull AttributeMap attributeMap, int amplifier) {
         super.addAttributeModifiers(entity, attributeMap, amplifier);
 
         AttributeInstance health = entity.getAttribute(Attributes.MAX_HEALTH);
@@ -78,7 +79,7 @@ public class WoundedEffect extends MobEffect {
     }
 
 
-    public static void woundEntity(@Nonnull LivingEntity entity, int percentage, boolean overwrite) {
+    public static void woundEntity(@NotNull LivingEntity entity, int percentage, boolean overwrite) {
         MobEffectInstance inst = entity.getEffect(ModEffects.WOUNDED_EFFECT);
         
         int amplifier = percentage;
@@ -93,10 +94,10 @@ public class WoundedEffect extends MobEffect {
         entity.removeEffect(ModEffects.WOUNDED_EFFECT);
         entity.addEffect(newInst);
     }
-    public static void woundEntity(@Nonnull LivingEntity entity, int percentage) {
+    public static void woundEntity(@NotNull LivingEntity entity, int percentage) {
         woundEntity(entity, percentage, false);
     }
-    public static void treatEntity(@Nonnull LivingEntity entity) {
+    public static void treatEntity(@NotNull LivingEntity entity) {
         if(entity.hasEffect(ModEffects.WOUNDED_EFFECT))
             entity.removeEffect(ModEffects.WOUNDED_EFFECT);
         entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 2));

@@ -1,38 +1,29 @@
 package com.lazrproductions.cuffed.items;
 
+import java.util.List;
+
+import com.lazrproductions.cuffed.component.CuffedDataComponents;
 import com.lazrproductions.cuffed.init.ModItems;
+
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
 
 public class BakedKeyMoldItem extends Item {
-    
-    public static final String TAG_QUALITY = "Quality";
-
     public BakedKeyMoldItem(Properties properties) {
-        super(properties);
+        super(properties.component(CuffedDataComponents.QUALITY, 5));
     }
 
-    public static ItemStack createFromRawMold(ItemStack oldMold) {
+    public static ItemStack createFromRawMold(ItemStack oldMold, RandomSource random) {
         ItemStack newMold = new ItemStack(ModItems.BAKED_KEY_MOLD, 1);
-        
-        CompoundTag oldTag = oldMold.getOrCreateTagElement(KeyMoldItem.TAG_COPIED_KEY);
-        CompoundTag tag = new CompoundTag();
-        tag.putUUID(KeyItem.TAG_ID, oldTag.getUUID(KeyItem.TAG_ID));
-        tag.putString(KeyMoldItem.TAG_NAME, oldTag.getString(KeyMoldItem.TAG_NAME));
-        
-        newMold.getOrCreateTag().put(KeyMoldItem.TAG_COPIED_KEY, tag);
-        Random r = new Random();
-        newMold.getOrCreateTag().putInt(TAG_QUALITY, r.nextInt(1) + 4);
+
+        newMold.set(CuffedDataComponents.KEY, oldMold.get(CuffedDataComponents.KEY));
+        newMold.set(CuffedDataComponents.KEY_NAME, oldMold.get(CuffedDataComponents.KEY_NAME));
+        newMold.set(CuffedDataComponents.QUALITY, random.nextInt(1) + 4);
 
         return newMold;
     }
@@ -40,32 +31,22 @@ public class BakedKeyMoldItem extends Item {
     public static ItemStack createKeyFrom(ItemStack moldStack, int amount) {
         ItemStack newKey = new ItemStack(ModItems.KEY, amount);
 
-        if(!moldStack.getOrCreateTag().contains(KeyMoldItem.TAG_COPIED_KEY))
+        if(!moldStack.has(CuffedDataComponents.KEY))
             return newKey;
 
-        CompoundTag moldTag = moldStack.getOrCreateTag().getCompound(KeyMoldItem.TAG_COPIED_KEY);
-        newKey.getOrCreateTag().putUUID(KeyItem.TAG_ID, moldTag.getUUID(KeyItem.TAG_ID));
+        newKey.set(CuffedDataComponents.KEY, moldStack.get(CuffedDataComponents.KEY));
 
-        if(moldTag.contains(KeyMoldItem.TAG_NAME))
-            newKey.getOrCreateTagElement("display").putString("Name", moldTag.getString(KeyMoldItem.TAG_NAME));
+        if (moldStack.has(CuffedDataComponents.KEY_NAME)) {
+            newKey.set(DataComponents.CUSTOM_NAME, moldStack.get(CuffedDataComponents.KEY_NAME));
+        }
 
         return newKey;
     }
 
-
     @Override
-    public ItemStack getDefaultInstance() {
-        ItemStack itemstack = new ItemStack(this);
-        itemstack.getOrCreateTag().putInt(TAG_QUALITY, 5);
-        return itemstack;
-    }
-
-    @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level pLevel, @Nonnull List<Component> pTooltipComponents,
-            @Nonnull TooltipFlag pIsAdvanced) {
-        super.appendHoverText(stack, pLevel, pTooltipComponents, pIsAdvanced);
-
-        int quality = stack.getOrCreateTag().getInt(TAG_QUALITY);
-        pTooltipComponents.add(Component.translatable("item.cuffed.baked_key_mold.description.quality_"+quality).withStyle(ChatFormatting.DARK_GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+        int quality = stack.getOrDefault(CuffedDataComponents.QUALITY, 0);
+        tooltipComponents.add(Component.translatable("item.cuffed.baked_key_mold.description.quality_"+quality).withStyle(ChatFormatting.DARK_GRAY));
     }
 }

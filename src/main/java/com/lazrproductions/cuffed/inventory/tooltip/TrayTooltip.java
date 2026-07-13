@@ -6,6 +6,10 @@ import com.lazrproductions.cuffed.items.TrayItem;
 import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
 import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -13,10 +17,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nonnull;
 
 public record TrayTooltip(NonNullList<ItemStack> items) implements ClientTooltipComponent, TooltipComponent {
     public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID,
@@ -31,11 +31,11 @@ public record TrayTooltip(NonNullList<ItemStack> items) implements ClientTooltip
         return 20;
     }
 
-    public int getWidth(@Nonnull Font font) {
+    public int getWidth(@NotNull Font font) {
         return 39;
     }
 
-    public void renderImage(@Nonnull Font font, int x, int y, @Nonnull GuiGraphics gui) {
+    public void renderImage(@NotNull Font font, int x, int y, @NotNull GuiGraphics gui) {
         ScreenUtilities.drawTexture(gui, new BlitCoordinates(x, y, 39, 20), BACKGROUND_TEXTURE);
 
         int foodSlot = getTrayFoodSlot();

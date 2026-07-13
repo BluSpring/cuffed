@@ -1,8 +1,13 @@
 package com.lazrproductions.cuffed.entity;
 
+import java.util.List;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.base.IAnchorableEntity;
 import com.lazrproductions.cuffed.init.ModEntityTypes;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.Packet;
@@ -15,7 +20,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,10 +34,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ChainKnotEntity extends HangingEntity {
 
@@ -55,7 +60,7 @@ public class ChainKnotEntity extends HangingEntity {
         this.playSound(SoundEvents.CHAIN_BREAK, 1.0F, 1.0F);
     }
 
-    public boolean hurt(@Nonnull DamageSource source, float f) {
+    public boolean hurt(@NotNull DamageSource source, float f) {
         if (source.getEntity() instanceof IAnchorableEntity a)
             if (a.getAnchor() == this)
                 return false;
@@ -63,7 +68,7 @@ public class ChainKnotEntity extends HangingEntity {
     }
 
     @Override
-    public InteractionResult interact(@Nonnull Player interactor, @Nonnull InteractionHand hand) {
+    public InteractionResult interact(@NotNull Player interactor, @NotNull InteractionHand hand) {
         if (this.level().isClientSide()) {
             return InteractionResult.SUCCESS;
         } else {
@@ -164,7 +169,7 @@ public class ChainKnotEntity extends HangingEntity {
     }
 
     @Override
-    protected void setDirection(@Nonnull Direction pFacingDirection) {
+    protected void setDirection(@NotNull Direction pFacingDirection) {
     }
 
     @Override
@@ -178,7 +183,7 @@ public class ChainKnotEntity extends HangingEntity {
     }
 
     @Override
-    protected float getEyeHeight(@Nonnull Pose p_31839_, @Nonnull EntityDimensions p_31840_) {
+    protected float getEyeHeight(@NotNull Pose p_31839_, @NotNull EntityDimensions p_31840_) {
         return 0.0625F;
     }
 

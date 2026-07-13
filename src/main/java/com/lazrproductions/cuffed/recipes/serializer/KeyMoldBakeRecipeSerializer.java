@@ -4,14 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.recipes.KeyMoldBakeRecipe;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-
-import javax.annotation.Nonnull;
 
 public class KeyMoldBakeRecipeSerializer<T extends KeyMoldBakeRecipe> implements RecipeSerializer<T> {
     private final RecipeFactory<T> factory;
@@ -21,7 +21,7 @@ public class KeyMoldBakeRecipeSerializer<T extends KeyMoldBakeRecipe> implements
     }
 
     @Override
-    public T fromJson(@Nonnull ResourceLocation recipeId, @Nonnull JsonObject json) {
+    public T fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
         String group = GsonHelper.getAsString(json, "group", "");
         JsonElement ingredientElement = GsonHelper.isArrayNode(json, "ingredient") ? GsonHelper.getAsJsonArray(json, "ingredient") : GsonHelper.getAsJsonObject(json, "ingredient");
         Ingredient ingredient = Ingredient.fromJson(ingredientElement);
@@ -32,7 +32,7 @@ public class KeyMoldBakeRecipeSerializer<T extends KeyMoldBakeRecipe> implements
     }
 
     @Override
-    public T fromNetwork(@Nonnull ResourceLocation recipeId, @Nonnull FriendlyByteBuf buffer) {
+    public T fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
         String group = buffer.readUtf();
         Ingredient ingredient = Ingredient.fromNetwork(buffer);
         ItemStack result = buffer.readItem();
@@ -42,7 +42,7 @@ public class KeyMoldBakeRecipeSerializer<T extends KeyMoldBakeRecipe> implements
     }
 
     @Override
-    public void toNetwork(@Nonnull FriendlyByteBuf buffer, @Nonnull T recipe) {
+    public void toNetwork(@NotNull FriendlyByteBuf buffer, @NotNull T recipe) {
         buffer.writeUtf(recipe.getGroup());
         recipe.getIngredients().get(0).toNetwork(buffer);
         buffer.writeItem(ModItems.KEY_MOLD.getDefaultInstance());

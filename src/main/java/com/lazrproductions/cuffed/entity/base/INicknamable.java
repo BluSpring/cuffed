@@ -1,9 +1,9 @@
 package com.lazrproductions.cuffed.entity.base;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-
-import javax.annotation.Nullable;
 
 public interface INicknamable {
     Component getNickname();

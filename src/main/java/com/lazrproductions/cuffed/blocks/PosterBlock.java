@@ -1,11 +1,10 @@
 package com.lazrproductions.cuffed.blocks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.blocks.base.PosterType;
 import com.lazrproductions.cuffed.init.ModBlockProperties;
 import com.lazrproductions.cuffed.items.PosterBlockItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -50,7 +49,7 @@ public class PosterBlock extends Block {
 
     @Override
     @Nullable
-    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext ctx) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext ctx) {
         BlockPos blockpos = ctx.getClickedPos();
         Level level = ctx.getLevel();
 
@@ -68,8 +67,8 @@ public class PosterBlock extends Block {
     }
 
     @Override
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos,
-            @Nonnull CollisionContext ctx) {
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos,
+            @NotNull CollisionContext ctx) {
         switch(state.getValue(FACING)) {
             case NORTH:
                 return SHAPE_NORTH;
@@ -83,26 +82,26 @@ public class PosterBlock extends Block {
     }
 
     @Override
-    public VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos,
-            @Nonnull CollisionContext ctx) {
+    public VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos,
+            @NotNull CollisionContext ctx) {
         return getShape(state, getter, pos, ctx);
     }
 
     @Override
-    public BlockState rotate(@Nonnull BlockState state, @Nonnull Rotation r) {
+    public BlockState rotate(@NotNull BlockState state, @NotNull Rotation r) {
         return state.setValue(FACING, r.rotate(state.getValue(FACING)));
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public BlockState mirror(@Nonnull BlockState state, @Nonnull Mirror m) {
+    public BlockState mirror(@NotNull BlockState state, @NotNull Mirror m) {
         return state.rotate(m.getRotation(state.getValue(FACING)));
     }
 
     @Override
-    public void setPlacedBy(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state,
+    public void setPlacedBy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
             @Nullable LivingEntity entity,
-            @Nonnull ItemStack stack) {
+            @NotNull ItemStack stack) {
         
         if(level.getBlockState(pos.above()).isAir())
             level.setBlock(pos.above(), state.setValue(HALF, DoubleBlockHalf.UPPER).setValue(POSTER_TYPE, state.getValue(POSTER_TYPE)), 3);
@@ -112,9 +111,9 @@ public class PosterBlock extends Block {
     }
 
     @Override
-    public BlockState updateShape(@Nonnull BlockState state, @Nonnull Direction direction,
-            @Nonnull BlockState otherState, @Nonnull LevelAccessor level,
-            @Nonnull BlockPos pos, @Nonnull BlockPos otherPos) {
+    public BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction,
+            @NotNull BlockState otherState, @NotNull LevelAccessor level,
+            @NotNull BlockPos pos, @NotNull BlockPos otherPos) {
         DoubleBlockHalf thisHalf = state.getValue(HALF);
         if (direction.getAxis() == Direction.Axis.Y
                 && thisHalf == DoubleBlockHalf.LOWER == (direction == Direction.UP)) {
@@ -128,7 +127,7 @@ public class PosterBlock extends Block {
     }
 
     @Override
-    public boolean canSurvive(@Nonnull BlockState state, @Nonnull LevelReader level, @Nonnull BlockPos pos) {
+    public boolean canSurvive(@NotNull BlockState state, @NotNull LevelReader level, @NotNull BlockPos pos) {
         Direction behindDirection = state.getValue(FACING).getOpposite();
 
         BlockPos posBehind = pos.relative(behindDirection);
@@ -137,8 +136,8 @@ public class PosterBlock extends Block {
     }
 
     @Override
-    public void playerWillDestroy(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state,
-            @Nonnull Player player) {
+    public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
+            @NotNull Player player) {
         if (!level.isClientSide) {
             if (player.isCreative())
                 preventCreativeDropFromBottomPart(level, pos, state, player);
@@ -148,7 +147,7 @@ public class PosterBlock extends Block {
     }
 
     @Override
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FACING, HALF, POSTER_TYPE);
     }
