@@ -1,20 +1,17 @@
 package com.lazrproductions.cuffed.recipes.serializer;
 
-import javax.annotation.Nonnull;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.recipes.KeyMoldBakeRecipe;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+
+import javax.annotation.Nonnull;
 
 public class KeyMoldBakeRecipeSerializer<T extends KeyMoldBakeRecipe> implements RecipeSerializer<T> {
     private final RecipeFactory<T> factory;
@@ -28,7 +25,7 @@ public class KeyMoldBakeRecipeSerializer<T extends KeyMoldBakeRecipe> implements
         String group = GsonHelper.getAsString(json, "group", "");
         JsonElement ingredientElement = GsonHelper.isArrayNode(json, "ingredient") ? GsonHelper.getAsJsonArray(json, "ingredient") : GsonHelper.getAsJsonObject(json, "ingredient");
         Ingredient ingredient = Ingredient.fromJson(ingredientElement);
-        ItemStack result = ModItems.KEY_MOLD.get().getDefaultInstance();
+        ItemStack result = ModItems.KEY_MOLD.getDefaultInstance();
         float experience = GsonHelper.getAsFloat(json, "experience", 0.0F);
         int cookingTime = GsonHelper.getAsInt(json, "cookingtime", 200);
         return factory.create(recipeId, group, ingredient, result, experience, cookingTime);
@@ -48,7 +45,7 @@ public class KeyMoldBakeRecipeSerializer<T extends KeyMoldBakeRecipe> implements
     public void toNetwork(@Nonnull FriendlyByteBuf buffer, @Nonnull T recipe) {
         buffer.writeUtf(recipe.getGroup());
         recipe.getIngredients().get(0).toNetwork(buffer);
-        buffer.writeItem(ModItems.KEY_MOLD.get().getDefaultInstance());
+        buffer.writeItem(ModItems.KEY_MOLD.getDefaultInstance());
         buffer.writeFloat(recipe.getExperience());
         buffer.writeVarInt(recipe.getCookingTime());
     }

@@ -1,20 +1,11 @@
 package com.lazrproductions.cuffed.restraints.custom;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.base.IRestrainableCapability;
 import com.lazrproductions.cuffed.entity.animation.ArmRestraintAnimationFlags;
 import com.lazrproductions.cuffed.entity.animation.LegRestraintAnimationFlags;
-import com.lazrproductions.cuffed.init.ModItems;
-import com.lazrproductions.cuffed.init.ModModelLayers;
-import com.lazrproductions.cuffed.init.ModRestraints;
-import com.lazrproductions.cuffed.init.ModSounds;
-import com.lazrproductions.cuffed.init.ModStatistics;
+import com.lazrproductions.cuffed.init.*;
 import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
 import com.lazrproductions.cuffed.restraints.base.IBreakableRestraint;
 import com.lazrproductions.cuffed.restraints.base.IEnchantableRestraint;
@@ -26,7 +17,6 @@ import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.lazrproductions.lazrslib.common.math.MathUtilities;
 import com.mojang.blaze3d.platform.Window;
-
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -51,6 +41,10 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class ShacklesLegsRestraint extends AbstractLegRestraint implements IBreakableRestraint, IEnchantableRestraint {
     static final ResourceLocation WIDGETS = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/gui/widgets.png");
@@ -79,11 +73,11 @@ public class ShacklesLegsRestraint extends AbstractLegRestraint implements IBrea
         return "info.cuffed.restraints.leg_shackles.name";
     }
 
-    public static final Item ITEM =  ModItems.SHACKLES.get();
+    public static final Item ITEM =  ModItems.SHACKLES;
     public Item getItem() {
         return ITEM;
     }
-    public static final Item KEY = ModItems.SHACKLES_KEY.get();
+    public static final Item KEY = ModItems.SHACKLES_KEY;
     public Item getKeyItem() {
         return KEY;
     }
@@ -313,7 +307,7 @@ public class ShacklesLegsRestraint extends AbstractLegRestraint implements IBrea
     }
 
     public int getMaxDurability() {
-        return ModItems.SHACKLES.get().getMaxDamage(ModItems.SHACKLES.get().getDefaultInstance());
+        return ModItems.SHACKLES.getMaxDamage(ModItems.SHACKLES.getDefaultInstance());
     }
 
     public boolean dropItemOnBroken() {
@@ -447,7 +441,7 @@ public class ShacklesLegsRestraint extends AbstractLegRestraint implements IBrea
     @OnlyIn(Dist.CLIENT)
     public static class ShacklesLegsRestraintModelInterface extends RestraintModelInterface { 
         @SuppressWarnings("unchecked")
-        static final Class<? extends HumanoidModel<? extends LivingEntity>> MODEL_CLASS = (Class<? extends HumanoidModel<? extends LivingEntity>>)(Class<?>)LegShacklesModel.class;
+        static final Class<? extends HumanoidModel<? extends LivingEntity>> MODEL_CLASS = (Class<? extends HumanoidModel<? extends LivingEntity>>) LegShacklesModel.class;
         static final ModelLayerLocation MODEL_LAYER = ModModelLayers.LEG_SHACKELS_LAYER;
         static final ResourceLocation MODEL_TEXTURE = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/entity/shackles.png");
 

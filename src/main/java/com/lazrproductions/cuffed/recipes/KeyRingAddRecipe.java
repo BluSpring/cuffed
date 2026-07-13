@@ -1,15 +1,10 @@
 package com.lazrproductions.cuffed.recipes;
 
-import java.util.ArrayList;
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModRecipes;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyRingItem;
-
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -19,6 +14,9 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
 
 public class KeyRingAddRecipe extends CustomRecipe {
     public KeyRingAddRecipe(ResourceLocation idIn, CraftingBookCategory category) {
@@ -32,15 +30,15 @@ public class KeyRingAddRecipe extends CustomRecipe {
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
             if (!inv.getItem(i).isEmpty())
-                if (inv.getItem(i).is(ModItems.KEY.get()) || inv.getItem(i).is(ModItems.KEY_RING.get())) {
+                if (inv.getItem(i).is(ModItems.KEY) || inv.getItem(i).is(ModItems.KEY_RING)) {
 
                     ItemStack stack = inv.getItem(i);
                     Item item = stack.getItem();
-                    if (ringStack == null && item == ModItems.KEY_RING.get()) {
+                    if (ringStack == null && item == ModItems.KEY_RING) {
                         ringStack = stack;
                     }
 
-                    if (item == ModItems.KEY.get()) {
+                    if (item == ModItems.KEY) {
                         keyStack.add(stack);
                     }
 
@@ -72,12 +70,12 @@ public class KeyRingAddRecipe extends CustomRecipe {
                 Item item = stack.getItem();
 
                 if (ringStack == null) {
-                    if (item == ModItems.KEY_RING.get()) {
+                    if (item == ModItems.KEY_RING) {
                         ringStack = stack;
                     }
                 }
 
-                if (item == ModItems.KEY.get()) {
+                if (item == ModItems.KEY) {
                     keyStacks.add(stack);
                 }
             }
@@ -111,7 +109,7 @@ public class KeyRingAddRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.KEY_RING_ADD.get();
+        return ModRecipes.KEY_RING_ADD;
     }
 
 }

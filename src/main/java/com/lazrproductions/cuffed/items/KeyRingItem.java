@@ -1,17 +1,10 @@
 package com.lazrproductions.cuffed.items;
 
-import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.blocks.CellDoor;
 import com.lazrproductions.cuffed.blocks.SafeBlock;
 import com.lazrproductions.cuffed.blocks.entity.LockableBlockEntity;
 import com.lazrproductions.cuffed.blocks.entity.SafeBlockEntity;
 import com.lazrproductions.cuffed.init.ModItems;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -31,6 +24,11 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.UUID;
 
 public class KeyRingItem extends Item {
 
@@ -64,7 +62,7 @@ public class KeyRingItem extends Item {
                             if(!lockable.hasBeenBound()) {
                                 if (tryToAddBoundId(player, stack, lockable.getLockId(), "block.cuffed.cell_door")) {
                                     lockable.bind();
-                                    player.awardStat(Stats.ITEM_USED.get(ModItems.KEY.get()), 1);
+                                    player.awardStat(Stats.ITEM_USED.get(ModItems.KEY), 1);
                                     return InteractionResult.SUCCESS;
                                 } else
                                     return InteractionResult.FAIL;
@@ -74,7 +72,7 @@ public class KeyRingItem extends Item {
                         if(!lockable.hasBeenBound()) {
                             if(tryToAddBoundId(player, stack, lockable.getLockId(), lockable.getLockName())) {
                                 lockable.bind();
-                                player.awardStat(Stats.ITEM_USED.get(ModItems.KEY_RING.get()), 1);
+                                player.awardStat(Stats.ITEM_USED.get(ModItems.KEY_RING), 1);
                                 return InteractionResult.SUCCESS;
                             }
                         }
@@ -83,7 +81,7 @@ public class KeyRingItem extends Item {
                             if(!safe.hasBeenBound()) {
                                 if(tryToAddBoundId(player, stack, safe.getLockId(), "block.cuffed.safe")) {
                                     safe.bind();
-                                    player.awardStat(Stats.ITEM_USED.get(ModItems.KEY_RING.get()), 1);
+                                    player.awardStat(Stats.ITEM_USED.get(ModItems.KEY_RING), 1);
                                     return InteractionResult.SUCCESS;
                                 }
                             }
@@ -205,9 +203,7 @@ public class KeyRingItem extends Item {
             return true;
         }
 
-        if (bindings < keys)
-            return true;
-        return false;
+        return bindings < keys;
     }
 
     @Override

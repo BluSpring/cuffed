@@ -1,11 +1,6 @@
 package com.lazrproductions.cuffed.blocks.entity;
 
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.init.ModBlockEntities;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -16,6 +11,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.Nonnull;
+import java.util.UUID;
+
 public class LockableBlockEntity extends BlockEntity {
     private UUID lockId;
     private boolean locked;
@@ -23,14 +21,14 @@ public class LockableBlockEntity extends BlockEntity {
     private boolean hasBeenBound;
 
     public LockableBlockEntity(BlockPos pos, BlockState state, String lockName) {
-        super(ModBlockEntities.CELL_DOOR_BLOCK_ENTITY.get(), pos, state);
+        super(ModBlockEntities.CELL_DOOR_BLOCK_ENTITY, pos, state);
         lockId = UUID.randomUUID();
         locked = false;
         this.lockName = lockName;
         hasBeenBound = false;
     }
     public LockableBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.CELL_DOOR_BLOCK_ENTITY.get(), pos, state);
+        super(ModBlockEntities.CELL_DOOR_BLOCK_ENTITY, pos, state);
         lockId = UUID.randomUUID();
         locked = false;
         lockName = "info.cuffed.lock";

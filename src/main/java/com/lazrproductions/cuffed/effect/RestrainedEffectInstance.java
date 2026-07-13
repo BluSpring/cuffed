@@ -1,18 +1,16 @@
 package com.lazrproductions.cuffed.effect;
 
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.init.ModEffects;
-
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.common.ForgeMod;
+
+import javax.annotation.Nonnull;
+import java.util.UUID;
 
 public class RestrainedEffectInstance extends MobEffectInstance {
 
@@ -26,7 +24,7 @@ public class RestrainedEffectInstance extends MobEffectInstance {
     public boolean noJumping;
 
     public RestrainedEffectInstance(int duration, int restraintType) {
-        super(ModEffects.RESTRAINED_EFFECT.get(), duration, restraintType);
+        super(ModEffects.RESTRAINED_EFFECT, duration, restraintType);
         
         boolean[] decodedValues = decodeRestraintProperties(restraintType);
         this.noMining = decodedValues[0];

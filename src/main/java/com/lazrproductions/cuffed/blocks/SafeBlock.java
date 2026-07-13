@@ -1,8 +1,5 @@
 package com.lazrproductions.cuffed.blocks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.blocks.entity.SafeBlockEntity;
@@ -10,7 +7,6 @@ import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyRingItem;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -47,6 +43,9 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @SuppressWarnings("deprecation")
 public class SafeBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
@@ -89,11 +88,11 @@ public class SafeBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
             BlockEntity blockentity = level.getBlockEntity(pos);
             if (blockentity instanceof SafeBlockEntity safe) {
 
-                boolean isKeyItemAndIsBoundToThis = stack.is((ModItems.KEY.get())) && KeyItem.isBoundToLock(stack, safe.getLockId());
-                boolean isKeyRingItemAndIsBoundToThis = stack.is((ModItems.KEY_RING.get())) && KeyRingItem.hasBoundId(stack, safe.getLockId());
-                boolean isCreativeKey = stack.is(ModItems.CREATIVE_KEY.get());
-                boolean isCreativeBindBreaker = stack.is(ModItems.CREATIVE_BIND_BREAKER.get());
-                boolean isHoldingLockpick = stack.is(ModItems.LOCKPICK.get());
+                boolean isKeyItemAndIsBoundToThis = stack.is((ModItems.KEY)) && KeyItem.isBoundToLock(stack, safe.getLockId());
+                boolean isKeyRingItemAndIsBoundToThis = stack.is((ModItems.KEY_RING)) && KeyRingItem.hasBoundId(stack, safe.getLockId());
+                boolean isCreativeKey = stack.is(ModItems.CREATIVE_KEY);
+                boolean isCreativeBindBreaker = stack.is(ModItems.CREATIVE_BIND_BREAKER);
+                boolean isHoldingLockpick = stack.is(ModItems.LOCKPICK);
 
 
                 if (!isHoldingLockpick) {
@@ -115,8 +114,8 @@ public class SafeBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
                 }
 
                 if (!safe.isLocked()) {
-                    player.openMenu((SafeBlockEntity) blockentity);
-                    player.awardStat(ModStatistics.OPEN_SAFE.get());
+                    player.openMenu(safe);
+                    player.awardStat(ModStatistics.OPEN_SAFE);
                     PiglinAi.angerNearbyPiglins(player, true);
                 }
             }

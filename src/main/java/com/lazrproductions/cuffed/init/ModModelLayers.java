@@ -6,19 +6,12 @@ import com.lazrproductions.cuffed.entity.model.ChainKnotEntityModel;
 import com.lazrproductions.cuffed.entity.model.CrumblingBlockModel;
 import com.lazrproductions.cuffed.entity.model.PadlockEntityModel;
 import com.lazrproductions.cuffed.entity.model.WeightedAnchorModel;
-import com.lazrproductions.cuffed.restraints.client.model.BundleModel;
-import com.lazrproductions.cuffed.restraints.client.model.DuckTapeArmsModel;
-import com.lazrproductions.cuffed.restraints.client.model.DuckTapeHeadModel;
-import com.lazrproductions.cuffed.restraints.client.model.DuckTapeLegsModel;
-import com.lazrproductions.cuffed.restraints.client.model.FuzzyHandcuffsModel;
-import com.lazrproductions.cuffed.restraints.client.model.HandcuffsModel;
-import com.lazrproductions.cuffed.restraints.client.model.LegShacklesModel;
-import com.lazrproductions.cuffed.restraints.client.model.LegcuffsModel;
-import com.lazrproductions.cuffed.restraints.client.model.ShacklesModel;
-
+import com.lazrproductions.cuffed.restraints.client.model.*;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 
 public class ModModelLayers {
     // Restraints
@@ -41,22 +34,21 @@ public class ModModelLayers {
     // Block Entities
 	public static final ModelLayerLocation GUILLOTINE_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "guillotine_block_entity"), "main");
 
-    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(CHAIN_KNOT_LAYER, ChainKnotEntityModel::getModelData);
-        event.registerLayerDefinition(PADLOCK_LAYER, PadlockEntityModel::getModelData);
-        event.registerLayerDefinition(WEIGHTED_ANCHOR_LAYER, WeightedAnchorModel::getModelData);
-        event.registerLayerDefinition(CRUMBLING_BLOCK_LAYER, CrumblingBlockModel::getModelData);
-
-        event.registerLayerDefinition(HANDCUFFS_LAYER, HandcuffsModel::createArmorLayer);
-        event.registerLayerDefinition(SHACKLES_LAYER, ShacklesModel::createArmorLayer);
-        event.registerLayerDefinition(FUZZY_HANDCUFFS_LAYER, FuzzyHandcuffsModel::createArmorLayer);
-        event.registerLayerDefinition(LEGCUFFS_LAYER, LegcuffsModel::createArmorLayer);
-        event.registerLayerDefinition(LEG_SHACKELS_LAYER, LegShacklesModel::createArmorLayer);
-        event.registerLayerDefinition(DUCK_TAPE_HEAD_LAYER, DuckTapeHeadModel::createArmorLayer);
-        event.registerLayerDefinition(DUCK_TAPE_ARM_LAYER, DuckTapeArmsModel::createArmorLayer);
-        event.registerLayerDefinition(DUCK_TAPE_LEG_LAYER, DuckTapeLegsModel::createArmorLayer);
-        event.registerLayerDefinition(BUNDLE_LAYER, BundleModel::createArmorLayer);
-
-        event.registerLayerDefinition(GUILLOTINE_LAYER, GuillotineBlockEntityModel::createBodyLayer);
+    @Environment(EnvType.CLIENT)
+    public static void registerLayers() {
+        EntityModelLayerRegistry.registerModelLayer(CHAIN_KNOT_LAYER, ChainKnotEntityModel::getModelData);
+        EntityModelLayerRegistry.registerModelLayer(PADLOCK_LAYER, PadlockEntityModel::getModelData);
+        EntityModelLayerRegistry.registerModelLayer(WEIGHTED_ANCHOR_LAYER, WeightedAnchorModel::getModelData);
+        EntityModelLayerRegistry.registerModelLayer(CRUMBLING_BLOCK_LAYER, CrumblingBlockModel::getModelData);
+        EntityModelLayerRegistry.registerModelLayer(HANDCUFFS_LAYER, HandcuffsModel::createArmorLayer);
+        EntityModelLayerRegistry.registerModelLayer(SHACKLES_LAYER, ShacklesModel::createArmorLayer);
+        EntityModelLayerRegistry.registerModelLayer(FUZZY_HANDCUFFS_LAYER, FuzzyHandcuffsModel::createArmorLayer);
+        EntityModelLayerRegistry.registerModelLayer(LEGCUFFS_LAYER, LegcuffsModel::createArmorLayer);
+        EntityModelLayerRegistry.registerModelLayer(LEG_SHACKELS_LAYER, LegShacklesModel::createArmorLayer);
+        EntityModelLayerRegistry.registerModelLayer(DUCK_TAPE_HEAD_LAYER, DuckTapeHeadModel::createArmorLayer);
+        EntityModelLayerRegistry.registerModelLayer(DUCK_TAPE_ARM_LAYER, DuckTapeArmsModel::createArmorLayer);
+        EntityModelLayerRegistry.registerModelLayer(DUCK_TAPE_LEG_LAYER, DuckTapeLegsModel::createArmorLayer);
+        EntityModelLayerRegistry.registerModelLayer(BUNDLE_LAYER, BundleModel::createArmorLayer);
+        EntityModelLayerRegistry.registerModelLayer(GUILLOTINE_LAYER, GuillotineBlockEntityModel::createBodyLayer);
     }
 }

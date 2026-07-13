@@ -1,13 +1,7 @@
 package com.lazrproductions.cuffed.blocks.entity;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.init.ModBlockEntities;
 import com.lazrproductions.cuffed.items.TrayItem;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -27,12 +21,16 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class ToiletBlockEntity extends BlockEntity {
     private static final int INVENTORY_SIZE = 1;
     private NonNullList<ItemStack> items = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
 
     public ToiletBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.TRAY.get(), pos, state);
+        super(ModBlockEntities.TRAY, pos, state);
     }
 
     public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
@@ -45,7 +43,7 @@ public class ToiletBlockEntity extends BlockEntity {
                 if(removeNextItem()) {
                     interacting.setItemInHand(hand, stackToRemove.copy());
 
-                    level.playSound((Player) null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
+                    level.playSound(null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
                         SoundEvents.BUCKET_FILL, SoundSource.NEUTRAL, 1.0F,
                         1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.4F);
 
@@ -56,7 +54,7 @@ public class ToiletBlockEntity extends BlockEntity {
                 if(addItem(stack.copyWithCount(1))) {
                     stack.shrink(1);
 
-                    level.playSound((Player) null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
+                    level.playSound(null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
                         SoundEvents.BUCKET_EMPTY, SoundSource.NEUTRAL, 1.0F,
                         1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.4F);
 

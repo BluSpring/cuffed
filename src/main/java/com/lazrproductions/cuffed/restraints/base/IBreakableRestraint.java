@@ -6,19 +6,19 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 
 public interface IBreakableRestraint {
-    public SoundEvent getBreakSound();
-    public int getMaxDurability();
-    public boolean isKeyToAttemptBreak(int keyCode, Options options);
-    public boolean requireAlternateKeysToAttemptBreak();
-    public boolean dropItemOnBroken();
-    public boolean canBeBrokenOutOf();
+    SoundEvent getBreakSound();
+    int getMaxDurability();
+    boolean isKeyToAttemptBreak(int keyCode, Options options);
+    boolean requireAlternateKeysToAttemptBreak();
+    boolean dropItemOnBroken();
+    boolean canBeBrokenOutOf();
 
-    public int getDurability();
+    int getDurability();
 
-    public void attemptToBreak(Player player, int keyCode, int action, Options options);
-    public void setDurability(ServerPlayer player, int value);
-    public void incrementDurability(ServerPlayer player, int value);
+    void attemptToBreak(Player player, int keyCode, int action, Options options);
+    void setDurability(ServerPlayer player, int value);
+    void incrementDurability(ServerPlayer player, int value);
 
-    public void onBrokenServer(ServerPlayer player);
-    public void onBrokenClient(Player player);
+    void onBrokenServer(ServerPlayer player);
+    void onBrokenClient(Player player);
 }

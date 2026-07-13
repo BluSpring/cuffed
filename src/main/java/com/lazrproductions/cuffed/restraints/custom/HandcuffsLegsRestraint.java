@@ -1,19 +1,11 @@
 package com.lazrproductions.cuffed.restraints.custom;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.base.IRestrainableCapability;
 import com.lazrproductions.cuffed.entity.animation.ArmRestraintAnimationFlags;
 import com.lazrproductions.cuffed.entity.animation.LegRestraintAnimationFlags;
-import com.lazrproductions.cuffed.init.ModItems;
-import com.lazrproductions.cuffed.init.ModModelLayers;
-import com.lazrproductions.cuffed.init.ModRestraints;
-import com.lazrproductions.cuffed.init.ModSounds;
-import com.lazrproductions.cuffed.init.ModStatistics;
+import com.lazrproductions.cuffed.init.*;
 import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
 import com.lazrproductions.cuffed.restraints.base.IBreakableRestraint;
 import com.lazrproductions.cuffed.restraints.base.IEnchantableRestraint;
@@ -25,7 +17,6 @@ import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.lazrproductions.lazrslib.common.math.MathUtilities;
 import com.mojang.blaze3d.platform.Window;
-
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.HumanoidModel;
@@ -48,6 +39,9 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nonnull;
+import java.util.Random;
 
 public class HandcuffsLegsRestraint extends AbstractLegRestraint implements IBreakableRestraint, IEnchantableRestraint {
     static final ResourceLocation WIDGETS = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/gui/widgets.png");
@@ -77,11 +71,11 @@ public class HandcuffsLegsRestraint extends AbstractLegRestraint implements IBre
         return "info.cuffed.restraints.legcuffs.name";
     }
 
-    public static final Item ITEM =  ModItems.HANDCUFFS.get();
+    public static final Item ITEM =  ModItems.HANDCUFFS;
     public Item getItem() {
         return ITEM;
     } 
-    public static final Item KEY = ModItems.HANDCUFFS_KEY.get();
+    public static final Item KEY = ModItems.HANDCUFFS_KEY;
     public Item getKeyItem() {
         return KEY;
     }
@@ -248,7 +242,7 @@ public class HandcuffsLegsRestraint extends AbstractLegRestraint implements IBre
     }
 
     public int getMaxDurability() {
-        return ModItems.HANDCUFFS.get().getMaxDamage(ModItems.HANDCUFFS.get().getDefaultInstance());
+        return ModItems.HANDCUFFS.getMaxDamage(ModItems.HANDCUFFS.getDefaultInstance());
     }
 
     public boolean dropItemOnBroken() {
@@ -382,7 +376,7 @@ public class HandcuffsLegsRestraint extends AbstractLegRestraint implements IBre
     @OnlyIn(Dist.CLIENT)
     public static class HandcuffsLegsRestraintModelInterface extends RestraintModelInterface { 
         @SuppressWarnings("unchecked")
-        static final Class<? extends HumanoidModel<? extends LivingEntity>> MODEL_CLASS = (Class<? extends HumanoidModel<? extends LivingEntity>>)(Class<?>)LegcuffsModel.class;
+        static final Class<? extends HumanoidModel<? extends LivingEntity>> MODEL_CLASS = (Class<? extends HumanoidModel<? extends LivingEntity>>) LegcuffsModel.class;
         static final ModelLayerLocation MODEL_LAYER = ModModelLayers.LEGCUFFS_LAYER;
         static final ResourceLocation MODEL_TEXTURE = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/entity/handcuffs.png");
 

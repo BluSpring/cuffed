@@ -1,14 +1,5 @@
 package com.lazrproductions.cuffed.client.gui.screen;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.inventory.FriskingMenu;
 import com.lazrproductions.cuffed.inventory.FriskingSlot;
@@ -17,7 +8,6 @@ import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -33,6 +23,13 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class FriskingScreen extends AbstractContainerScreen<FriskingMenu> {
@@ -107,8 +104,8 @@ public class FriskingScreen extends AbstractContainerScreen<FriskingMenu> {
 
    public static void renderEntityInInventoryFollowsMouse(GuiGraphics graphics, int x, int y, int z, float mouseX,
          float mouseY, LivingEntity entity) {
-      float f = (float) Math.atan((double) (mouseX / 40.0F));
-      float f1 = (float) Math.atan((double) (mouseY / 40.0F));
+      float f = (float) Math.atan(mouseX / 40.0F);
+      float f1 = (float) Math.atan(mouseY / 40.0F);
       // Forge: Allow passing in direct angle components instead of mouse position
       renderEntityInInventoryFollowsAngle(graphics, x, y, z, f, f1, entity);
    }
@@ -141,7 +138,7 @@ public class FriskingScreen extends AbstractContainerScreen<FriskingMenu> {
    public static void renderEntityInInventory(GuiGraphics graphics, int x, int y, int z,
          Quaternionf rotationA, @Nullable Quaternionf rotationB, LivingEntity entity) {
       graphics.pose().pushPose();
-      graphics.pose().translate((double) x, (double) y, 50.0D);
+      graphics.pose().translate(x, y, 50.0D);
       graphics.pose()
             .mulPoseMatrix((new Matrix4f()).scaling((float) z, (float) z, (float) (-z)));
       graphics.pose().mulPose(rotationA);

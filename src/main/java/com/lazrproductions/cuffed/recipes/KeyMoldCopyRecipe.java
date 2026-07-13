@@ -1,14 +1,9 @@
 package com.lazrproductions.cuffed.recipes;
 
-import java.util.ArrayList;
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModRecipes;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyMoldItem;
-
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +15,9 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
 
 public class KeyMoldCopyRecipe extends CustomRecipe {
     public KeyMoldCopyRecipe(ResourceLocation idIn, CraftingBookCategory category) {
@@ -49,9 +47,9 @@ public class KeyMoldCopyRecipe extends CustomRecipe {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack checkingStack = inv.getItem(i);
             if (!checkingStack.isEmpty())
-                if (checkingStack.is(ModItems.KEY.get()) || checkingStack.is(ModItems.KEY_MOLD.get()) || checkingStack.is(Items.CLAY_BALL)) {
+                if (checkingStack.is(ModItems.KEY) || checkingStack.is(ModItems.KEY_MOLD) || checkingStack.is(Items.CLAY_BALL)) {
                     Item item = checkingStack.getItem();
-                    if (item == ModItems.KEY.get())
+                    if (item == ModItems.KEY)
                         keysInGrid.add(checkingStack);
                 }
         }
@@ -64,7 +62,7 @@ public class KeyMoldCopyRecipe extends CustomRecipe {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack checkingStack = inv.getItem(i);
             if (!checkingStack.isEmpty())
-                if (checkingStack.is(ModItems.KEY.get()) || checkingStack.is(ModItems.KEY_MOLD.get()) || checkingStack.is(Items.CLAY_BALL))
+                if (checkingStack.is(ModItems.KEY) || checkingStack.is(ModItems.KEY_MOLD) || checkingStack.is(Items.CLAY_BALL))
                     validInGrid.add(checkingStack);       
         }
 
@@ -83,9 +81,9 @@ public class KeyMoldCopyRecipe extends CustomRecipe {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack checkingStack = inv.getItem(i);
             if (!checkingStack.isEmpty())
-                if (checkingStack.is(ModItems.KEY.get()) && checkingStack.getOrCreateTag().contains(KeyItem.TAG_ID))
+                if (checkingStack.is(ModItems.KEY) && checkingStack.getOrCreateTag().contains(KeyItem.TAG_ID))
                     numOfKeys++;
-                else if(checkingStack.is(ModItems.KEY_MOLD.get()) || checkingStack.is(Items.CLAY_BALL))
+                else if(checkingStack.is(ModItems.KEY_MOLD) || checkingStack.is(Items.CLAY_BALL))
                     numOfClayOrMolds++;
                 else
                     return false;
@@ -102,7 +100,7 @@ public class KeyMoldCopyRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.KEY_MOLD_COPY.get();
+        return ModRecipes.KEY_MOLD_COPY;
     }
 
     @Override
@@ -111,7 +109,7 @@ public class KeyMoldCopyRecipe extends CustomRecipe {
     
         for(int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack item = container.getItem(i);
-            if (item.is(ModItems.KEY.get()))
+            if (item.is(ModItems.KEY))
                 nonnulllist.set(i, item.copy());
         }
     

@@ -1,9 +1,5 @@
 package com.lazrproductions.cuffed.client.gui.screen;
 
-import javax.annotation.Nonnull;
-
-import org.joml.Random;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
@@ -11,17 +7,19 @@ import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.lazrproductions.lazrslib.common.math.MathUtilities;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Random;
+
+import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 public class LockpickingScreen extends GenericScreen{
@@ -98,7 +96,7 @@ public class LockpickingScreen extends GenericScreen{
         int centerScreenY = graphics.guiHeight() / 2;
 
         // SHAKE ANIMATION
-        int shakeOffset = Mth.floor((Mth.sin((float)animationTick * 2) - 0.5f) * 3);
+        int shakeOffset = Mth.floor((Mth.sin(animationTick * 2) - 0.5f) * 3);
         //
 
 
@@ -125,7 +123,7 @@ public class LockpickingScreen extends GenericScreen{
         Vec2 mouseDelta = new Vec2(
             Mth.clamp(mouseX - centerScreenX , -100f, 100f) / 100f, 
             Mth.clamp(mouseY - centerScreenY - 16, -100f, 100f) / 100f);
-        angleToMouse = ((float)Mth.atan2((double)mouseDelta.y,(double)mouseDelta.x) * Mth.RAD_TO_DEG) + 225;
+        angleToMouse = ((float)Mth.atan2(mouseDelta.y, mouseDelta.x) * Mth.RAD_TO_DEG) + 225;
 
 
         float angleToCurrentGhost = -(90 * (currentTargetPick / (secondsPerPhase * 20))) + 360;

@@ -1,12 +1,9 @@
 package com.lazrproductions.cuffed.recipes;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModRecipes;
 import com.lazrproductions.cuffed.items.BakedKeyMoldItem;
 import com.lazrproductions.cuffed.items.KeyMoldItem;
-
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -17,6 +14,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nonnull;
+
 public class KeyMoldBakeRecipe extends SmeltingRecipe {
 
 
@@ -26,7 +25,7 @@ public class KeyMoldBakeRecipe extends SmeltingRecipe {
 
     @Override
     public boolean matches(@Nonnull Container inv, @Nonnull Level worldIn) {
-        return inv.getItem(0).is(ModItems.KEY_MOLD.get()) && inv.getItem(0).getOrCreateTag().contains(KeyMoldItem.TAG_COPIED_KEY);
+        return inv.getItem(0).is(ModItems.KEY_MOLD) && inv.getItem(0).getOrCreateTag().contains(KeyMoldItem.TAG_COPIED_KEY);
     }
 
     @Override
@@ -38,6 +37,6 @@ public class KeyMoldBakeRecipe extends SmeltingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.KEY_MOLD_BAKE.get();
+        return ModRecipes.KEY_MOLD_BAKE;
     }
 }

@@ -3,24 +3,27 @@ package com.lazrproductions.cuffed.init;
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.client.particle.BloodDripParticle;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 public class ModParticleTypes {
-    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, CuffedMod.MODID);
+    public static final SimpleParticleType BLOOD_DRIP_FALL_PARTICLE = register("blood_drip", FabricParticleTypes.simple(true));
 
-    public static final RegistryObject<SimpleParticleType> BLOOD_DRIP_FALL_PARTICLE = PARTICLE_TYPES.register("blood_drip", () -> new SimpleParticleType(true));
-
-    public static void register(IEventBus eventBus) {
-        PARTICLE_TYPES.register(eventBus);
+    private static <T extends ParticleType<?>> T register(String name, T particle) {
+        return Registry.register(BuiltInRegistries.PARTICLE_TYPE, CuffedMod.id(name), particle);
     }
 
-    public static void registerSprites(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(ModParticleTypes.BLOOD_DRIP_FALL_PARTICLE.get(), BloodDripParticle.Provider::new);
+    public static void register() {
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static void registerSprites() {
+        ParticleFactoryRegistry.getInstance().register(BLOOD_DRIP_FALL_PARTICLE, BloodDripParticle.Provider::new);
     }
 }

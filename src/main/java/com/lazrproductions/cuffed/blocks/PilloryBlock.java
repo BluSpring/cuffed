@@ -1,19 +1,10 @@
 package com.lazrproductions.cuffed.blocks;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.joml.Vector3f;
-
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.blocks.base.DetentionBlock;
 import com.lazrproductions.cuffed.cap.base.IRestrainableCapability;
 import com.lazrproductions.cuffed.entity.base.IDetainableEntity;
-import com.lazrproductions.cuffed.entity.base.IRestrainableEntity;
 import com.lazrproductions.cuffed.init.ModSounds;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -34,18 +25,18 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Vector3f;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class PilloryBlock extends DetentionBlock {
 
@@ -54,29 +45,29 @@ public class PilloryBlock extends DetentionBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
     protected static final VoxelShape SHAPE_NS_CLOSED = Shapes.or(
-            Block.box(16 * -0.0625, 16 * 0, 16 * 0.375, 16 * 0.125, 16 * 0.5625, 16 * 0.625),
-            Block.box(16 * 0.875, 16 * 0, 16 * 0.375, 16 * 1.0625, 16 * 0.5625, 16 * 0.625),
-            Block.box(16 * 0.125, 16 * 0, 16 * 0.4375, 16 * 0.875, 16 * 0.25, 16 * 0.5625));
+            Block.box(16 * -0.0625, 0, 16 * 0.375, 16 * 0.125, 16 * 0.5625, 16 * 0.625),
+            Block.box(16 * 0.875, 0, 16 * 0.375, 16 * 1.0625, 16 * 0.5625, 16 * 0.625),
+            Block.box(16 * 0.125, 0, 16 * 0.4375, 16 * 0.875, 16 * 0.25, 16 * 0.5625));
     protected static final VoxelShape SHAPE_NS_OPEN = Shapes.or(
-            Block.box(16 * -0.0625, 16 * 0, 16 * 0.375, 16 * 0.125, 16 * 0.5625, 16 * 0.625),
-            Block.box(16 * 0.875, 16 * 0, 16 * 0.375, 16 * 1.0625, 16 * 0.5625, 16 * 0.625),
+            Block.box(16 * -0.0625, 0, 16 * 0.375, 16 * 0.125, 16 * 0.5625, 16 * 0.625),
+            Block.box(16 * 0.875, 0, 16 * 0.375, 16 * 1.0625, 16 * 0.5625, 16 * 0.625),
             Block.box(16 * 0.125, 16 * 0.1875, 16 * 0.4375, 16 * 0.875, 16 * 0.5, 16 * 0.5625));
     protected static final VoxelShape SHAPE_NS_BASE = Shapes.or(
-            Block.box(16 * -0.0625, 16 * 0, 16 * 0.375, 16 * 0.125, 16 * 1, 16 * 0.625),
-            Block.box(16 * 0.875, 16 * 0, 16 * 0.375, 16 * 1.0625, 16 * 1, 16 * 0.625),
+            Block.box(16 * -0.0625, 0, 16 * 0.375, 16 * 0.125, 16, 16 * 0.625),
+            Block.box(16 * 0.875, 0, 16 * 0.375, 16 * 1.0625, 16, 16 * 0.625),
             Block.box(16 * 0.125, 16 * 0.625, 16 * 0.4375, 16 * 0.875, 16 * 0.9375, 16 * 0.5625));
 
     protected static final VoxelShape SHAPE_EW_CLOSED = Shapes.or(
-            Block.box(16 * 0.375, 16 * 0, 16 * 0.875, 16 * 0.625, 16 * 0.5625, 16 * 1.0625),
-            Block.box(16 * 0.4375, 16 * 0, 16 * 0.125, 16 * 0.5625, 16 * 0.25, 16 * 0.875),
-            Block.box(16 * 0.375, 16 * 0, 16 * -0.0625, 16 * 0.625, 16 * 0.5625, 16 * 0.125));
+            Block.box(16 * 0.375, 0, 16 * 0.875, 16 * 0.625, 16 * 0.5625, 16 * 1.0625),
+            Block.box(16 * 0.4375, 0, 16 * 0.125, 16 * 0.5625, 16 * 0.25, 16 * 0.875),
+            Block.box(16 * 0.375, 0, 16 * -0.0625, 16 * 0.625, 16 * 0.5625, 16 * 0.125));
     protected static final VoxelShape SHAPE_EW_OPEN = Shapes.or(
-            Block.box(16 * 0.375, 16 * 0, 16 * 0.875, 16 * 0.625, 16 * 0.5625, 16 * 1.0625),
+            Block.box(16 * 0.375, 0, 16 * 0.875, 16 * 0.625, 16 * 0.5625, 16 * 1.0625),
             Block.box(16 * 0.4375, 16 * 0.1875, 16 * 0.125, 16 * 0.5625, 16 * 0.5, 16 * 0.875),
-            Block.box(16 * 0.375, 16 * 0, 16 * -0.0625, 16 * 0.625, 16 * 0.5625, 16 * 0.125));
+            Block.box(16 * 0.375, 0, 16 * -0.0625, 16 * 0.625, 16 * 0.5625, 16 * 0.125));
     protected static final VoxelShape SHAPE_EW_BASE = Shapes.or(
-            Block.box(16 * 0.375, 16 * 0, 16 * 0.875, 16 * 0.625, 16 * 1, 16 * 1.0625),
-            Block.box(16 * 0.375, 16 * 0, 16 * -0.0625, 16 * 0.625, 16 * 1, 16 * 0.125),
+            Block.box(16 * 0.375, 0, 16 * 0.875, 16 * 0.625, 16, 16 * 1.0625),
+            Block.box(16 * 0.375, 0, 16 * -0.0625, 16 * 0.625, 16, 16 * 0.125),
             Block.box(16 * 0.4375, 16 * 0.625, 16 * 0.125, 16 * 0.5625, 16 * 0.9375, 16 * 0.875));
 
     public PilloryBlock(Properties properties) {

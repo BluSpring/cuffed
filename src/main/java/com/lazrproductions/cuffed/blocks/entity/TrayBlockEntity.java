@@ -1,13 +1,9 @@
 package com.lazrproductions.cuffed.blocks.entity;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.init.ModBlockEntities;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.items.TrayItem;
 import com.mojang.datafixers.util.Pair;
-
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -35,11 +31,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class TrayBlockEntity extends BlockEntity {
     private NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
 
     public TrayBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.TRAY.get(), pos, state);
+        super(ModBlockEntities.TRAY, pos, state);
     }
 
     public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
@@ -72,7 +71,7 @@ public class TrayBlockEntity extends BlockEntity {
                     if(removeItem(0)) {
                         interacting.setItemInHand(hand, food);
 
-                        level.playSound((Player) null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
+                        level.playSound(null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
                             SoundEvents.COD_FLOP, SoundSource.NEUTRAL, 1.0F,
                             1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.4F);
 
@@ -81,7 +80,7 @@ public class TrayBlockEntity extends BlockEntity {
                     } else if(removeItem(1)) {
                         interacting.setItemInHand(hand, fork);
 
-                        level.playSound((Player) null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
+                        level.playSound(null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
                             SoundEvents.LANTERN_HIT, SoundSource.NEUTRAL, 1.0F,
                             1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.4F);
 
@@ -90,7 +89,7 @@ public class TrayBlockEntity extends BlockEntity {
                     } else if(removeItem(2)) {
                         interacting.setItemInHand(hand, spoon);
 
-                        level.playSound((Player) null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
+                        level.playSound(null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
                             SoundEvents.LANTERN_HIT, SoundSource.NEUTRAL, 1.0F,
                             1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.4F);
 
@@ -99,7 +98,7 @@ public class TrayBlockEntity extends BlockEntity {
                     } else if(removeItem(3)) {
                         interacting.setItemInHand(hand, knife);
 
-                        level.playSound((Player) null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
+                        level.playSound(null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
                             SoundEvents.LANTERN_HIT, SoundSource.NEUTRAL, 1.0F,
                             1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.4F);
 
@@ -112,7 +111,7 @@ public class TrayBlockEntity extends BlockEntity {
                     setItem(itemInMainHand.copyWithCount(1), 0);
                     itemInMainHand.shrink(1);
 
-                    level.playSound((Player) null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
+                    level.playSound(null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
                         SoundEvents.COD_FLOP, SoundSource.NEUTRAL, 1.0F,
                         1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.4F);
 
@@ -122,7 +121,7 @@ public class TrayBlockEntity extends BlockEntity {
                     setItem(itemInMainHand.copyWithCount(1), 1);
                     itemInMainHand.shrink(1);
 
-                    level.playSound((Player) null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
+                    level.playSound(null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
                         SoundEvents.LANTERN_HIT, SoundSource.NEUTRAL, 1.0F,
                         1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.4F);
 
@@ -132,7 +131,7 @@ public class TrayBlockEntity extends BlockEntity {
                     setItem(itemInMainHand.copyWithCount(1), 2);
                     itemInMainHand.shrink(1);
 
-                    level.playSound((Player) null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
+                    level.playSound(null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
                         SoundEvents.LANTERN_HIT, SoundSource.NEUTRAL, 1.0F,
                         1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.4F);
 
@@ -142,7 +141,7 @@ public class TrayBlockEntity extends BlockEntity {
                     setItem(itemInMainHand.copyWithCount(1), 3);
                     itemInMainHand.shrink(1);
 
-                    level.playSound((Player) null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
+                    level.playSound(null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
                         SoundEvents.LANTERN_HIT, SoundSource.NEUTRAL, 1.0F,
                         1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.4F);
 
@@ -162,7 +161,7 @@ public class TrayBlockEntity extends BlockEntity {
                     (float) foodproperties.getSaturationModifier());
 
             player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-            level.playSound((Player) null, getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ(),
+            level.playSound(null, getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ(),
                     SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
             if (player instanceof ServerPlayer) {
                 CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayer) player, stack);
@@ -174,7 +173,7 @@ public class TrayBlockEntity extends BlockEntity {
                 }
             }
             
-            level.playSound((Player) null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
+            level.playSound(null, getBlockPos().getX() + 0.5f, getBlockPos().getY(), getBlockPos().getZ() + 0.5f,
                     player.getEatingSound(stack), SoundSource.NEUTRAL, 1.0F,
                     1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.4F);
 
@@ -196,7 +195,7 @@ public class TrayBlockEntity extends BlockEntity {
     @Nonnull
     public ItemStack getForkStack() {
         for (ItemStack itemStack : items) {
-            if (itemStack.is(ModItems.FORK.get()))
+            if (itemStack.is(ModItems.FORK))
                 return itemStack;
         }
         return ItemStack.EMPTY;
@@ -205,7 +204,7 @@ public class TrayBlockEntity extends BlockEntity {
     @Nonnull
     public ItemStack getSpoonStack() {
         for (ItemStack itemStack : items) {
-            if (itemStack.is(ModItems.SPOON.get()))
+            if (itemStack.is(ModItems.SPOON))
                 return itemStack;
         }
         return ItemStack.EMPTY;
@@ -214,7 +213,7 @@ public class TrayBlockEntity extends BlockEntity {
     @Nonnull
     public ItemStack getKnifeStack() {
         for (ItemStack itemStack : items) {
-            if (itemStack.is(ModItems.KNIFE.get()))
+            if (itemStack.is(ModItems.KNIFE))
                 return itemStack;
         }
         return ItemStack.EMPTY;
@@ -276,7 +275,7 @@ public class TrayBlockEntity extends BlockEntity {
 
     public void dropItem(@Nonnull Level level, @Nonnull BlockPos pos) {
         ItemStack i = TrayItem.createTrayFrom(items);
-        double d0 = (double) EntityType.ITEM.getWidth();
+        double d0 = EntityType.ITEM.getWidth();
         double d1 = 0.2D;
         double d2 = d0 / 2.0D;
         double d3 = Math.floor(pos.getX()) + level.random.nextDouble() * d1 + d2;
@@ -325,21 +324,21 @@ public class TrayBlockEntity extends BlockEntity {
 
     protected boolean hasSpoon() {
         for (ItemStack itemStack : items)
-            if (itemStack.is(ModItems.SPOON.get()))
+            if (itemStack.is(ModItems.SPOON))
                 return true;
         return false;
     }
 
     protected boolean hasFork() {
         for (ItemStack itemStack : items)
-            if (itemStack.is(ModItems.FORK.get()))
+            if (itemStack.is(ModItems.FORK))
                 return true;
         return false;
     }
 
     protected boolean hasKnife() {
         for (ItemStack itemStack : items)
-            if (itemStack.is(ModItems.KNIFE.get()))
+            if (itemStack.is(ModItems.KNIFE))
                 return true;
         return false;
     }
@@ -354,21 +353,21 @@ public class TrayBlockEntity extends BlockEntity {
 
     protected ItemStack getFork() {
         for (ItemStack itemStack : items)
-            if (itemStack.is(ModItems.FORK.get()))
+            if (itemStack.is(ModItems.FORK))
                 return itemStack;
         return ItemStack.EMPTY;
     }
 
     protected ItemStack getSpoon() {
         for (ItemStack itemStack : items)
-            if (itemStack.is(ModItems.SPOON.get()))
+            if (itemStack.is(ModItems.SPOON))
                 return itemStack;
         return ItemStack.EMPTY;
     }
 
     protected ItemStack getKnife() {
         for (ItemStack itemStack : items)
-            if (itemStack.is(ModItems.KNIFE.get()))
+            if (itemStack.is(ModItems.KNIFE))
                 return itemStack;
         return ItemStack.EMPTY;
     }

@@ -1,8 +1,5 @@
 package com.lazrproductions.cuffed.blocks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.blocks.entity.LockableBlockEntity;
@@ -10,7 +7,6 @@ import com.lazrproductions.cuffed.init.ModBlocks;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyRingItem;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -42,6 +38,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CellDoor extends DoorBlock implements EntityBlock {
 
@@ -150,11 +149,11 @@ public class CellDoor extends DoorBlock implements EntityBlock {
             
 
             if(level.getBlockEntity(bottomPos) instanceof LockableBlockEntity lockable) {
-                boolean isKeyThatIsBoundToThisLock = stack.is((ModItems.KEY.get())) && KeyItem.isBoundToLock(stack, lockable.getLockId());
-                boolean isKeyRingThatIsBoundToThisLock = stack.is((ModItems.KEY_RING.get())) && KeyRingItem.hasBoundId(stack, lockable.getLockId());
-                boolean isCreativeKey = stack.is(ModItems.CREATIVE_KEY.get());
-                boolean isCreativeBindBreaker = stack.is(ModItems.CREATIVE_BIND_BREAKER.get());
-                boolean isLockpick = stack.is(ModItems.LOCKPICK.get());
+                boolean isKeyThatIsBoundToThisLock = stack.is((ModItems.KEY)) && KeyItem.isBoundToLock(stack, lockable.getLockId());
+                boolean isKeyRingThatIsBoundToThisLock = stack.is((ModItems.KEY_RING)) && KeyRingItem.hasBoundId(stack, lockable.getLockId());
+                boolean isCreativeKey = stack.is(ModItems.CREATIVE_KEY);
+                boolean isCreativeBindBreaker = stack.is(ModItems.CREATIVE_BIND_BREAKER);
+                boolean isLockpick = stack.is(ModItems.LOCKPICK);
 
                 if(!isLockpick) {
                     if(isCreativeBindBreaker) {
@@ -187,7 +186,7 @@ public class CellDoor extends DoorBlock implements EntityBlock {
     }
 
     private void playSound(Level level, BlockPos pos, boolean open) {
-        level.playSound(null, pos, open ? SoundEvents.IRON_DOOR_OPEN : SoundEvents.IRON_DOOR_OPEN,
+        level.playSound(null, pos, SoundEvents.IRON_DOOR_OPEN,
                 SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
     }
 
@@ -221,8 +220,8 @@ public class CellDoor extends DoorBlock implements EntityBlock {
             return state.setValue(IN_BARS, flag);
         }
 
-        boolean flag4 = (isBottom && pos.above().equals(otherPos) && otherState.is(ModBlocks.CELL_DOOR.get()));
-        boolean flag5 = (!isBottom && pos.below().equals(otherPos) && otherState.is(ModBlocks.CELL_DOOR.get()));
+        boolean flag4 = (isBottom && pos.above().equals(otherPos) && otherState.is(ModBlocks.CELL_DOOR));
+        boolean flag5 = (!isBottom && pos.below().equals(otherPos) && otherState.is(ModBlocks.CELL_DOOR));
         if (flag4 || flag5) {
             // state = state.setValue(LOCKED, otherState.getValue(LOCKED)).setValue(BOUND,
             // otherState.getValue(BOUND)).setValue(OPEN, otherState.getValue(OPEN));

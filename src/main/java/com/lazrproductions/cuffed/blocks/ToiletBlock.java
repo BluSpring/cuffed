@@ -1,10 +1,6 @@
 package com.lazrproductions.cuffed.blocks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.blocks.entity.ToiletBlockEntity;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -33,6 +29,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ToiletBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 
@@ -108,7 +107,7 @@ public class ToiletBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof ToiletBlockEntity toilet) {
             toilet.getDrops(level, pos).forEach((c) -> {
-                double d0 = (double) EntityType.ITEM.getWidth();
+                double d0 = EntityType.ITEM.getWidth();
                 double d1 = 0.2D;
                 double d2 = d0 / 2.0D;
                 double d3 = Math.floor(pos.getX()) + level.random.nextDouble() * d1 + d2;

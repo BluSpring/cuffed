@@ -1,13 +1,10 @@
 package com.lazrproductions.cuffed.restraints.client.layer;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.entity.base.IRestrainableEntity;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.restraints.custom.PilloryRestraint;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -16,6 +13,8 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+
+import javax.annotation.Nonnull;
 
 public class PilloryEntityLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
    private final ItemInHandRenderer itemInHandRenderer;
@@ -33,7 +32,7 @@ public class PilloryEntityLayer<T extends LivingEntity, M extends HumanoidModel<
         if (res.getHeadRestraintId().equals(PilloryRestraint.ID)) {
             
             stack.pushPose();
-            ItemStack itemStack = ModItems.PILLORY_ITEM.get().getDefaultInstance();
+            ItemStack itemStack = ModItems.PILLORY_ITEM.getDefaultInstance();
             translateToHead(stack);
             if(entity.isCrouching())
                 stack.translate(0, -0.5d, 0);

@@ -1,15 +1,9 @@
 package com.lazrproductions.cuffed.items;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.blocks.PosterBlock;
 import com.lazrproductions.cuffed.blocks.base.PosterType;
 import com.lazrproductions.cuffed.init.ModBlocks;
 import com.lazrproductions.cuffed.init.ModItems;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -22,6 +16,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class PosterBlockItem extends BlockItem {
     public static final String POSTER_TYPE_TAG = "Poster"; 
     
@@ -33,7 +31,7 @@ public class PosterBlockItem extends BlockItem {
     @Nullable
     protected BlockState getPlacementState(@Nonnull BlockPlaceContext ctx) {
         BlockState state = super.getPlacementState(ctx);
-        if(state != null && state.is(ModBlocks.POSTER.get()))
+        if(state != null && state.is(ModBlocks.POSTER))
             state = state.setValue(PosterBlock.POSTER_TYPE, getPosterType(ctx.getItemInHand()));
         return state;
     }
@@ -54,7 +52,7 @@ public class PosterBlockItem extends BlockItem {
     }
 
     public static ItemStack newItemFromType(PosterType type) {
-        ItemStack stack = ModItems.POSTER_ITEM.get().getDefaultInstance().copyWithCount(1);
+        ItemStack stack = ModItems.POSTER_ITEM.getDefaultInstance().copyWithCount(1);
         CompoundTag tag = stack.getOrCreateTag();
         tag.putString(POSTER_TYPE_TAG, type.getSerializedName());
         return stack;

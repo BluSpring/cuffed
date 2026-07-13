@@ -1,14 +1,11 @@
 package com.lazrproductions.cuffed.inventory.tooltip;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.items.TrayItem;
 import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
 import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -19,24 +16,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class TrayTooltip implements ClientTooltipComponent, TooltipComponent {
+import javax.annotation.Nonnull;
+
+public record TrayTooltip(NonNullList<ItemStack> items) implements ClientTooltipComponent, TooltipComponent {
     public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID,
-            "textures/gui/container/tray.png");
-    
+        "textures/gui/container/tray.png");
+
     public static final ScreenTexture BACKGROUND_TEXTURE = new ScreenTexture(ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/gui/container/tray.png"), 0, 0, 39, 20, 128, 128);
     public static final ScreenTexture FORK_TEXTURE = new ScreenTexture(ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/gui/container/tray.png"), 0, 20, 5, 15, 128, 128);
     public static final ScreenTexture SPOON_TEXTURE = new ScreenTexture(ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/gui/container/tray.png"), 5, 20, 5, 15, 128, 128);
     public static final ScreenTexture KNIFE_TEXTURE = new ScreenTexture(ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/gui/container/tray.png"), 10, 20, 5, 15, 128, 128);
-
-    private final NonNullList<ItemStack> items;
-
-    public TrayTooltip(NonNullList<ItemStack> Items) {
-        this.items = Items;
-    }
-
-    public NonNullList<ItemStack> getItems() {
-        return this.items;
-    }
 
     public int getHeight() {
         return 20;
@@ -48,9 +37,9 @@ public class TrayTooltip implements ClientTooltipComponent, TooltipComponent {
 
     public void renderImage(@Nonnull Font font, int x, int y, @Nonnull GuiGraphics gui) {
         ScreenUtilities.drawTexture(gui, new BlitCoordinates(x, y, 39, 20), BACKGROUND_TEXTURE);
-        
+
         int foodSlot = getTrayFoodSlot();
-        if(foodSlot > -1)
+        if (foodSlot > -1)
             renderSlot(x + 1, y + 1, foodSlot, gui, font);
 
         int spoons = hasSpoon();
@@ -79,7 +68,7 @@ public class TrayTooltip implements ClientTooltipComponent, TooltipComponent {
 
     private int getTrayFoodSlot() {
         for (int i = 0; i < items.size(); i++) {
-            if(TrayItem.itemIsFood(items.get(i)))
+            if (TrayItem.itemIsFood(items.get(i)))
                 return i;
         }
         return -1;
@@ -88,25 +77,27 @@ public class TrayTooltip implements ClientTooltipComponent, TooltipComponent {
     private int hasSpoon() {
         int c = 0;
         for (int i = 0; i < items.size(); i++) {
-            if(items.get(i).is(ModItems.SPOON.get())) {
+            if (items.get(i).is(ModItems.SPOON)) {
                 c++;
             }
         }
         return c;
     }
+
     private int hasFork() {
         int c = 0;
         for (int i = 0; i < items.size(); i++) {
-            if(items.get(i).is(ModItems.FORK.get())) {
+            if (items.get(i).is(ModItems.FORK)) {
                 c++;
             }
         }
         return c;
     }
+
     private int hasKnife() {
         int c = 0;
         for (int i = 0; i < items.size(); i++) {
-            if(items.get(i).is(ModItems.KNIFE.get())) {
+            if (items.get(i).is(ModItems.KNIFE)) {
                 c++;
             }
         }
@@ -114,7 +105,7 @@ public class TrayTooltip implements ClientTooltipComponent, TooltipComponent {
     }
 
     @OnlyIn(Dist.CLIENT)
-    static enum Texture {
+    enum Texture {
         SLOT(0, 0, 18, 20),
         BORDER_VERTICAL(0, 18, 1, 20),
         BORDER_HORIZONTAL_TOP(0, 20, 18, 1),
@@ -127,7 +118,7 @@ public class TrayTooltip implements ClientTooltipComponent, TooltipComponent {
         public final int w;
         public final int h;
 
-        private Texture(int p_169928_, int p_169929_, int p_169930_, int p_169931_) {
+        Texture(int p_169928_, int p_169929_, int p_169930_, int p_169931_) {
             this.x = p_169928_;
             this.y = p_169929_;
             this.w = p_169930_;

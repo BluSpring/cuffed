@@ -1,17 +1,13 @@
 package com.lazrproductions.cuffed.client.particle;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class BloodDripParticle extends TextureSheetParticle {
@@ -35,13 +31,13 @@ public class BloodDripParticle extends TextureSheetParticle {
         this.zo = this.z;
         this.preMoveUpdate();
         if (!this.removed) {
-            this.yd -= (double) this.gravity;
+            this.yd -= this.gravity;
             this.move(this.xd, this.yd, this.zd);
             this.postMoveUpdate();
             if (!this.removed) {
-                this.xd *= (double) 0.98F;
-                this.yd *= (double) 0.98F;
-                this.zd *= (double) 0.98F;
+                this.xd *= 0.98F;
+                this.yd *= 0.98F;
+                this.zd *= 0.98F;
             }
         }
 

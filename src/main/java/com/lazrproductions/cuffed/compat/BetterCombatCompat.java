@@ -17,7 +17,6 @@ public class BetterCombatCompat {
             wasRecentlyDisabled = true;
             BetterCombatClient.ENABLED = false;
         } catch (Exception e) {
-            return;
         }
     }
 
@@ -28,7 +27,6 @@ public class BetterCombatCompat {
         try {
             BetterCombatClient.ENABLED = wasEnabled;
         } catch (Exception e) {
-            return;
         }
     }
 }

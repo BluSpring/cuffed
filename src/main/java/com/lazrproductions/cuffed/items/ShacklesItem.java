@@ -1,19 +1,17 @@
 package com.lazrproductions.cuffed.items;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.items.base.AbstractRestraintItem;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ShacklesItem extends AbstractRestraintItem {
 
@@ -38,7 +36,7 @@ public class ShacklesItem extends AbstractRestraintItem {
             .withStyle(ChatFormatting.GRAY)
             .append(" ")
             .append(
-                ModItems.SHACKLES_KEY.get().getDefaultInstance().getHoverName().copy()
+                ModItems.SHACKLES_KEY.getDefaultInstance().getHoverName().copy()
                 .withStyle(ChatFormatting.WHITE)));
                 
         super.appendHoverText(stack, level, components, tooltipFlag);

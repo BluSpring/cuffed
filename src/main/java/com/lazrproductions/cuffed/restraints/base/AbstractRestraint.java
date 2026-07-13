@@ -1,16 +1,8 @@
 package com.lazrproductions.cuffed.restraints.base;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.compat.ArsNouveauCompat;
 import com.lazrproductions.cuffed.compat.IronsSpellsnSpellbooksCompat;
-import com.lazrproductions.cuffed.compat.KnightsOfBritanniaCompat;
 import com.lazrproductions.cuffed.compat.ManaAndArtificeCompat;
 import com.lazrproductions.cuffed.entity.animation.ArmRestraintAnimationFlags;
 import com.lazrproductions.cuffed.entity.animation.LegRestraintAnimationFlags;
@@ -18,7 +10,6 @@ import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.restraints.client.RestraintModelInterface;
 import com.mojang.blaze3d.platform.Window;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
@@ -36,6 +27,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.UUID;
 
 public abstract class AbstractRestraint {
 
@@ -142,20 +139,20 @@ public abstract class AbstractRestraint {
         ModStatistics.awardTimeSpentRestrained(player, this);
 
         if(this instanceof IEnchantableRestraint e) {
-            if(e.getEnchantmentLevel(ModEnchantments.FAMINE.get()) >= 1)
+            if(e.getEnchantmentLevel(ModEnchantments.FAMINE) >= 1)
                 if(!player.hasEffect(MobEffects.HUNGER))
                     player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 100, 1));
 
-            if(e.getEnchantmentLevel(ModEnchantments.SHROUD.get()) >= 1)
+            if(e.getEnchantmentLevel(ModEnchantments.SHROUD) >= 1)
                 if(!player.hasEffect(MobEffects.BLINDNESS))
                     player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 1));
                     
-            if(e.getEnchantmentLevel(ModEnchantments.EXHAUST.get()) >= 1) {
+            if(e.getEnchantmentLevel(ModEnchantments.EXHAUST) >= 1) {
                 if(!player.hasEffect(MobEffects.DIG_SLOWDOWN)) player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, 1));
                 if(!player.hasEffect(MobEffects.WEAKNESS)) player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1));
             }     
 
-            if(e.getEnchantmentLevel(ModEnchantments.SILENCE.get()) >= 1) {
+            if(e.getEnchantmentLevel(ModEnchantments.SILENCE) >= 1) {
                 double drainPercentage = 0.005D; // 0.5% per tick, so drains 10% per second TODO: make this a config option
                 if(CuffedMod.ArsNouveauInstalled) ArsNouveauCompat.DrainMana(player, drainPercentage);
                 if(CuffedMod.IronsSpellsnSpellbooksInstalled) IronsSpellsnSpellbooksCompat.DrainMana(player, drainPercentage);

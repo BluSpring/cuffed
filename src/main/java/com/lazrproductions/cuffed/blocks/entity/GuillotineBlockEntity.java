@@ -1,22 +1,17 @@
 package com.lazrproductions.cuffed.blocks.entity;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.blocks.PilloryBlock;
 import com.lazrproductions.cuffed.compat.PlayerReviveCompat;
 import com.lazrproductions.cuffed.init.ModBlockEntities;
 import com.lazrproductions.cuffed.init.ModDamageTypes;
 import com.lazrproductions.cuffed.init.ModSounds;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.server.commands.KillCommand;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,6 +20,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class GuillotineBlockEntity extends BlockEntity {
 
@@ -35,7 +33,7 @@ public class GuillotineBlockEntity extends BlockEntity {
     public boolean isDown;
 
     public GuillotineBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.GUILLOTINE.get(), pos, state);
+        super(ModBlockEntities.GUILLOTINE, pos, state);
     }
 
     public void interact(@Nonnull Level l, @Nonnull BlockPos pos, @Nonnull BlockState state) {

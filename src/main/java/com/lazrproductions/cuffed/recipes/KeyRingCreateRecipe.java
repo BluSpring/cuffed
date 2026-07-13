@@ -1,14 +1,9 @@
 package com.lazrproductions.cuffed.recipes;
 
-import java.util.ArrayList;
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModRecipes;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyRingItem;
-
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -18,6 +13,9 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
 
 public class KeyRingCreateRecipe extends CustomRecipe {
     public KeyRingCreateRecipe(ResourceLocation idIn, CraftingBookCategory category) {
@@ -30,10 +28,10 @@ public class KeyRingCreateRecipe extends CustomRecipe {
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
             if (!inv.getItem(i).isEmpty())
-                if (inv.getItem(i).is(ModItems.KEY.get())) {
+                if (inv.getItem(i).is(ModItems.KEY)) {
                     ItemStack stack = inv.getItem(i);
                     Item item = stack.getItem();
-                    if (item == ModItems.KEY.get()) {
+                    if (item == ModItems.KEY) {
                         keyStack.add(stack);
                     }
 
@@ -56,13 +54,13 @@ public class KeyRingCreateRecipe extends CustomRecipe {
                 ItemStack stack = inv.getItem(i);
                 Item item = stack.getItem();
 
-                if (item == ModItems.KEY.get()) {
+                if (item == ModItems.KEY) {
                     keyStacks.add(stack);
                 }
             }
 
 
-            ItemStack newStack = new ItemStack(ModItems.KEY_RING.get());
+            ItemStack newStack = new ItemStack(ModItems.KEY_RING);
             newStack.setCount(1);
             //int keys = 2;
                 
@@ -88,7 +86,7 @@ public class KeyRingCreateRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.KEY_RING_ADD.get();
+        return ModRecipes.KEY_RING_ADD;
     }
 
 }

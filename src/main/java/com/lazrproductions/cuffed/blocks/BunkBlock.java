@@ -1,14 +1,6 @@
 package com.lazrproductions.cuffed.blocks;
 
-import java.util.Optional;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.lazrproductions.cuffed.blocks.entity.BunkBlockEntity;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -25,14 +17,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.CollisionGetter;
-import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DoubleBlockCombiner;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -47,6 +34,11 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.apache.commons.lang3.ArrayUtils;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 
 @SuppressWarnings("deprecation")
@@ -104,8 +96,8 @@ public class BunkBlock extends HorizontalDirectionalBlock implements EntityBlock
                 }
 
                 Vec3 vec3 = pos.getCenter();
-                level.explode((Entity) null, level.damageSources().badRespawnPointExplosion(vec3),
-                        (ExplosionDamageCalculator) null, vec3, 5.0F, true, Level.ExplosionInteraction.BLOCK);
+                level.explode(null, level.damageSources().badRespawnPointExplosion(vec3),
+                    null, vec3, 5.0F, true, Level.ExplosionInteraction.BLOCK);
                 return InteractionResult.SUCCESS;
             } else if (state.getValue(OCCUPIED)) {
                 interactor.displayClientMessage(Component.translatable("block.minecraft.bed.occupied"), true);
@@ -290,8 +282,8 @@ public class BunkBlock extends HorizontalDirectionalBlock implements EntityBlock
     }
 
     private static int[][] bedStandUpOffsets(Direction p_49539_, Direction p_49540_) {
-        return ArrayUtils.addAll((int[][]) bedSurroundStandUpOffsets(p_49539_, p_49540_),
-                (int[][]) bedAboveStandUpOffsets(p_49539_));
+        return ArrayUtils.addAll(bedSurroundStandUpOffsets(p_49539_, p_49540_),
+            bedAboveStandUpOffsets(p_49539_));
     }
 
     private static int[][] bedSurroundStandUpOffsets(Direction p_49552_, Direction p_49553_) {

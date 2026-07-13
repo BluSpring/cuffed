@@ -1,7 +1,5 @@
 package com.lazrproductions.cuffed.restraints.custom;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.animation.ArmRestraintAnimationFlags;
 import com.lazrproductions.cuffed.entity.animation.LegRestraintAnimationFlags;
@@ -15,7 +13,6 @@ import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
 import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.mojang.blaze3d.platform.Window;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -29,6 +26,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nonnull;
 
 public class DuckTapeHeadRestraint extends AbstractHeadRestraint {
 
@@ -57,7 +56,7 @@ public class DuckTapeHeadRestraint extends AbstractHeadRestraint {
         return "info.cuffed.restraints.duck_tape_head.name";
     }
 
-    public static final Item ITEM =  ModItems.DUCK_TAPE.get();
+    public static final Item ITEM =  ModItems.DUCK_TAPE;
     public Item getItem() {
         return ITEM;
     } 
@@ -209,7 +208,7 @@ public class DuckTapeHeadRestraint extends AbstractHeadRestraint {
     @OnlyIn(Dist.CLIENT)
     public static class DuckTapeHeadRestraintModelInterface extends RestraintModelInterface { 
         @SuppressWarnings("unchecked")
-        static final Class<? extends HumanoidModel<? extends LivingEntity>> MODEL_CLASS = (Class<? extends HumanoidModel<? extends LivingEntity>>)(Class<?>)DuckTapeHeadModel.class;
+        static final Class<? extends HumanoidModel<? extends LivingEntity>> MODEL_CLASS = (Class<? extends HumanoidModel<? extends LivingEntity>>) DuckTapeHeadModel.class;
         static final ModelLayerLocation MODEL_LAYER = ModModelLayers.DUCK_TAPE_HEAD_LAYER;
         static final ResourceLocation MODEL_TEXTURE = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/entity/duck_tape.png");
 

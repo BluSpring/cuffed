@@ -1,16 +1,10 @@
 package com.lazrproductions.cuffed.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.base.IAnchorableEntity;
 import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.init.ModEntityTypes;
 import com.lazrproductions.cuffed.init.ModItems;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -42,6 +36,10 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidType;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+
 public class WeightedAnchorEntity extends LivingEntity {
 
     private static final EntityDataAccessor<Boolean> DATA_ENCHANTED = SynchedEntityData.defineId(Player.class, EntityDataSerializers.BOOLEAN);
@@ -51,7 +49,7 @@ public class WeightedAnchorEntity extends LivingEntity {
         super(type, level);
     }
     public WeightedAnchorEntity(Level world, BlockPos pos) {
-        super(ModEntityTypes.WEIGHTED_ANCHOR.get(), world);
+        super(ModEntityTypes.WEIGHTED_ANCHOR, world);
         this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D);
     }
 
@@ -64,7 +62,7 @@ public class WeightedAnchorEntity extends LivingEntity {
     }
 
     public ItemStack getDroppedItem() {
-        ItemStack stack = new ItemStack(ModItems.WEIGHTED_ANCHOR_ITEM.get(), 1);
+        ItemStack stack = new ItemStack(ModItems.WEIGHTED_ANCHOR_ITEM, 1);
         EnchantmentHelper.setEnchantments(EnchantmentHelper.deserializeEnchantments(getEnchantments()), stack);
         return stack;
     }
@@ -78,7 +76,7 @@ public class WeightedAnchorEntity extends LivingEntity {
     public void tick() {
         if(!level().isClientSide()) {
             entityData.set(DATA_ENCHANTED, getEnchantments().size() > 0);
-            if(this.isInWaterOrBubble() && getEnchantmentLevel(ModEnchantments.BUOYANT.get()) >= 1)
+            if(this.isInWaterOrBubble() && getEnchantmentLevel(ModEnchantments.BUOYANT) >= 1)
                 this.addDeltaMovement(new Vec3(0f, 0.023f, 0f));
          }
   
@@ -93,9 +91,7 @@ public class WeightedAnchorEntity extends LivingEntity {
     @Override
     public boolean isInvulnerableTo(@Nonnull DamageSource source) {
 
-        if(source.is(DamageTypes.GENERIC_KILL))
-            return false;
-        return true;
+        return !source.is(DamageTypes.GENERIC_KILL);
     }
 
     @Override

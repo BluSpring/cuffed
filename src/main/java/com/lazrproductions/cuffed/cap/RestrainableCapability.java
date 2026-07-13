@@ -1,39 +1,22 @@
 package com.lazrproductions.cuffed.cap;
 
-import java.util.ArrayList;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.base.IRestrainableCapability;
-import com.lazrproductions.cuffed.compat.BetterCombatCompat;
-import com.lazrproductions.cuffed.compat.ElenaiDodge2Compat;
-import com.lazrproductions.cuffed.compat.EpicFightCompat;
-import com.lazrproductions.cuffed.compat.ParcoolCompat;
-import com.lazrproductions.cuffed.compat.PlayerReviveCompat;
+import com.lazrproductions.cuffed.compat.*;
 import com.lazrproductions.cuffed.effect.RestrainedEffectInstance;
 import com.lazrproductions.cuffed.init.ModEffects;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.items.base.AbstractRestraintKeyItem;
 import com.lazrproductions.cuffed.restraints.RestraintAPI;
-import com.lazrproductions.cuffed.restraints.base.AbstractArmRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractHeadRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
-import com.lazrproductions.cuffed.restraints.base.IEnchantableRestraint;
-import com.lazrproductions.cuffed.restraints.base.RestraintType;
+import com.lazrproductions.cuffed.restraints.base.*;
 import com.lazrproductions.lazrslib.common.math.MathUtilities;
 import com.mojang.blaze3d.platform.Window;
-
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.commands.TeleportCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -41,13 +24,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class RestrainableCapability implements IRestrainableCapability {
 
@@ -77,21 +62,21 @@ public class RestrainableCapability implements IRestrainableCapability {
         int encoded = encodeRestraintDisabilities();
 
         if (isRestrained()) {
-            if (!player.hasEffect(ModEffects.RESTRAINED_EFFECT.get())) {
+            if (!player.hasEffect(ModEffects.RESTRAINED_EFFECT)) {
                 // Add new effect
                 RestrainedEffectInstance inst = new RestrainedEffectInstance(-1, encoded);
                 player.addEffect(inst);
             } else {
                 // Remove and replace existing effect
-                if (player.getEffect(ModEffects.RESTRAINED_EFFECT.get()) instanceof RestrainedEffectInstance e
+                if (player.getEffect(ModEffects.RESTRAINED_EFFECT) instanceof RestrainedEffectInstance e
                         && e.getAmplifier() != encoded) {
-                    player.removeEffect(ModEffects.RESTRAINED_EFFECT.get());
+                    player.removeEffect(ModEffects.RESTRAINED_EFFECT);
                     RestrainedEffectInstance inst = new RestrainedEffectInstance(-1, encoded);
                     player.addEffect(inst);
                 }
             }
-        } else if (player.hasEffect(ModEffects.RESTRAINED_EFFECT.get()))
-            player.removeEffect(ModEffects.RESTRAINED_EFFECT.get());
+        } else if (player.hasEffect(ModEffects.RESTRAINED_EFFECT))
+            player.removeEffect(ModEffects.RESTRAINED_EFFECT);
 
         // ---
 
@@ -226,7 +211,7 @@ public class RestrainableCapability implements IRestrainableCapability {
                             return true;
                         }
             }
-        } else if (stack.is(ModItems.LOCKPICK.get())) {
+        } else if (stack.is(ModItems.LOCKPICK)) {
             int lockpickType = -1;
             if (interactionHeight > 1.5f && headRestrained() && headRestraint.getLockpickable())
                 lockpickType = RestraintType.Head.toInteger();
@@ -248,7 +233,7 @@ public class RestrainableCapability implements IRestrainableCapability {
                                 ? getArmRestraint().getLockpickingProgressPerPick()
                                 : getHeadRestraint().getLockpickingProgressPerPick();
 
-                CuffedAPI.Networking.sendLockpickBeginPickingRestraintPacketToClient((ServerPlayer) other,
+                CuffedAPI.Networking.sendLockpickBeginPickingRestraintPacketToClient(other,
                         player.getUUID().toString(), lockpickType, speedIncreasePerPick, progressPerPick);
                 return true;
             }
@@ -288,9 +273,7 @@ public class RestrainableCapability implements IRestrainableCapability {
     // #region Restraint Management
 
     public boolean restraintsDisabledBreakingBlocks() {
-        boolean v = false;
-        if (armRestraint != null && !armRestraint.AllowBreakingBlocks())
-            v = true;
+        boolean v = armRestraint != null && !armRestraint.AllowBreakingBlocks();
         if (legRestraint != null && !legRestraint.AllowBreakingBlocks())
             v = true;
         if (headRestraint != null && !headRestraint.AllowBreakingBlocks())
@@ -299,9 +282,7 @@ public class RestrainableCapability implements IRestrainableCapability {
     }
 
     public boolean restraintsDisabledItemUse() {
-        boolean v = false;
-        if (armRestraint != null && !armRestraint.AllowItemUse())
-            v = true;
+        boolean v = armRestraint != null && !armRestraint.AllowItemUse();
         if (legRestraint != null && !legRestraint.AllowItemUse())
             v = true;
         if (headRestraint != null && !headRestraint.AllowItemUse())
@@ -310,9 +291,7 @@ public class RestrainableCapability implements IRestrainableCapability {
     }
 
     public boolean restraintsDisabledMovement() {
-        boolean v = false;
-        if (armRestraint != null && !armRestraint.AllowMovement())
-            v = true;
+        boolean v = armRestraint != null && !armRestraint.AllowMovement();
         if (legRestraint != null && !legRestraint.AllowMovement())
             v = true;
         if (headRestraint != null && !headRestraint.AllowMovement())
@@ -321,9 +300,7 @@ public class RestrainableCapability implements IRestrainableCapability {
     }
 
     public boolean restraintsDisabledJumping() {
-        boolean v = false;
-        if (armRestraint != null && !armRestraint.AllowJumping())
-            v = true;
+        boolean v = armRestraint != null && !armRestraint.AllowJumping();
         if (legRestraint != null && !legRestraint.AllowJumping())
             v = true;
         if (headRestraint != null && !headRestraint.AllowJumping())
@@ -742,8 +719,8 @@ public class RestrainableCapability implements IRestrainableCapability {
     // #region Events
 
     public void onLoginServer(ServerPlayer player) {
-        if (player.hasEffect(ModEffects.RESTRAINED_EFFECT.get()))
-            player.removeEffect(ModEffects.RESTRAINED_EFFECT.get());
+        if (player.hasEffect(ModEffects.RESTRAINED_EFFECT))
+            player.removeEffect(ModEffects.RESTRAINED_EFFECT);
     }
 
     public void onLoginClient(Player player) {

@@ -1,11 +1,7 @@
 package com.lazrproductions.cuffed.entity;
 
 
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.init.ModEntityTypes;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -17,6 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+
+import javax.annotation.Nonnull;
 
 public class CrumblingBlockEntity extends Entity {
     static int CRUMBLE_STAGE_TIME = 20;
@@ -33,7 +31,7 @@ public class CrumblingBlockEntity extends Entity {
     }
 
     public CrumblingBlockEntity(Level world, BlockPos pos, BlockState state, int crumbleProgress) {
-        super(ModEntityTypes.CRUMBLING_BLOCK.get(), world);
+        super(ModEntityTypes.CRUMBLING_BLOCK, world);
         this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D);
         
         setCrumbleProgress(crumbleProgress, 1);

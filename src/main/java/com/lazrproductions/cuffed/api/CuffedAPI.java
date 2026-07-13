@@ -1,11 +1,5 @@
 package com.lazrproductions.cuffed.api;
 
-import java.util.HashMap;
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.blocks.PilloryBlock;
 import com.lazrproductions.cuffed.blocks.base.ILockableBlock;
@@ -16,16 +10,10 @@ import com.lazrproductions.cuffed.entity.PadlockEntity;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.init.ModTags;
-import com.lazrproductions.cuffed.packet.LockpickBlockPacket;
-import com.lazrproductions.cuffed.packet.LockpickLockPacket;
-import com.lazrproductions.cuffed.packet.LockpickRestraintPacket;
-import com.lazrproductions.cuffed.packet.RestraintEquippedPacket;
-import com.lazrproductions.cuffed.packet.RestraintSyncPacket;
-import com.lazrproductions.cuffed.packet.RestraintUtilityPacket;
+import com.lazrproductions.cuffed.packet.*;
 import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
 import com.lazrproductions.lazrslib.common.network.LazrNetwork;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -47,6 +35,11 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.server.ServerLifecycleHooks;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class CuffedAPI {
     public static class Networking {
@@ -134,13 +127,13 @@ public class CuffedAPI {
                 if (level != null) {
                     if (!level.isClientSide()) {
                         ItemStack itemstack = player.getItemInHand(InteractionHand.MAIN_HAND);
-                        player.getCooldowns().addCooldown(ModItems.LOCKPICK.get(), 20);
+                        player.getCooldowns().addCooldown(ModItems.LOCKPICK, 20);
                         if (wasFailed) {
                             itemstack.hurtAndBreak(1, player, (p) -> {
                                 p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
                             });
 
-                            player.awardStat(ModStatistics.LOCKPICKS_BROKEN.get());
+                            player.awardStat(ModStatistics.LOCKPICKS_BROKEN);
                         } else {
                             level.playLocalSound((float) player.position().x, (float) player.position().y,
                                     (float) player.position().z, SoundEvents.CHAIN_BREAK, SoundSource.PLAYERS,
@@ -151,7 +144,7 @@ public class CuffedAPI {
                                 p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
                             });
                             if (level.getEntity(lockId) instanceof PadlockEntity e) {
-                                player.awardStat(ModStatistics.SUCCESSFUL_LOCKPICKS.get());
+                                player.awardStat(ModStatistics.SUCCESSFUL_LOCKPICKS);
                                 e.RemoveLock();
                             }
                         }
@@ -166,13 +159,13 @@ public class CuffedAPI {
                 Level level = lockpicker.level();
                 if (level != null && !level.isClientSide()) {
                         ItemStack itemstack = lockpicker.getItemInHand(InteractionHand.MAIN_HAND);
-                        lockpicker.getCooldowns().addCooldown(ModItems.LOCKPICK.get(), 20);
+                        lockpicker.getCooldowns().addCooldown(ModItems.LOCKPICK, 20);
                         if (wasFailed) {
                             itemstack.hurtAndBreak(1, lockpicker, (p) -> {
                                 p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
                             });
 
-                            lockpicker.awardStat(ModStatistics.LOCKPICKS_BROKEN.get());
+                            lockpicker.awardStat(ModStatistics.LOCKPICKS_BROKEN);
                         } else {
                             level.playLocalSound((float) restrained.position().x, (float) restrained.position().y,
                                     (float) restrained.position().z, SoundEvents.CHAIN_BREAK, SoundSource.PLAYERS,
@@ -183,7 +176,7 @@ public class CuffedAPI {
                                 p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
                             });
 
-                            lockpicker.awardStat(ModStatistics.SUCCESSFUL_LOCKPICKS.get());
+                            lockpicker.awardStat(ModStatistics.SUCCESSFUL_LOCKPICKS);
                             RestrainableCapability cap = (RestrainableCapability)Capabilities.getRestrainableCapability(restrained);
                             cap.TryUnequipRestraint(restrained, lockpicker, restraintType);
                         }
@@ -198,20 +191,20 @@ public class CuffedAPI {
                 if (level != null) {
                     if (!level.isClientSide()) {
                         ItemStack itemstack = lockpicker.getItemInHand(InteractionHand.MAIN_HAND);
-                        lockpicker.getCooldowns().addCooldown(ModItems.LOCKPICK.get(), 20);
+                        lockpicker.getCooldowns().addCooldown(ModItems.LOCKPICK, 20);
                         if (wasFailed) {
                             itemstack.hurtAndBreak(1, lockpicker, (p) -> {
                                 p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
                             });
 
-                            lockpicker.awardStat(ModStatistics.LOCKPICKS_BROKEN.get());
+                            lockpicker.awardStat(ModStatistics.LOCKPICKS_BROKEN);
                         } else {
                             level.playLocalSound((float) lockpicker.position().x, (float) lockpicker.position().y,
                                     (float) lockpicker.position().z, SoundEvents.CHAIN_BREAK, SoundSource.PLAYERS,
                                     1, 1,
                                     true);
 
-                            lockpicker.awardStat(ModStatistics.SUCCESSFUL_LOCKPICKS.get());
+                            lockpicker.awardStat(ModStatistics.SUCCESSFUL_LOCKPICKS);
 
                             itemstack.hurtAndBreak(1, lockpicker, (p) -> {
                                 p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
@@ -289,14 +282,13 @@ public class CuffedAPI {
                 }
                 
                 if (state.getBlock() instanceof ChestBlock chest) {
-                    if(state.getValue(chest.TYPE) == ChestType.SINGLE) return false;
+                    if(state.getValue(ChestBlock.TYPE) == ChestType.SINGLE) return false;
                     
                     Direction dir = ChestBlock.getConnectedDirection(state);
                     BlockPos otherPos = pos.relative(dir);
                     PadlockEntity otherPadlock = PadlockEntity.getLockAt(level, otherPos);
-                    if (level.getBlockState(otherPos).is(net.minecraft.world.level.block.Blocks.CHEST)
-                            && otherPadlock != null && otherPadlock.isLocked())
-                        return true;
+                    return level.getBlockState(otherPos).is(net.minecraft.world.level.block.Blocks.CHEST)
+                        && otherPadlock != null && otherPadlock.isLocked();
                 } 
             }
 

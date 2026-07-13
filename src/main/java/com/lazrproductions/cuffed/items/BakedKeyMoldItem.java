@@ -1,13 +1,6 @@
 package com.lazrproductions.cuffed.items;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.init.ModItems;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -15,6 +8,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class BakedKeyMoldItem extends Item {
     
@@ -25,7 +23,7 @@ public class BakedKeyMoldItem extends Item {
     }
 
     public static ItemStack createFromRawMold(ItemStack oldMold) {
-        ItemStack newMold = new ItemStack(ModItems.BAKED_KEY_MOLD.get(), 1);
+        ItemStack newMold = new ItemStack(ModItems.BAKED_KEY_MOLD, 1);
         
         CompoundTag oldTag = oldMold.getOrCreateTagElement(KeyMoldItem.TAG_COPIED_KEY);
         CompoundTag tag = new CompoundTag();
@@ -40,7 +38,7 @@ public class BakedKeyMoldItem extends Item {
     }
 
     public static ItemStack createKeyFrom(ItemStack moldStack, int amount) {
-        ItemStack newKey = new ItemStack(ModItems.KEY.get(), amount);
+        ItemStack newKey = new ItemStack(ModItems.KEY, amount);
 
         if(!moldStack.getOrCreateTag().contains(KeyMoldItem.TAG_COPIED_KEY))
             return newKey;

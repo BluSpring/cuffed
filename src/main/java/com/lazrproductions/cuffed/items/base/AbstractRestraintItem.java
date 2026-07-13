@@ -1,47 +1,28 @@
 package com.lazrproductions.cuffed.items.base;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import java.util.List;
-import java.util.function.Predicate;
-
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.RestrainableCapability;
 import com.lazrproductions.cuffed.cap.base.IRestrainableCapability;
 import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.restraints.RestraintAPI;
-import com.lazrproductions.cuffed.restraints.base.AbstractArmRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractHeadRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
-import com.lazrproductions.cuffed.restraints.base.RestraintType;
-
+import com.lazrproductions.cuffed.restraints.base.*;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BundleItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.AABB;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import net.minecraft.client.gui.screens.Screen;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class AbstractRestraintItem extends Item {
     public AbstractRestraintItem(Properties p) {
@@ -54,13 +35,13 @@ public class AbstractRestraintItem extends Item {
             return true;
         if (enchantment == Enchantments.BINDING_CURSE)
             return true;
-        if (enchantment == ModEnchantments.IMBUE.get())
+        if (enchantment == ModEnchantments.IMBUE)
             return true;
-        if (enchantment == ModEnchantments.FAMINE.get())
+        if (enchantment == ModEnchantments.FAMINE)
             return true;
-        if (enchantment == ModEnchantments.SHROUD.get())
+        if (enchantment == ModEnchantments.SHROUD)
             return true;
-        if (enchantment == ModEnchantments.EXHAUST.get())
+        if (enchantment == ModEnchantments.EXHAUST)
             return true;
         return super.canApplyAtEnchantingTable(stack, enchantment);
     }

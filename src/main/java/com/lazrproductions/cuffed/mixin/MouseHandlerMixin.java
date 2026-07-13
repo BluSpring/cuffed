@@ -1,21 +1,18 @@
 package com.lazrproductions.cuffed.mixin;
 
-import java.util.ArrayList;
-
+import com.lazrproductions.cuffed.api.CuffedAPI;
+import com.lazrproductions.cuffed.cap.RestrainableCapability;
+import com.lazrproductions.cuffed.entity.base.IDetainableEntity;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.MouseHandler;
+import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.lazrproductions.cuffed.api.CuffedAPI;
-import com.lazrproductions.cuffed.cap.RestrainableCapability;
-import com.lazrproductions.cuffed.entity.base.IDetainableEntity;
-
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.MouseHandler;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.player.Player;
+import java.util.ArrayList;
 
 @Mixin(MouseHandler.class)
 public class MouseHandlerMixin {
@@ -27,7 +24,7 @@ public class MouseHandlerMixin {
             if(inst.screen != null)
                 return;
 
-            RestrainableCapability cap = (RestrainableCapability)CuffedAPI.Capabilities.getRestrainableCapability((Player)player);
+            RestrainableCapability cap = (RestrainableCapability)CuffedAPI.Capabilities.getRestrainableCapability(player);
             if(cap != null && cap.isRestrained()) {
                 cap.onMouseInput(player, keyCode, scanCode);
                 for (int i : cap.gatherBlockedInputs()) {
@@ -57,7 +54,7 @@ public class MouseHandlerMixin {
             if(inst.screen != null)
                 return;
 
-            RestrainableCapability cap = (RestrainableCapability)CuffedAPI.Capabilities.getRestrainableCapability((Player)player);
+            RestrainableCapability cap = (RestrainableCapability)CuffedAPI.Capabilities.getRestrainableCapability(player);
             if(cap != null && cap.armsRestrained()) {
                 callback.cancel();
                 return;
@@ -67,7 +64,6 @@ public class MouseHandlerMixin {
                 if(detainable.getDetained() > -1)
                 {
                     callback.cancel();
-                    return;
                 }
                     
         }

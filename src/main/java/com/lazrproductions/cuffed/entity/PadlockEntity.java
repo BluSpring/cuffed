@@ -1,11 +1,5 @@
 package com.lazrproductions.cuffed.entity;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.init.ModEntityTypes;
@@ -13,7 +7,6 @@ import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModTags;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyRingItem;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -44,6 +37,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.UUID;
+
 public class PadlockEntity extends HangingEntity {
 
     private static final EntityDataAccessor<Boolean> DATA_LOCKED = SynchedEntityData.defineId(PadlockEntity.class,
@@ -62,7 +60,7 @@ public class PadlockEntity extends HangingEntity {
     }
 
     public PadlockEntity(Level world, BlockPos pos) {
-        super(ModEntityTypes.PADLOCK.get(), world, pos);
+        super(ModEntityTypes.PADLOCK, world, pos);
         this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D);
         entityData.set(DATA_LOCK_ID, Optional.of(UUID.randomUUID()));
     }
@@ -77,7 +75,7 @@ public class PadlockEntity extends HangingEntity {
         float xO = this.getYRot() == 90.0f ? -1 : this.getYRot() == 270.0f || this.getYRot() == -90.0f ? 1 : 0;
         float zO = this.getYRot() == 0.0f ? 1 : this.getYRot() == 180.0f || this.getYRot() == -180.0f ? -1 : 0;
         ItemEntity itementity = new ItemEntity(this.level(), this.pos.getX() + 0.5f + xO, this.pos.getY() + 0.5f,
-                this.pos.getZ() + 0.5f + zO, new ItemStack(ModItems.PADLOCK.get()));
+                this.pos.getZ() + 0.5f + zO, new ItemStack(ModItems.PADLOCK));
         itementity.setDefaultPickUpDelay();
         this.level().addFreshEntity(itementity);
 
@@ -97,8 +95,8 @@ public class PadlockEntity extends HangingEntity {
             return InteractionResult.SUCCESS;
         } else {
             ItemStack stack = interactor.getItemInHand(hand);
-            if (stack.is(ModItems.CREATIVE_RESTRAINT_CUTTER.get())) {
-                interactor.awardStat(Stats.ITEM_USED.get(ModItems.CREATIVE_KEY.get()));
+            if (stack.is(ModItems.CREATIVE_RESTRAINT_CUTTER)) {
+                interactor.awardStat(Stats.ITEM_USED.get(ModItems.CREATIVE_KEY));
                 // Toggle locked
                 if (!interactor.isCrouching()) {
                     setLocked(!isLocked());
@@ -117,9 +115,9 @@ public class PadlockEntity extends HangingEntity {
                 }
             }
 
-            if (stack.is(ModItems.KEY.get())) {
+            if (stack.is(ModItems.KEY)) {
                 if (KeyItem.isBoundToLock(stack, getLockId())) {
-                    interactor.awardStat(Stats.ITEM_USED.get(ModItems.KEY.get()));
+                    interactor.awardStat(Stats.ITEM_USED.get(ModItems.KEY));
                     // Toggle locked
                     if (!interactor.isCrouching()) {
                         setLocked(!isLocked());
@@ -144,9 +142,9 @@ public class PadlockEntity extends HangingEntity {
                 }
             }
 
-            if (stack.is((ModItems.KEY_RING.get()))) {
+            if (stack.is((ModItems.KEY_RING))) {
                 if (KeyRingItem.hasBoundId(stack, getLockId())) {
-                    interactor.awardStat(Stats.ITEM_USED.get(ModItems.KEY_RING.get()));
+                    interactor.awardStat(Stats.ITEM_USED.get(ModItems.KEY_RING));
                     // Unlock
                     if (!interactor.isCrouching()) {
                         setLocked(!isLocked());
@@ -180,7 +178,7 @@ public class PadlockEntity extends HangingEntity {
                 return InteractionResult.CONSUME;
             }
 
-            if (stack.is(ModItems.LOCKPICK.get())) {
+            if (stack.is(ModItems.LOCKPICK)) {
                 CuffedAPI.Networking.sendLockpickBeginPickingLockPacketToClient((ServerPlayer) interactor, this.getId(),
                         isReinforced()
                                 ? CuffedMod.SERVER_CONFIG.LOCKPICKING_SPEED_INCREASE_PER_PICK_FOR_BREAKING_REINFORCED_PADLOCKS.get()
@@ -192,7 +190,7 @@ public class PadlockEntity extends HangingEntity {
                 return InteractionResult.SUCCESS;
             }
 
-            if (stack.is(ModItems.CREATIVE_BIND_BREAKER.get())) {
+            if (stack.is(ModItems.CREATIVE_BIND_BREAKER)) {
                 if(getHasBeenBound()) {
                     resetBindings();
                     interactor.sendSystemMessage(Component.translatable("item.cuffed.creative_bind_breaker.use", getDisplayName().getString()));
@@ -246,7 +244,7 @@ public class PadlockEntity extends HangingEntity {
         float xO = this.getYRot() == 90.0f ? -1 : this.getYRot() == 270.0f || this.getYRot() == -90.0f ? 1 : 0;
         float zO = this.getYRot() == 0.0f ? 1 : this.getYRot() == 180.0f || this.getYRot() == -180.0f ? -1 : 0;
         ItemEntity itementity = new ItemEntity(this.level(), this.pos.getX() + 0.5f + xO, this.pos.getY() + 0.5f,
-                this.pos.getZ() + 0.5f + zO, new ItemStack(ModItems.PADLOCK.get()));
+                this.pos.getZ() + 0.5f + zO, new ItemStack(ModItems.PADLOCK));
         itementity.setDefaultPickUpDelay();
         this.level().addFreshEntity(itementity);
 
@@ -347,7 +345,7 @@ public class PadlockEntity extends HangingEntity {
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(ModItems.PADLOCK.get());
+        return new ItemStack(ModItems.PADLOCK);
     }
 
     public void setLocked(boolean value) {

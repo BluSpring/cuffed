@@ -1,14 +1,8 @@
 package com.lazrproductions.cuffed.entity;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.base.IAnchorableEntity;
 import com.lazrproductions.cuffed.init.ModEntityTypes;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.Packet;
@@ -21,20 +15,20 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ChainKnotEntity extends HangingEntity {
 
@@ -43,7 +37,7 @@ public class ChainKnotEntity extends HangingEntity {
     }
 
     public ChainKnotEntity(Level world, BlockPos pos) {
-        super(ModEntityTypes.CHAIN_KNOT.get(), world, pos);
+        super(ModEntityTypes.CHAIN_KNOT, world, pos);
         this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D);
     }
 
@@ -229,7 +223,7 @@ public class ChainKnotEntity extends HangingEntity {
         this.setPosRaw((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.375D,
                 (double) this.pos.getZ() + 0.5D);
         double d0 = (double) this.getType().getWidth() / 2.0D;
-        double d1 = (double) this.getType().getHeight();
+        double d1 = this.getType().getHeight();
         this.setBoundingBox(new AABB(this.getX() - d0, this.getY(), this.getZ() - d0, this.getX() + d0,
                 this.getY() + d1, this.getZ() + d0));
     }

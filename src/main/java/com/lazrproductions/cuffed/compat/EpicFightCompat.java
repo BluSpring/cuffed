@@ -20,7 +20,6 @@ public class EpicFightCompat {
                 p.toVanillaMode(true);
             }
         } catch(Exception e) {
-            return;
         }
     }
 
@@ -33,7 +32,6 @@ public class EpicFightCompat {
             if(wasEnabled)
                 p.toEpicFightMode(true);
         } catch(Exception e) {
-            return;
         }
     }
 }

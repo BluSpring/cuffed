@@ -7,22 +7,22 @@ import net.minecraft.nbt.ListTag;
 
 public interface IPrivacyOperand {
 
-    public static final String RESTRAINING_RESTRICTION = CuffedMod.MODID + ":restraining";
-    public static final String NICKNAMING_RESTRICTION = CuffedMod.MODID + ":nicknaming";
-    public static final String ANCHORING_RESTRICTION = CuffedMod.MODID + ":anchoring";
-    public static final String DETAINING_RESTRICTION = CuffedMod.MODID + ":detaining";
+    String RESTRAINING_RESTRICTION = CuffedMod.MODID + ":restraining";
+    String NICKNAMING_RESTRICTION = CuffedMod.MODID + ":nicknaming";
+    String ANCHORING_RESTRICTION = CuffedMod.MODID + ":anchoring";
+    String DETAINING_RESTRICTION = CuffedMod.MODID + ":detaining";
 
-    public static final String TAG_RESTRICTIONS = "PrivacyRestrictions";
-    public static final String TAG_RESTRICTION_ID = "Id";
-    public static final String TAG_RESTRICTION = "RestrictionLevel";
+    String TAG_RESTRICTIONS = "PrivacyRestrictions";
+    String TAG_RESTRICTION_ID = "Id";
+    String TAG_RESTRICTION = "RestrictionLevel";
 
-    public void setRestrainingRestrictions(PrivacyRestriction newRestriction);
+    void setRestrainingRestrictions(PrivacyRestriction newRestriction);
 
-    public void setNicknamingRestrictions(PrivacyRestriction newRestriction);
+    void setNicknamingRestrictions(PrivacyRestriction newRestriction);
 
-    public void setAnchoringRestrictions(PrivacyRestriction newRestriction);
+    void setAnchoringRestrictions(PrivacyRestriction newRestriction);
 
-    public void setDetainingRestrictions(PrivacyRestriction newRestriction);
+    void setDetainingRestrictions(PrivacyRestriction newRestriction);
 
     void setRestriction(String key, PrivacyRestriction newRestriction);
 
@@ -30,13 +30,13 @@ public interface IPrivacyOperand {
 
     PrivacyRestriction getRestriction(String key);
 
-    public PrivacyRestriction getRestrainingRestrictions();
+    PrivacyRestriction getRestrainingRestrictions();
 
-    public PrivacyRestriction getNicknamingRestrictions();
+    PrivacyRestriction getNicknamingRestrictions();
 
-    public PrivacyRestriction getAnchoringRestrictions();
+    PrivacyRestriction getAnchoringRestrictions();
 
-    public PrivacyRestriction getDetainingRestrictions();
+    PrivacyRestriction getDetainingRestrictions();
 
     ListTag serializeRestrictions();
 
@@ -44,7 +44,7 @@ public interface IPrivacyOperand {
 
     void writeDefaultRestrictions();
 
-    public static enum PrivacyRestriction {
+    enum PrivacyRestriction {
         ALWAYS,
         ASK,
         ONLY_WHEN_RESTRAINED,

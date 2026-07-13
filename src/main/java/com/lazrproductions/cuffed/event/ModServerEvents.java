@@ -1,13 +1,5 @@
 package com.lazrproductions.cuffed.event;
 
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-
-import com.hollingsworth.arsnouveau.common.block.ModBlock;
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.blocks.PilloryBlock;
@@ -21,7 +13,6 @@ import com.lazrproductions.cuffed.entity.base.IAnchorableEntity;
 import com.lazrproductions.cuffed.entity.base.IDetainableEntity;
 import com.lazrproductions.cuffed.entity.base.INicknamable;
 import com.lazrproductions.cuffed.init.ModBlocks;
-import com.lazrproductions.cuffed.init.ModEffects;
 import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModTags;
@@ -29,8 +20,6 @@ import com.lazrproductions.cuffed.items.PossessionsBox;
 import com.lazrproductions.cuffed.restraints.base.AbstractArmRestraint;
 import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
 import com.lazrproductions.cuffed.restraints.base.IEnchantableRestraint;
-import com.lazrproductions.cuffed.restraints.base.RestraintType;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -44,8 +33,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -54,7 +41,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -63,11 +49,8 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -76,6 +59,8 @@ import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+
+import java.util.*;
 
 public class ModServerEvents {
     @SubscribeEvent
@@ -188,10 +173,10 @@ public class ModServerEvents {
                     return;
                 }
 
-                if (state.is(ModBlocks.PILLORY.get())) {
+                if (state.is(ModBlocks.PILLORY)) {
                     ServerPlayer whoIWasEscorting = cap.getWhoImEscorting();
                     if (whoIWasEscorting != null) {
-                        if (level.getBlockState(pos.above()).is(ModBlocks.PILLORY.get())) {
+                        if (level.getBlockState(pos.above()).is(ModBlocks.PILLORY)) {
                             pos = pos.above();
                             state = level.getBlockState(pos);
                         }
@@ -206,7 +191,7 @@ public class ModServerEvents {
                     }
                 }
 
-                if(state.is(ModBlocks.BUNK.get())) {
+                if(state.is(ModBlocks.BUNK)) {
                     if (cap.getWhoImEscorting() != null) {
                         state.use(event.getLevel(), cap.getWhoImEscorting(), InteractionHand.MAIN_HAND, event.getHitVec());
                         event.setCancellationResult(InteractionResult.SUCCESS);
@@ -217,7 +202,7 @@ public class ModServerEvents {
 
                 if (state.is(ModTags.Blocks.REINFORCED_BLOCKS) && Block.isShapeFullBlock(state.getShape(level, pos))) {
                     ItemStack stack = event.getItemStack();
-                    if (stack.is(ModItems.FORK.get()) || stack.is(ModItems.SPOON.get())) {
+                    if (stack.is(ModItems.FORK) || stack.is(ModItems.SPOON)) {
                         Random r = new Random();
                         if (r.nextFloat() < 0.25f)
                             CrumblingBlockEntity.crumbleBlock(level, pos, state, 1);
@@ -240,7 +225,6 @@ public class ModServerEvents {
                 if(CuffedAPI.Lockpicking.isLockedAt(level, state, pos) && !(state.getBlock() instanceof ILockableBlock)) {
                         event.setCancellationResult(InteractionResult.FAIL);
                         event.setCanceled(true);
-                        return;
                 }
             }
         }
@@ -269,7 +253,7 @@ public class ModServerEvents {
                             .multiply(new Vec3(maxDist, maxDist, maxDist)).add(player.getEyePosition()).y,
                             target.position().z);
 
-                    if (event.getItemStack().is(ModItems.POSSESSIONSBOX.get()) && targetCap.armsRestrained()) {
+                    if (event.getItemStack().is(ModItems.POSSESSIONSBOX) && targetCap.armsRestrained()) {
                         PossessionsBox.frisk(player, target, event.getItemStack());
                         event.setCancellationResult(InteractionResult.SUCCESS);
                         event.setCanceled(true);
@@ -328,7 +312,6 @@ public class ModServerEvents {
                         myCap.stopEscortingPlayer();
                         event.setCancellationResult(InteractionResult.SUCCESS);
                         event.setCanceled(true);
-                        return;
                     }
                 }
             }
@@ -424,15 +407,15 @@ public class ModServerEvents {
                         IRestrainableCapability cap = CuffedAPI.Capabilities.getRestrainableCapability(pl);
                         if (cap != null && cap.armsRestrained()
                                 && cap.getArmRestraint() instanceof IEnchantableRestraint e
-                                && e.hasEnchantment(ModEnchantments.IMBUE.get())) {
-                            int enchLevel = e.getEnchantmentLevel(ModEnchantments.IMBUE.get());
+                                && e.hasEnchantment(ModEnchantments.IMBUE)) {
+                            int enchLevel = e.getEnchantmentLevel(ModEnchantments.IMBUE);
                             float percentage = ((float) enchLevel / 3f) * 0.8f;
                             amountNegated += (originalAmount * percentage);
                         }
                         if (cap != null && cap.legsRestrained()
                                 && cap.getLegRestraint() instanceof IEnchantableRestraint e
-                                && e.hasEnchantment(ModEnchantments.IMBUE.get())) {
-                            int enchLevel = e.getEnchantmentLevel(ModEnchantments.IMBUE.get());
+                                && e.hasEnchantment(ModEnchantments.IMBUE)) {
+                            int enchLevel = e.getEnchantmentLevel(ModEnchantments.IMBUE);
                             float percentage = ((float) enchLevel / 3f) * 0.8f;
                             amountNegated += (originalAmount * percentage);
                         }

@@ -1,16 +1,9 @@
 package com.lazrproductions.cuffed.items;
 
-import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.blocks.CellDoor;
 import com.lazrproductions.cuffed.blocks.entity.LockableBlockEntity;
 import com.lazrproductions.cuffed.blocks.entity.SafeBlockEntity;
 import com.lazrproductions.cuffed.init.ModItems;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -28,6 +21,11 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.UUID;
 
 public class KeyItem extends Item {
 
@@ -59,7 +57,7 @@ public class KeyItem extends Item {
                         if (!isBoundToALock(stack) && !lockable.hasBeenBound()) {
                             if (tryToSetBoundId(player, stack, lockable.getLockId(), "Cell Door")) {
                                 lockable.bind();
-                                player.awardStat(Stats.ITEM_USED.get(ModItems.KEY.get()), 1);
+                                player.awardStat(Stats.ITEM_USED.get(ModItems.KEY), 1);
                                 return InteractionResult.SUCCESS;
                             } else
                                 return InteractionResult.FAIL;
@@ -69,7 +67,7 @@ public class KeyItem extends Item {
                     if (!isBoundToALock(stack) && !lockable.hasBeenBound()) {
                         if (tryToSetBoundId(player, stack, lockable.getLockId(), lockable.getLockName())) {
                             lockable.bind();
-                            player.awardStat(Stats.ITEM_USED.get(ModItems.KEY.get()), 1);
+                            player.awardStat(Stats.ITEM_USED.get(ModItems.KEY), 1);
                             return InteractionResult.SUCCESS;
                         } else
                             return InteractionResult.FAIL;
@@ -79,7 +77,7 @@ public class KeyItem extends Item {
                     if (!isBoundToALock(stack) && !safe.hasBeenBound()) {
                         if (tryToSetBoundId(player, stack, safe.getLockId(), "block.cuffed.safe")) {
                             safe.bind();
-                            player.awardStat(Stats.ITEM_USED.get(ModItems.KEY.get()), 1);
+                            player.awardStat(Stats.ITEM_USED.get(ModItems.KEY), 1);
                             return InteractionResult.SUCCESS;
                         } else
                             return InteractionResult.FAIL;

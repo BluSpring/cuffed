@@ -1,11 +1,8 @@
 package com.lazrproductions.cuffed.blocks.entity;
 
-import java.util.UUID;
-
 import com.lazrproductions.cuffed.blocks.SafeBlock;
 import com.lazrproductions.cuffed.init.ModBlockEntities;
 import com.lazrproductions.cuffed.init.ModSounds;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
@@ -25,6 +22,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.UUID;
 
 @SuppressWarnings("null")
 public class SafeBlockEntity extends RandomizableContainerBlockEntity {
@@ -59,7 +58,7 @@ public class SafeBlockEntity extends RandomizableContainerBlockEntity {
     };
 
     public SafeBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.SAFE_BLOCK_ENTITY.get(), pos, state);
+        super(ModBlockEntities.SAFE_BLOCK_ENTITY, pos, state);
         lockId = UUID.randomUUID();
         locked = false;
         hasBeenBound = false;
@@ -163,7 +162,7 @@ public class SafeBlockEntity extends RandomizableContainerBlockEntity {
         double d0 = (double) this.worldPosition.getX() + 0.5D + (double) vec3i.getX() / 2.0D;
         double d1 = (double) this.worldPosition.getY() + 0.5D + (double) vec3i.getY() / 2.0D;
         double d2 = (double) this.worldPosition.getZ() + 0.5D + (double) vec3i.getZ() / 2.0D;
-        this.level.playSound((Player) null, d0, d1, d2, soundEvent, SoundSource.BLOCKS, 0.5F,
+        this.level.playSound(null, d0, d1, d2, soundEvent, SoundSource.BLOCKS, 0.5F,
                 this.level.random.nextFloat() * 0.1F + 0.9F);
     }
 }

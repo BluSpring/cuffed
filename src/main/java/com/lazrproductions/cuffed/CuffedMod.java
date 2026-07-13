@@ -1,38 +1,13 @@
 package com.lazrproductions.cuffed;
 
-import java.util.function.Function;
-
-import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.core.dispenser.BlockSource;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.neoforged.fml.config.ModConfig;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.blocks.base.PosterType;
 import com.lazrproductions.cuffed.blocks.entity.renderer.GuillotineBlockEntityRenderer;
 import com.lazrproductions.cuffed.blocks.entity.renderer.TrayBlockEntityRenderer;
-import com.lazrproductions.cuffed.cap.RestrainableCapability;
 import com.lazrproductions.cuffed.client.gui.screen.FriskingScreen;
 import com.lazrproductions.cuffed.command.CuffedDebugCommand;
 import com.lazrproductions.cuffed.command.HandcuffCommand;
-import com.lazrproductions.cuffed.compat.ArsNouveauCompat;
 import com.lazrproductions.cuffed.compat.BetterCombatCompat;
-import com.lazrproductions.cuffed.compat.ElenaiDodge2Compat;
-import com.lazrproductions.cuffed.compat.EpicFightCompat;
-import com.lazrproductions.cuffed.compat.IronsSpellsnSpellbooksCompat;
-import com.lazrproductions.cuffed.compat.KnightsOfBritanniaCompat;
-import com.lazrproductions.cuffed.compat.ManaAndArtificeCompat;
-import com.lazrproductions.cuffed.compat.ParcoolCompat;
-import com.lazrproductions.cuffed.compat.PlayerReviveCompat;
 import com.lazrproductions.cuffed.compat.SimpleVoiceChatCompat;
 import com.lazrproductions.cuffed.compat.TacZCompat;
 import com.lazrproductions.cuffed.config.CuffedServerConfig;
@@ -42,31 +17,23 @@ import com.lazrproductions.cuffed.entity.renderer.PadlockEntityRenderer;
 import com.lazrproductions.cuffed.entity.renderer.WeightedAnchorEntityRenderer;
 import com.lazrproductions.cuffed.event.ModClientEvents;
 import com.lazrproductions.cuffed.event.ModServerEvents;
-import com.lazrproductions.cuffed.init.ModBlockEntities;
-import com.lazrproductions.cuffed.init.ModBlocks;
-import com.lazrproductions.cuffed.init.ModCreativeTabs;
-import com.lazrproductions.cuffed.init.ModEffects;
-import com.lazrproductions.cuffed.init.ModEnchantments;
-import com.lazrproductions.cuffed.init.ModEntityTypes;
-import com.lazrproductions.cuffed.init.ModItems;
-import com.lazrproductions.cuffed.init.ModMenuTypes;
-import com.lazrproductions.cuffed.init.ModModelLayers;
-import com.lazrproductions.cuffed.init.ModParticleTypes;
-import com.lazrproductions.cuffed.init.ModRecipes;
-import com.lazrproductions.cuffed.init.ModRestraints;
-import com.lazrproductions.cuffed.init.ModSounds;
-import com.lazrproductions.cuffed.init.ModStatistics;
+import com.lazrproductions.cuffed.init.*;
 import com.lazrproductions.cuffed.inventory.tooltip.PossessionsBoxTooltip;
 import com.lazrproductions.cuffed.inventory.tooltip.TrayTooltip;
 import com.lazrproductions.cuffed.items.KeyRingItem;
 import com.lazrproductions.cuffed.items.PossessionsBox;
 import com.lazrproductions.cuffed.items.TrayItem;
 import com.lazrproductions.cuffed.items.base.AbstractRestraintItem;
-import com.lazrproductions.cuffed.restraints.RestraintAPI;
-import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
-
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
@@ -75,6 +42,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DispenserBlock;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 public class CuffedMod implements ModInitializer {
@@ -220,14 +189,14 @@ public class CuffedMod implements ModInitializer {
         public static void onClientSetup() {
             LOGGER.info("Running client setup for Cuffed");
 
-            ItemProperties.register(ModItems.KEY_RING.get(),
+            ItemProperties.register(ModItems.KEY_RING,
                     ResourceLocation.fromNamespaceAndPath(MODID, "keys"), (stack, level, living, id) -> {
                         var tag = stack.getTag();
                         if (tag != null && tag.contains(KeyRingItem.TAG_KEYS))
                             return tag.getInt(KeyRingItem.TAG_KEYS);
                         return 0;
                     });
-            ItemProperties.register(ModItems.POSSESSIONSBOX.get(),
+            ItemProperties.register(ModItems.POSSESSIONSBOX,
                     ResourceLocation.fromNamespaceAndPath(MODID, "filled"), (stack, level, living, id) -> {
                         CompoundTag compoundtag = stack.getOrCreateTag();
                         if (!compoundtag.contains(PossessionsBox.TAG_ITEMS)) {
@@ -237,12 +206,12 @@ public class CuffedMod implements ModInitializer {
                             return listtag.size() > 0 ? 1 : 0;
                         }
                     });
-            ItemProperties.register(ModItems.TRAY.get(),
+            ItemProperties.register(ModItems.TRAY,
                     ResourceLocation.fromNamespaceAndPath(MODID, "filled"), (stack, level, living, id) -> {
                         return TrayItem.trayHasFoodItem(stack) || TrayItem.trayHasSpoon(stack)
                                 || TrayItem.trayHasFork(stack) || TrayItem.trayHasKnife(stack) ? 1 : 0;
                     });
-            ItemProperties.register(ModItems.POSTER_ITEM.get(),
+            ItemProperties.register(ModItems.POSTER_ITEM,
                     ResourceLocation.fromNamespaceAndPath(MODID, "poster"), (stack, level, living, id) -> {
                         return PosterType.getfromItem(stack).toInt();
                     });
@@ -284,7 +253,7 @@ public class CuffedMod implements ModInitializer {
 
             BlockEntityRenderers.register(ModBlockEntities.GUILLOTINE, GuillotineBlockEntityRenderer::new);
             BlockEntityRenderers.register(ModBlockEntities.TRAY, TrayBlockEntityRenderer::new);
-            //event.registerBlockEntityRenderer(ModBlockEntities.TOILET.get(), ToiletBlockEntityRenderer::new);
+            //event.registerBlockEntityRenderer(ModBlockEntities.TOILET, ToiletBlockEntityRenderer::new);
         }
     }
 }

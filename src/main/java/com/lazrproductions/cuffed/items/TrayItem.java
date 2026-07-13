@@ -1,16 +1,10 @@
 package com.lazrproductions.cuffed.items;
 
-import java.util.Optional;
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.inventory.tooltip.TrayTooltip;
-
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -27,6 +21,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+
+import javax.annotation.Nonnull;
+import java.util.Optional;
 
 public class TrayItem extends BlockItem {
     public static final String TAG_ITEMS = "Items";
@@ -122,7 +119,7 @@ public class TrayItem extends BlockItem {
                     ItemStack itemToAddCopy = stackToAdd.copyWithCount(1);
                     CompoundTag itemToAddData = new CompoundTag();
                     itemToAddCopy.save(itemToAddData);
-                    listtag.set(slotToAddTo, (Tag) itemToAddData);
+                    listtag.set(slotToAddTo, itemToAddData);
                     return 1;
                 }
             }
@@ -323,7 +320,7 @@ public class TrayItem extends BlockItem {
 
 
     public static ItemStack createTrayFrom(NonNullList<ItemStack> stacks) {
-        ItemStack stack = ModItems.TRAY.get().getDefaultInstance();
+        ItemStack stack = ModItems.TRAY.getDefaultInstance();
         CompoundTag tag = stack.getOrCreateTag();
         tag.put(TAG_ITEMS, saveItemToTagList(stacks));
         return stack;
@@ -343,11 +340,11 @@ public class TrayItem extends BlockItem {
         boolean isFood = stack.isEdible();
         if (isFood)
             return !trayHasFood;
-        else if (stack.is(ModItems.SPOON.get()))
+        else if (stack.is(ModItems.SPOON))
             return !trayHasSpoon;
-        else if (stack.is(ModItems.FORK.get()))
+        else if (stack.is(ModItems.FORK))
             return !trayHasFork;
-        else if (stack.is(ModItems.KNIFE.get()))
+        else if (stack.is(ModItems.KNIFE))
             return !trayHasKnife;
         return false;
     }
@@ -362,21 +359,21 @@ public class TrayItem extends BlockItem {
     public static boolean trayHasSpoon(@Nonnull ItemStack stack) {
         var stacks = getContents(stack);
         for (ItemStack itemStack : stacks)
-            if (itemStack.is(ModItems.SPOON.get()))
+            if (itemStack.is(ModItems.SPOON))
                 return true;
         return false;
     }
     public static boolean trayHasFork(@Nonnull ItemStack stack) {
         var stacks = getContents(stack);
         for (ItemStack itemStack : stacks)
-            if (itemStack.is(ModItems.FORK.get()))
+            if (itemStack.is(ModItems.FORK))
                 return true;
         return false;
     }
     public static boolean trayHasKnife(@Nonnull ItemStack stack) {
         var stacks = getContents(stack);
         for (ItemStack itemStack : stacks)
-            if (itemStack.is(ModItems.KNIFE.get()))
+            if (itemStack.is(ModItems.KNIFE))
                 return true;
         return false;
     }
@@ -384,12 +381,12 @@ public class TrayItem extends BlockItem {
         return stack.isEdible();
     }
     public static boolean itemIsSpoon(@Nonnull ItemStack stack) {
-        return stack.is(ModItems.SPOON.get());
+        return stack.is(ModItems.SPOON);
     }
     public static boolean itemIsFork(@Nonnull ItemStack stack) {
-        return stack.is(ModItems.FORK.get());
+        return stack.is(ModItems.FORK);
     }
     public static boolean itemIsKnife(@Nonnull ItemStack stack) {
-        return stack.is(ModItems.KNIFE.get());
+        return stack.is(ModItems.KNIFE);
     }
 }

@@ -1,11 +1,5 @@
 package com.lazrproductions.cuffed.packet;
 
-import java.util.UUID;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.RestrainableCapability;
@@ -16,13 +10,17 @@ import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
 import com.lazrproductions.lazrslib.common.network.packet.ParameterizedLazrPacket;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * A packet to sync the equipping and unequipping of restraints to the
@@ -89,44 +87,44 @@ public class RestraintEquippedPacket extends ParameterizedLazrPacket {
                 RestrainableCapability cap = (RestrainableCapability) CuffedAPI.Capabilities.getRestrainableCapability(arg0);
     
                 try {
-                    CompoundTag newTag = newData.toLowerCase().equals("null") ? null : TagParser.parseTag(newData);
-                    CompoundTag oldTag = oldData.toLowerCase().equals("null") ? null : TagParser.parseTag(oldData);
+                    CompoundTag newTag = newData.equalsIgnoreCase("null") ? null : TagParser.parseTag(newData);
+                    CompoundTag oldTag = oldData.equalsIgnoreCase("null") ? null : TagParser.parseTag(oldData);
                     Player captor = !captorUUID.equals("null") ? arg0.level().getPlayerByUUID(UUID.fromString(captorUUID)) : null;
     
                     if (type == RestraintType.Arm.toInteger()) {
                         // Sets the client-side version of the restraint AND sends onEquippedClient &
                         // onUnequipped events
-                        if (!newData.toLowerCase().equals("null")) {
+                        if (!newData.equalsIgnoreCase("null")) {
                             cap.armRestraint = (AbstractArmRestraint) RestraintAPI.getRestraintFromTag(newTag);
                             cap.armRestraint.onEquippedClient(arg0, captor);
                         } else
                             cap.armRestraint = null;
     
-                        if (!oldData.toLowerCase().equals("null")) {
+                        if (!oldData.equalsIgnoreCase("null")) {
                             AbstractArmRestraint oldRestraint = (AbstractArmRestraint) RestraintAPI.getRestraintFromTag(oldTag);
                             oldRestraint.onUnequippedClient(arg0);
                         }
                     } else if(type == RestraintType.Leg.toInteger()) {
                         // Sets the client-side version of the restraint AND sends onEquippedClient &
                         // onUnequipped events
-                        if (!newData.toLowerCase().equals("null")) {
+                        if (!newData.equalsIgnoreCase("null")) {
                             cap.legRestraint = (AbstractLegRestraint) RestraintAPI.getRestraintFromTag(newTag);
                             cap.legRestraint.onEquippedClient(arg0, captor);
                         } else
                             cap.legRestraint = null;
-                        if (!oldData.toLowerCase().equals("null")) {
+                        if (!oldData.equalsIgnoreCase("null")) {
                             AbstractLegRestraint oldRestraint = (AbstractLegRestraint) RestraintAPI.getRestraintFromTag(oldTag);
                             oldRestraint.onUnequippedClient(arg0);
                         }
                     }  else if(type == RestraintType.Head.toInteger())  {
                         // Sets the client-side version of the restraint AND sends onEquippedClient &
                         // onUnequipped events
-                        if (!newData.toLowerCase().equals("null")) {
+                        if (!newData.equalsIgnoreCase("null")) {
                             cap.headRestraint = (AbstractHeadRestraint) RestraintAPI.getRestraintFromTag(newTag);
                             cap.headRestraint.onEquippedClient(arg0, captor);
                         } else
                             cap.headRestraint = null;
-                        if (!oldData.toLowerCase().equals("null")) {
+                        if (!oldData.equalsIgnoreCase("null")) {
                             AbstractHeadRestraint oldRestraint = (AbstractHeadRestraint) RestraintAPI.getRestraintFromTag(oldTag);
                             oldRestraint.onUnequippedClient(arg0);
                         }

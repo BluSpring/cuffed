@@ -1,12 +1,6 @@
 package com.lazrproductions.cuffed.items;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.init.ModItems;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -14,6 +8,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class KeyMoldItem extends Item {
     
@@ -26,7 +24,7 @@ public class KeyMoldItem extends Item {
 
 
     public static ItemStack createFromKey(ItemStack keyStack) {
-        ItemStack newMold = new ItemStack(ModItems.KEY_MOLD.get(), 1);
+        ItemStack newMold = new ItemStack(ModItems.KEY_MOLD, 1);
         
         if(!keyStack.getOrCreateTag().contains(KeyItem.TAG_ID))
             return newMold;

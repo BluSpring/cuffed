@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BunkBlockEntity extends BlockEntity { 
     public BunkBlockEntity(BlockPos pos, BlockState state) {
-       super(ModBlockEntities.BUNK_BLOCK_ENTITY.get(), pos, state);
+       super(ModBlockEntities.BUNK_BLOCK_ENTITY, pos, state);
     }
  
     public ClientboundBlockEntityDataPacket getUpdatePacket() {

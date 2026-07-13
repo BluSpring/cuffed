@@ -1,16 +1,14 @@
 package com.lazrproductions.cuffed.mixin;
 
+import com.lazrproductions.cuffed.entity.base.IRestrainableEntity;
+import com.lazrproductions.cuffed.restraints.RestraintAPI;
+import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import com.lazrproductions.cuffed.entity.base.IRestrainableEntity;
-import com.lazrproductions.cuffed.restraints.RestraintAPI;
-import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
-
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
 
 @Mixin(LocalPlayer.class)
 public class LocalPlayerMixin {
@@ -42,7 +40,6 @@ public class LocalPlayerMixin {
                 if (restraint != null && !restraint.AllowSprinting()) {
                     callback.setReturnValue(false);
                     callback.cancel();
-                    return;
                 }
             }
         }

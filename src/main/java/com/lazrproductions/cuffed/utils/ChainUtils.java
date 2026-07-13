@@ -1,10 +1,5 @@
 package com.lazrproductions.cuffed.utils;
 
-import java.util.Random;
-
-import org.joml.Math;
-import org.joml.Matrix4f;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.LightTexture;
@@ -15,6 +10,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Math;
+import org.joml.Matrix4f;
+
+import java.util.Random;
 
 public class ChainUtils {
 	public static void renderChainTo(Entity entity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, Entity entityFrom) {
@@ -246,7 +245,7 @@ public class ChainUtils {
 		float[] rr = new float[] { 0.2862745098039216f, 0.2431372549019608f, 0.1450980392156863f }; 
 		float[] rg = new float[] { 0.3137254901960784f, 0.2666666666666667f, 0.1725490196078431f };
 		float[] rb = new float[] { 0.396078431372549f, 0.3254901960784314f, 0.2392156862745098f };
-		Random random =new Random(index*1000);
+		Random random =new Random(index* 1000L);
 		int colorI = Math.round(random.nextFloat() * 2.49f); 
 		float r = rr[colorI];
 		float g = rg[colorI];

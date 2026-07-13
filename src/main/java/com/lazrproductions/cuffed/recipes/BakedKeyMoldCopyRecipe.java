@@ -1,14 +1,9 @@
 package com.lazrproductions.cuffed.recipes;
 
-import java.util.ArrayList;
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModRecipes;
 import com.lazrproductions.cuffed.items.BakedKeyMoldItem;
 import com.lazrproductions.cuffed.items.KeyMoldItem;
-
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +15,9 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
 
 public class BakedKeyMoldCopyRecipe extends CustomRecipe {
     public BakedKeyMoldCopyRecipe(ResourceLocation idIn, CraftingBookCategory category) {
@@ -51,9 +49,9 @@ public class BakedKeyMoldCopyRecipe extends CustomRecipe {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack checkingStack = inv.getItem(i);
             if (!checkingStack.isEmpty())
-                if (checkingStack.is(ModItems.BAKED_KEY_MOLD.get()) || checkingStack.is(Items.IRON_INGOT)) {
+                if (checkingStack.is(ModItems.BAKED_KEY_MOLD) || checkingStack.is(Items.IRON_INGOT)) {
                     Item item = checkingStack.getItem();
-                    if (item == ModItems.BAKED_KEY_MOLD.get()
+                    if (item == ModItems.BAKED_KEY_MOLD
                             && checkingStack.getOrCreateTag().contains(KeyMoldItem.TAG_COPIED_KEY))
                         moldsInGrid.add(checkingStack);
                 }
@@ -68,7 +66,7 @@ public class BakedKeyMoldCopyRecipe extends CustomRecipe {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack checkingStack = inv.getItem(i);
             if (!checkingStack.isEmpty())
-                if (checkingStack.is(ModItems.BAKED_KEY_MOLD.get()) || checkingStack.is(Items.IRON_INGOT))
+                if (checkingStack.is(ModItems.BAKED_KEY_MOLD) || checkingStack.is(Items.IRON_INGOT))
                     validInGrid.add(checkingStack);
         }
 
@@ -87,7 +85,7 @@ public class BakedKeyMoldCopyRecipe extends CustomRecipe {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack checkingStack = inv.getItem(i);
             if (!checkingStack.isEmpty())
-                if (checkingStack.is(ModItems.BAKED_KEY_MOLD.get())
+                if (checkingStack.is(ModItems.BAKED_KEY_MOLD)
                         && checkingStack.getOrCreateTag().contains(KeyMoldItem.TAG_COPIED_KEY))
                     numofMolds++;
                 else if (checkingStack.is(Items.IRON_INGOT))
@@ -107,7 +105,7 @@ public class BakedKeyMoldCopyRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.BAKED_KEY_MOLD_COPY.get();
+        return ModRecipes.BAKED_KEY_MOLD_COPY;
     }
 
     @Override
@@ -116,7 +114,7 @@ public class BakedKeyMoldCopyRecipe extends CustomRecipe {
     
         for(int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack item = container.getItem(i);
-            if (item.is(ModItems.BAKED_KEY_MOLD.get())) {
+            if (item.is(ModItems.BAKED_KEY_MOLD)) {
                 int oldQuality = item.getOrCreateTag().getInt(BakedKeyMoldItem.TAG_QUALITY);
                 if(oldQuality > 1) {
                     item.getOrCreateTag().putInt("Quality", oldQuality - 1);

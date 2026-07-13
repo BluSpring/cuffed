@@ -19,7 +19,6 @@ public class ParcoolCompat {
                 ParCoolConfig.Client.Booleans.ParCoolIsActive.set(false);
             }
         } catch(Exception e) {
-            return;
         }
     }
 
@@ -30,7 +29,6 @@ public class ParcoolCompat {
         try{
             ParCoolConfig.Client.Booleans.ParCoolIsActive.set(wasEnabled);
         } catch(Exception e) {
-            return;
         }
     }
 }

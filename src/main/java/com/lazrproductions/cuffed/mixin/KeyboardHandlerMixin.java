@@ -1,21 +1,18 @@
 package com.lazrproductions.cuffed.mixin;
 
-import java.util.ArrayList;
-
+import com.lazrproductions.cuffed.api.CuffedAPI;
+import com.lazrproductions.cuffed.cap.RestrainableCapability;
+import com.lazrproductions.cuffed.entity.base.IDetainableEntity;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.KeyboardHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.lazrproductions.cuffed.api.CuffedAPI;
-import com.lazrproductions.cuffed.cap.RestrainableCapability;
-import com.lazrproductions.cuffed.entity.base.IDetainableEntity;
-
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.KeyboardHandler;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.player.Player;
+import java.util.ArrayList;
 
 @Mixin(KeyboardHandler.class)
 public class KeyboardHandlerMixin {
@@ -25,7 +22,7 @@ public class KeyboardHandlerMixin {
         LocalPlayer player = inst.player;
 
         if(player!= null && inst.screen == null) {
-            RestrainableCapability cap = (RestrainableCapability)CuffedAPI.Capabilities.getRestrainableCapability((Player)player);
+            RestrainableCapability cap = (RestrainableCapability)CuffedAPI.Capabilities.getRestrainableCapability(player);
             if(cap != null && cap.isRestrained()) {
                 cap.onKeyInput(player, keyCode, action);
                 for (int i : cap.gatherBlockedInputs()) {

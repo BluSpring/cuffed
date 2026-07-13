@@ -1,13 +1,10 @@
 package com.lazrproductions.cuffed.recipes;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModRecipes;
 import com.lazrproductions.cuffed.items.KeyItem;
 import com.lazrproductions.cuffed.items.KeyMoldItem;
 import com.lazrproductions.cuffed.items.KeyRingItem;
-
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +17,8 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nonnull;
+
 public class KeyRingDisassembleRecipe extends CustomRecipe {
     public KeyRingDisassembleRecipe(ResourceLocation idIn, CraftingBookCategory category) {
         super(idIn, category);
@@ -31,7 +30,7 @@ public class KeyRingDisassembleRecipe extends CustomRecipe {
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
             if (!inv.getItem(i).isEmpty())
-                if (inv.getItem(i).is(ModItems.KEY_RING.get()))
+                if (inv.getItem(i).is(ModItems.KEY_RING))
                     ringStack = inv.getItem(i);
                 else
                     return false;
@@ -40,8 +39,7 @@ public class KeyRingDisassembleRecipe extends CustomRecipe {
 
         if (ringStack != null) {
             CompoundTag tag = ringStack.getOrCreateTag();
-            if (tag != null && tag.getInt("Keys") > 0)
-                return true;
+            return tag != null && tag.getInt("Keys") > 0;
         }
 
         return false;
@@ -56,7 +54,7 @@ public class KeyRingDisassembleRecipe extends CustomRecipe {
         if (matches(inv, null)) {
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 if (!inv.getItem(i).isEmpty())
-                    if (inv.getItem(i).is(ModItems.KEY_RING.get()))
+                    if (inv.getItem(i).is(ModItems.KEY_RING))
                         ringStack = inv.getItem(i);
             }
 
@@ -65,7 +63,7 @@ public class KeyRingDisassembleRecipe extends CustomRecipe {
                 if (tag.contains(KeyRingItem.TAG_BOUND_LOCKS)) {
                     ListTag boundKeysTag = tag.getList(KeyRingItem.TAG_BOUND_LOCKS, 10);
                     if (boundKeysTag.size() > 0) {
-                        ItemStack stack = ModItems.KEY.get().getDefaultInstance();
+                        ItemStack stack = ModItems.KEY.getDefaultInstance();
                         stack.setCount(1);
 
                         CompoundTag keyOnRingTag = boundKeysTag.getCompound(boundKeysTag.size() - 1);
@@ -93,7 +91,7 @@ public class KeyRingDisassembleRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.KEY_RING_DISASSEMBLE.get();
+        return ModRecipes.KEY_RING_DISASSEMBLE;
     }
 
     @Override
@@ -106,7 +104,7 @@ public class KeyRingDisassembleRecipe extends CustomRecipe {
             ItemStack stack = container.getItem(i);
             CompoundTag tag = stack.getOrCreateTag();
             
-            if (stack.is(ModItems.KEY_RING.get()) 
+            if (stack.is(ModItems.KEY_RING) 
                     && tag.contains(KeyRingItem.TAG_KEYS) 
                     && tag.getInt(KeyRingItem.TAG_KEYS) > 1) {
                 int numOfKeys = tag.getInt(KeyRingItem.TAG_KEYS);

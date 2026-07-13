@@ -1,12 +1,5 @@
 package com.lazrproductions.cuffed.client.gui.screen;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.annotation.Nonnull;
-
-import org.joml.Vector2i;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.lazrslib.client.font.FontUtilities;
 import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
@@ -15,15 +8,8 @@ import com.lazrproductions.lazrslib.client.screen.base.ScreenRect;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.lazrproductions.lazrslib.client.ui.Alignment;
 import com.lazrproductions.lazrslib.client.ui.UIUtilities;
-import com.lazrproductions.lazrslib.client.ui.element.HorizontalElement;
-import com.lazrproductions.lazrslib.client.ui.element.ItemIconElement;
-import com.lazrproductions.lazrslib.client.ui.element.LinkElement;
-import com.lazrproductions.lazrslib.client.ui.element.ScaledTextureElement;
-import com.lazrproductions.lazrslib.client.ui.element.TextElement;
-import com.lazrproductions.lazrslib.client.ui.element.TextureElement;
-import com.lazrproductions.lazrslib.client.ui.element.VerticalElement;
+import com.lazrproductions.lazrslib.client.ui.element.*;
 import com.mojang.blaze3d.platform.Window;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -31,11 +17,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FastColor.ARGB32;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.util.Mth;
+import org.joml.Vector2i;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @OnlyIn(Dist.CLIENT)
 public class InformationBookletScreen extends GenericScreen {
@@ -273,8 +264,7 @@ public class InformationBookletScreen extends GenericScreen {
         ScreenRect area = pos.toRect();
         if(area.positionEnvlopes(mouseX, mouseY)) {
             ScreenUtilities.drawTexture(graphics, pos, highlightedTexture);
-            if(mouseDown)
-                return true;
+            return mouseDown;
         } else
             ScreenUtilities.drawTexture(graphics, pos, texture);
 
@@ -303,7 +293,7 @@ public class InformationBookletScreen extends GenericScreen {
         private int screenWidth, screenHeight;
         private ScreenRect pageRect;
         private ScreenRect contentRect;
-        private ScreenTexture backgroundtexture;
+        private final ScreenTexture backgroundtexture;
         public int pageHorizontalOffset;
 
         public GenericPage(ScreenTexture background) {

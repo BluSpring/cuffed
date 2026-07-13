@@ -1,13 +1,8 @@
 package com.lazrproductions.cuffed.recipes;
 
-import java.util.ArrayList;
-
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModRecipes;
 import com.lazrproductions.cuffed.items.PosterBlockItem;
-
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -16,6 +11,9 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
 
 public class PosterChangeRecipe extends CustomRecipe {
     public PosterChangeRecipe(ResourceLocation idIn, CraftingBookCategory category) {
@@ -45,7 +43,7 @@ public class PosterChangeRecipe extends CustomRecipe {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack checkingStack = inv.getItem(i);
             if (!checkingStack.isEmpty())
-                if (checkingStack.is(ModItems.POSTER_ITEM.get()))
+                if (checkingStack.is(ModItems.POSTER_ITEM))
                     validInGrid.add(checkingStack);
         }
 
@@ -63,7 +61,7 @@ public class PosterChangeRecipe extends CustomRecipe {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack checkingStack = inv.getItem(i);
             if (!checkingStack.isEmpty())
-                if (checkingStack.is(ModItems.POSTER_ITEM.get()))
+                if (checkingStack.is(ModItems.POSTER_ITEM))
                     numOfPosters++;
                 else
                     return false;
@@ -80,6 +78,6 @@ public class PosterChangeRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.POSTER_CHANGE.get();
+        return ModRecipes.POSTER_CHANGE;
     }
 }

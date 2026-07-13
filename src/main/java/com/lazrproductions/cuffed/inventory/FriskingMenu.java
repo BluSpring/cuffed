@@ -1,9 +1,6 @@
 package com.lazrproductions.cuffed.inventory;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.init.ModMenuTypes;
-
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,6 +10,8 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
 
 public class FriskingMenu extends AbstractContainerMenu {
     private final Container container;
@@ -32,8 +31,8 @@ public class FriskingMenu extends AbstractContainerMenu {
         container.startOpen(playerInv.player);
 
         // create other's armor slots
-        this.addSlot(new FriskingSlot(container, 0, 8, 8 + (18 * 0)));
-        this.addSlot(new FriskingSlot(container, 1, 8, 8 + (18 * 1)));
+        this.addSlot(new FriskingSlot(container, 0, 8, 8));
+        this.addSlot(new FriskingSlot(container, 1, 8, 8 + (18)));
         this.addSlot(new FriskingSlot(container, 2, 8, 8 + (18 * 2)));
         this.addSlot(new FriskingSlot(container, 3, 8, 8 + (18 * 3)));
 
@@ -73,7 +72,7 @@ public class FriskingMenu extends AbstractContainerMenu {
     }
 
     public FriskingMenu(int containerId, Inventory inv) {
-        this(ModMenuTypes.FRISKING_MENU.get(), containerId, inv, 0, 5);
+        this(ModMenuTypes.FRISKING_MENU, containerId, inv, 0, 5);
     }
 
     public boolean stillValid(@Nonnull Player player) {

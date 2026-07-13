@@ -1,21 +1,20 @@
 package com.lazrproductions.cuffed.restraints;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.animation.ArmRestraintAnimationFlags;
 import com.lazrproductions.cuffed.entity.animation.LegRestraintAnimationFlags;
 import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
 import com.mojang.datafixers.util.Pair;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RestraintAPI {
     /**
@@ -35,7 +34,7 @@ public class RestraintAPI {
          */
         @SuppressWarnings("unchecked")
         public static void register(IForgeRegistry<?> registry) {
-            IForgeRegistry<AbstractRestraint> r = (IForgeRegistry<AbstractRestraint>) registry;
+            IForgeRegistry<AbstractRestraint> r = registry;
 
             for (ResourceLocation key : r.getKeys()) {
                 if (containsKey(key)) {
@@ -302,7 +301,7 @@ public class RestraintAPI {
      */
     public static boolean canEquipRestriantItem(ItemStack stack, RestraintType type, ServerPlayer player, ServerPlayer captor) {
         var r = Registries.get(stack.getItem(), type);
-        return r != null ? r.canEquipRestraintItem(stack, player, captor) : false;
+        return r != null && r.canEquipRestraintItem(stack, player, captor);
     }
 
     /**

@@ -1,9 +1,6 @@
 package com.lazrproductions.cuffed.inventory.tooltip;
 
-import javax.annotation.Nonnull;
-
 import com.lazrproductions.cuffed.CuffedMod;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -15,19 +12,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class PossessionsBoxTooltip implements ClientTooltipComponent, TooltipComponent {
+import javax.annotation.Nonnull;
+
+public record PossessionsBoxTooltip(NonNullList<ItemStack> items) implements ClientTooltipComponent, TooltipComponent {
     public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID,
-            "textures/gui/container/possessions_box.png");
-
-    private final NonNullList<ItemStack> items;
-
-    public PossessionsBoxTooltip(NonNullList<ItemStack> Items) {
-        this.items = Items;
-    }
-
-    public NonNullList<ItemStack> getItems() {
-        return this.items;
-    }
+        "textures/gui/container/possessions_box.png");
 
     public int getHeight() {
         return this.gridSizeY() * 20 + 4;
@@ -55,10 +44,10 @@ public class PossessionsBoxTooltip implements ClientTooltipComponent, TooltipCom
 
     private void renderSlot(int x, int y, int index, GuiGraphics gui, Font p_281863_) {
         if (index >= this.items.size()) {
-            this.blit(gui, x, y, PossessionsBoxTooltip.Texture.SLOT);
+            this.blit(gui, x, y, Texture.SLOT);
         } else {
             ItemStack itemstack = this.items.get(index);
-            this.blit(gui, x, y, PossessionsBoxTooltip.Texture.SLOT);
+            this.blit(gui, x, y, Texture.SLOT);
             gui.renderItem(itemstack, x + 1, y + 1, index);
             gui.renderItemDecorations(p_281863_, itemstack, x + 1, y + 1);
             if (index == 0) {
@@ -68,25 +57,25 @@ public class PossessionsBoxTooltip implements ClientTooltipComponent, TooltipCom
     }
 
     private void drawBorder(int x, int y, int width, int height, GuiGraphics gui) {
-        this.blit(gui, x, y, PossessionsBoxTooltip.Texture.BORDER_CORNER_TOP);
-        this.blit(gui, x + width * 18 + 1, y, PossessionsBoxTooltip.Texture.BORDER_CORNER_TOP);
+        this.blit(gui, x, y, Texture.BORDER_CORNER_TOP);
+        this.blit(gui, x + width * 18 + 1, y, Texture.BORDER_CORNER_TOP);
 
         for (int i = 0; i < width; ++i) {
-            this.blit(gui, x + 1 + i * 18, y, PossessionsBoxTooltip.Texture.BORDER_HORIZONTAL_TOP);
+            this.blit(gui, x + 1 + i * 18, y, Texture.BORDER_HORIZONTAL_TOP);
             this.blit(gui, x + 1 + i * 18, y + height * 20,
-                    PossessionsBoxTooltip.Texture.BORDER_HORIZONTAL_BOTTOM);
+                Texture.BORDER_HORIZONTAL_BOTTOM);
         }
 
         for (int j = 0; j < height; ++j) {
-            this.blit(gui, x, y + j * 20 + 1, PossessionsBoxTooltip.Texture.BORDER_VERTICAL);
-            this.blit(gui, x + width * 18 + 1, y + j * 20 + 1, PossessionsBoxTooltip.Texture.BORDER_VERTICAL);
+            this.blit(gui, x, y + j * 20 + 1, Texture.BORDER_VERTICAL);
+            this.blit(gui, x + width * 18 + 1, y + j * 20 + 1, Texture.BORDER_VERTICAL);
         }
 
-        this.blit(gui, x, y + height * 20, PossessionsBoxTooltip.Texture.BORDER_CORNER_BOTTOM);
-        this.blit(gui, x + width * 18 + 1, y + height * 20, PossessionsBoxTooltip.Texture.BORDER_CORNER_BOTTOM);
+        this.blit(gui, x, y + height * 20, Texture.BORDER_CORNER_BOTTOM);
+        this.blit(gui, x + width * 18 + 1, y + height * 20, Texture.BORDER_CORNER_BOTTOM);
     }
 
-    private void blit(GuiGraphics gui, int x, int y, PossessionsBoxTooltip.Texture texture) {
+    private void blit(GuiGraphics gui, int x, int y, Texture texture) {
         gui.blit(TEXTURE_LOCATION, x, y, 0, (float) texture.x, (float) texture.y, texture.w, texture.h, 128, 128);
     }
 
@@ -99,7 +88,7 @@ public class PossessionsBoxTooltip implements ClientTooltipComponent, TooltipCom
     }
 
     @OnlyIn(Dist.CLIENT)
-    static enum Texture {
+    enum Texture {
         SLOT(0, 0, 18, 20),
         BORDER_VERTICAL(0, 18, 1, 20),
         BORDER_HORIZONTAL_TOP(0, 20, 18, 1),
@@ -112,7 +101,7 @@ public class PossessionsBoxTooltip implements ClientTooltipComponent, TooltipCom
         public final int w;
         public final int h;
 
-        private Texture(int p_169928_, int p_169929_, int p_169930_, int p_169931_) {
+        Texture(int p_169928_, int p_169929_, int p_169930_, int p_169931_) {
             this.x = p_169928_;
             this.y = p_169929_;
             this.w = p_169930_;

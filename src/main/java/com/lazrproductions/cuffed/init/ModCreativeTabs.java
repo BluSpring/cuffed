@@ -4,95 +4,92 @@ import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.blocks.base.PosterType;
 import com.lazrproductions.cuffed.items.PosterBlockItem;
 
-import net.minecraft.core.registries.Registries;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 
 public class ModCreativeTabs {
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister
-            .create(Registries.CREATIVE_MODE_TAB, CuffedMod.MODID);
+    public static final CreativeModeTab CUFFED_TAB = register("cuffed_tab",
+        FabricItemGroup.builder()
+            .title(Component.translatable("itemGroup.cuffed"))
+            .icon(ModItems.HANDCUFFS::getDefaultInstance)
+            .displayItems((parameters, output) -> {
+                output.accept(ModItems.HANDCUFFS);
+                output.accept(ModItems.SHACKLES);
+                output.accept(ModItems.FUZZY_HANDCUFFS);
 
-    public static final RegistryObject<CreativeModeTab> CUFFED_TAB = CREATIVE_MODE_TABS.register("cuffed_tab",
-            () -> CreativeModeTab.builder()
-                    .title(Component.translatable("itemGroup.cuffed"))
-                    .icon(() -> ModItems.HANDCUFFS.get().getDefaultInstance())
-                    .displayItems((parameters, output) -> {
-                        output.accept(ModItems.HANDCUFFS.get());
-                        output.accept(ModItems.SHACKLES.get());
-                        output.accept(ModItems.FUZZY_HANDCUFFS.get());
+                output.accept(ModItems.HANDCUFFS_KEY);
+                output.accept(ModItems.SHACKLES_KEY);
 
-                        output.accept(ModItems.HANDCUFFS_KEY.get());
-                        output.accept(ModItems.SHACKLES_KEY.get());
+                output.accept(Items.BUNDLE);
 
-                        output.accept(Items.BUNDLE);
+                output.accept(ModItems.POSSESSIONSBOX);
+                output.accept(ModItems.PRISONER_TAG);
 
-                        output.accept(ModItems.POSSESSIONSBOX.get());
-                        output.accept(ModItems.PRISONER_TAG.get());
+                output.accept(ModItems.DUCK_TAPE);
+                output.accept(ModItems.BANDAGE);
 
-                        output.accept(ModItems.DUCK_TAPE.get());
-                        output.accept(ModItems.BANDAGE.get());
-                        
-                        output.accept(ModItems.TRAY.get());
-                        output.accept(ModItems.FORK.get());
-                        output.accept(ModItems.SPOON.get());
-                        output.accept(ModItems.KNIFE.get());
+                output.accept(ModItems.TRAY);
+                output.accept(ModItems.FORK);
+                output.accept(ModItems.SPOON);
+                output.accept(ModItems.KNIFE);
 
-                        output.accept(ModItems.PADLOCK.get());
-                        output.accept(ModItems.KEY.get());
-                        output.accept(ModItems.KEY_RING.get());
-                        output.accept(ModItems.KEY_MOLD.get());
-                        output.accept(ModItems.BAKED_KEY_MOLD.get());
-                        output.accept(ModItems.LOCKPICK.get());
-
-                        
-                        output.accept(ModItems.WEIGHTED_ANCHOR_ITEM.get());
+                output.accept(ModItems.PADLOCK);
+                output.accept(ModItems.KEY);
+                output.accept(ModItems.KEY_RING);
+                output.accept(ModItems.KEY_MOLD);
+                output.accept(ModItems.BAKED_KEY_MOLD);
+                output.accept(ModItems.LOCKPICK);
 
 
-                        output.accept(ModItems.CELL_DOOR_ITEM.get());
-                        output.accept(ModItems.REINFORCED_BARS_ITEM.get());
-                        output.accept(ModItems.REINFORCED_BARS_GAPPED_ITEM.get());
-                        output.accept(ModItems.REINFORCED_SMOOTH_STONE_ITEM.get());
-                        output.accept(ModItems.REINFORCED_STONE_ITEM.get());
-                        output.accept(ModItems.REINFORCED_STONE_SLAB_ITEM.get());
-                        output.accept(ModItems.REINFORCED_STONE_STAIRS_ITEM.get());
-                        output.accept(ModItems.REINFORCED_STONE_CHISELED_ITEM.get());
-                        output.accept(ModItems.REINFORCED_LAMP_ITEM.get());
+                output.accept(ModItems.WEIGHTED_ANCHOR_ITEM);
 
 
-                        output.accept(ModItems.PILLORY_ITEM.get());
-                        output.accept(ModItems.GUILLOTINE_ITEM.get());
-
-                        
-                        output.accept(ModItems.BUNK_ITEM.get());
-
-
-                        output.accept(ModItems.SAFE_ITEM.get());
-
-
-                        output.accept(PosterBlockItem.newItemFromType(PosterType.NONE));
-                        output.accept(PosterBlockItem.newItemFromType(PosterType.SERENITY));
-                        output.accept(PosterBlockItem.newItemFromType(PosterType.SKELETON));
-                        output.accept(PosterBlockItem.newItemFromType(PosterType.IMPUNITY));
-                        output.accept(PosterBlockItem.newItemFromType(PosterType.ZOOOM));
-                        output.accept(PosterBlockItem.newItemFromType(PosterType.A_SHADOW_LOCKED_AWAY));
-                        output.accept(PosterBlockItem.newItemFromType(PosterType.PRISONER));
-                        output.accept(PosterBlockItem.newItemFromType(PosterType.LANTERN));
+                output.accept(ModItems.CELL_DOOR_ITEM);
+                output.accept(ModItems.REINFORCED_BARS_ITEM);
+                output.accept(ModItems.REINFORCED_BARS_GAPPED_ITEM);
+                output.accept(ModItems.REINFORCED_SMOOTH_STONE_ITEM);
+                output.accept(ModItems.REINFORCED_STONE_ITEM);
+                output.accept(ModItems.REINFORCED_STONE_SLAB_ITEM);
+                output.accept(ModItems.REINFORCED_STONE_STAIRS_ITEM);
+                output.accept(ModItems.REINFORCED_STONE_CHISELED_ITEM);
+                output.accept(ModItems.REINFORCED_LAMP_ITEM);
 
 
+                output.accept(ModItems.PILLORY_ITEM);
+                output.accept(ModItems.GUILLOTINE_ITEM);
 
-                        output.accept(ModItems.CREATIVE_RESTRAINT_CUTTER.get());
-                        output.accept(ModItems.CREATIVE_KEY.get());
-                        output.accept(ModItems.CREATIVE_BIND_BREAKER.get());
-                        
-                        //output.accept(ModItems.INFORMATION_BOOKLET.get());
-                    }).build());
 
-    public static void register(IEventBus bus) {
-        CREATIVE_MODE_TABS.register(bus);
+                output.accept(ModItems.BUNK_ITEM);
 
+
+                output.accept(ModItems.SAFE_ITEM);
+
+
+                output.accept(PosterBlockItem.newItemFromType(PosterType.NONE));
+                output.accept(PosterBlockItem.newItemFromType(PosterType.SERENITY));
+                output.accept(PosterBlockItem.newItemFromType(PosterType.SKELETON));
+                output.accept(PosterBlockItem.newItemFromType(PosterType.IMPUNITY));
+                output.accept(PosterBlockItem.newItemFromType(PosterType.ZOOOM));
+                output.accept(PosterBlockItem.newItemFromType(PosterType.A_SHADOW_LOCKED_AWAY));
+                output.accept(PosterBlockItem.newItemFromType(PosterType.PRISONER));
+                output.accept(PosterBlockItem.newItemFromType(PosterType.LANTERN));
+
+
+                output.accept(ModItems.CREATIVE_RESTRAINT_CUTTER);
+                output.accept(ModItems.CREATIVE_KEY);
+                output.accept(ModItems.CREATIVE_BIND_BREAKER);
+
+                //output.accept(ModItems.INFORMATION_BOOKLET);
+            }).build());
+
+    public static void register() {
+    }
+
+    private static CreativeModeTab register(String name, CreativeModeTab tab) {
+        return Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CuffedMod.id(name), tab);
     }
 }

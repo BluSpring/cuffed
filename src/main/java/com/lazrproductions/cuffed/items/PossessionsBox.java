@@ -1,22 +1,13 @@
 package com.lazrproductions.cuffed.items;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.lazrproductions.cuffed.init.ModMenuTypes;
 import com.lazrproductions.cuffed.inventory.FriskingContainer;
 import com.lazrproductions.cuffed.inventory.FriskingMenu;
 import com.lazrproductions.cuffed.inventory.tooltip.PossessionsBoxTooltip;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -36,6 +27,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class PossessionsBox extends Item {
 
@@ -91,7 +88,7 @@ public class PossessionsBox extends Item {
             ItemStack itemstack1 = stackToAdd.copyWithCount(k);
             CompoundTag compoundtag2 = new CompoundTag();
             itemstack1.save(compoundtag2);
-            listtag.add(0, (Tag) compoundtag2);
+            listtag.add(0, compoundtag2);
             return stackToAdd;
          }
       } else {
@@ -212,7 +209,7 @@ public class PossessionsBox extends Item {
 
          @Override
          public AbstractContainerMenu createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player p) {
-            return new FriskingMenu(ModMenuTypes.FRISKING_MENU.get(), id, playerInventory, player.getId(), new FriskingContainer(player, boxStack), 5);
+            return new FriskingMenu(ModMenuTypes.FRISKING_MENU, id, playerInventory, player.getId(), new FriskingContainer(player, boxStack), 5);
          }
       });
    }

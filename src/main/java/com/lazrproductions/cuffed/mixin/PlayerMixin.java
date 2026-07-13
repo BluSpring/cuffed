@@ -1,16 +1,5 @@
 package com.lazrproductions.cuffed.mixin;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-
-import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.blocks.PilloryBlock;
@@ -24,8 +13,6 @@ import com.lazrproductions.cuffed.entity.base.IPrivacyOperand;
 import com.lazrproductions.cuffed.entity.base.IRestrainableEntity;
 import com.lazrproductions.cuffed.init.ModEffects;
 import com.lazrproductions.cuffed.restraints.base.IEnchantableRestraint;
-
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -49,6 +36,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 @Mixin(Player.class)
 public class PlayerMixin extends LivingEntity implements IRestrainableEntity, IDetainableEntity, INicknamable, IPrivacyOperand {
@@ -138,9 +135,9 @@ public class PlayerMixin extends LivingEntity implements IRestrainableEntity, ID
                 setHeadEnchanted(cap.getHeadRestraint() instanceof IEnchantableRestraint e && e.getEnchantments() != null && e.getEnchantments().size() > 0);
             }
 
-            if(!this.hasEffect(ModEffects.RESTRAINED_EFFECT.get()))
+            if(!this.hasEffect(ModEffects.RESTRAINED_EFFECT))
                 setRestraintCode(0);
-            else if(this.getEffect(ModEffects.RESTRAINED_EFFECT.get()) instanceof RestrainedEffectInstance i)
+            else if(this.getEffect(ModEffects.RESTRAINED_EFFECT) instanceof RestrainedEffectInstance i)
                 setRestraintCode(i.getAmplifier());
         
             if(getDetained() > -1) {
@@ -206,13 +203,13 @@ public class PlayerMixin extends LivingEntity implements IRestrainableEntity, ID
         if(!armsRestrained) {
             Vec3 lookAngle = player.getLookAngle();
             if(lookAngle.y >= 60f/180f * Mth.DEG_TO_RAD) {                
-                cap.onInteractedByOther((ServerPlayer)player, (ServerPlayer)player, 2d, getItemInHand(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND, true);
+                cap.onInteractedByOther(player, player, 2d, getItemInHand(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND, true);
                 return true;
             } else if(lookAngle.y <= -60f/180f ) {                
-                cap.onInteractedByOther((ServerPlayer)player, (ServerPlayer)player, 0d, getItemInHand(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND, true);
+                cap.onInteractedByOther(player, player, 0d, getItemInHand(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND, true);
                 return true;
             } else {                
-                cap.onInteractedByOther((ServerPlayer)player, (ServerPlayer)player, 1d, getItemInHand(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND, true);
+                cap.onInteractedByOther(player, player, 1d, getItemInHand(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND, true);
                 return true;
             }
         }
