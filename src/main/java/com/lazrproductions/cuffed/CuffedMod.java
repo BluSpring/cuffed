@@ -2,8 +2,17 @@ package com.lazrproductions.cuffed;
 
 import java.util.function.Function;
 
-import javax.annotation.Nonnull;
-
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.fml.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,11 +64,9 @@ import com.lazrproductions.cuffed.items.TrayItem;
 import com.lazrproductions.cuffed.items.base.AbstractRestraintItem;
 import com.lazrproductions.cuffed.restraints.RestraintAPI;
 import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
-import com.mna.ManaAndArtifice;
 
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
@@ -68,33 +75,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegisterEvent;
-import net.minecraftforge.registries.ForgeRegistries.Keys;
-import net.minecraftforge.server.command.ConfigCommand;
+import org.jetbrains.annotations.NotNull;
 
-@Mod(CuffedMod.MODID)
-public class CuffedMod {
+public class CuffedMod implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(CuffedMod.MODID);
     public static final String MODID = "cuffed";
 
-    public static final CuffedServerConfig SERVER_CONFIG = new CuffedServerConfig(MODID, ModConfig.Type.SERVER);
+    public static final CuffedServerConfig SERVER_CONFIG = new CuffedServerConfig();
 
     public static boolean BetterCombatInstalled = false;
     public static boolean EpicFightInstalled = false;
@@ -107,139 +94,130 @@ public class CuffedMod {
     public static boolean PlayerReviveInstalled = false;
     public static boolean VoiceChatInstalled = false;
 
-    public CuffedMod(FMLJavaModLoadingContext ctx) {
-        IEventBus modEventBus = ctx.getModEventBus();
+    public static ResourceLocation id(String name) {
+        return ResourceLocation.fromNamespaceAndPath(MODID, name);
+    }
 
-        modEventBus.addListener(this::commonSetup);
+    @Override
+    public void onInitialize() {
+        this.commonSetup();
+        
+        SERVER_CONFIG.registerConfig();
 
-        SERVER_CONFIG.registerConfig(ctx);
+        ModEntityTypes.register();
+        ModBlocks.register();
+        ModBlockEntities.register();
+        ModItems.register();
+        ModParticleTypes.register();
+        ModEnchantments.register();
+        ModCreativeTabs.register();
+        ModRecipes.register();
+        ModEffects.register();
+        ModStatistics.register();
+        ModMenuTypes.register();
+        ModRestraints.register();
 
-        ModEntityTypes.register(modEventBus);
-        ModBlocks.register(modEventBus);
-        ModBlockEntities.register(modEventBus);
-        ModItems.register(modEventBus);
-        ModParticleTypes.register(modEventBus);
-        ModEnchantments.register(modEventBus);
-        ModCreativeTabs.register(modEventBus);
-        ModRecipes.register(modEventBus);
-        ModEffects.register(modEventBus);
-        ModStatistics.register(modEventBus);
-        ModMenuTypes.register(modEventBus);
-        ModRestraints.register(modEventBus);
+//        this.registerCaps();
+        this.registerSounds();
+        registerCommands();
+        ModEntityTypes.registerAttributes();
 
-        MinecraftForge.EVENT_BUS.register(this);
-
-        modEventBus.addListener(this::registerCaps);
-        modEventBus.addListener(this::registerSounds);
-        modEventBus.addListener(ModEntityTypes::registerAttributes);
-
-        if (ModList.get().isLoaded("bettercombat")) {
+        if (FabricLoader.getInstance().isModLoaded("bettercombat")) {
             BetterCombatInstalled = true;
             BetterCombatCompat.load();
         }
-        if (ModList.get().isLoaded("epicfight")) {
-            EpicFightInstalled = true;
-            EpicFightCompat.load();
-        }
-        if (ModList.get().isLoaded("parcool")) {
-            ParcoolInstalled = true;
-            ParcoolCompat.load();
-        }
-        if (ModList.get().isLoaded("elenaidodge2")) {
-            ElenaiDodge2Installed = true;
-            ElenaiDodge2Compat.load();
-        }
-        if (ModList.get().isLoaded("irons_spellbooks")) {
-            IronsSpellsnSpellbooksInstalled = true;
-            IronsSpellsnSpellbooksCompat.load();
-        }
-        if (ModList.get().isLoaded("ars_nouveau")) {
-            ArsNouveauInstalled = true;
-            ArsNouveauCompat.load();
-        }
-        if (ModList.get().isLoaded("mna")) {
-            ManaAndArtificeInstalled = true;
-            ManaAndArtificeCompat.load();
-        }
-        // if (ModList.get().isLoaded("knights_of_britannia")) {
+//        if (FabricLoader.getInstance().isModLoaded("epicfight")) {
+//            EpicFightInstalled = true;
+//            EpicFightCompat.load();
+//        }
+//        if (FabricLoader.getInstance().isModLoaded("parcool")) {
+//            ParcoolInstalled = true;
+//            ParcoolCompat.load();
+//        }
+//        if (FabricLoader.getInstance().isModLoaded("elenaidodge2")) {
+//            ElenaiDodge2Installed = true;
+//            ElenaiDodge2Compat.load();
+//        }
+//        if (FabricLoader.getInstance().isModLoaded("irons_spellbooks")) {
+//            IronsSpellsnSpellbooksInstalled = true;
+//            IronsSpellsnSpellbooksCompat.load();
+//        }
+//        if (FabricLoader.getInstance().isModLoaded("ars_nouveau")) {
+//            ArsNouveauInstalled = true;
+//            ArsNouveauCompat.load();
+//        }
+//        if (FabricLoader.getInstance().isModLoaded("mna")) {
+//            ManaAndArtificeInstalled = true;
+//            ManaAndArtificeCompat.load();
+//        }
+        // if (FabricLoader.getInstance().isModLoaded("knights_of_britannia")) {
         //     KnightsOfBritanniaInstalled = true;
         //     KnightsOfBritanniaCompat.load();
         // }
-        if (ModList.get().isLoaded("playerrevive")) {
-            PlayerReviveInstalled = true;
-            PlayerReviveCompat.load();
-        }
-        if (ModList.get().isLoaded("voicechat")) {
+//        if (FabricLoader.getInstance().isModLoaded("playerrevive")) {
+//            PlayerReviveInstalled = true;
+//            PlayerReviveCompat.load();
+//        }
+        if (FabricLoader.getInstance().isModLoaded("voicechat")) {
             VoiceChatInstalled = true;
             SimpleVoiceChatCompat.load();
         }
-        if (ModList.get().isLoaded("tacz")) {
-            VoiceChatInstalled = true;
-            TacZCompat.load(modEventBus);
+        if (FabricLoader.getInstance().isModLoaded("tacz")) {
+//            VoiceChatInstalled = true;
+            TacZCompat.load();
         }
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
+    private void commonSetup() {
         LOGGER.info("Running commmon setup for Cuffed");
 
         CuffedAPI.Networking.registerPackets();
 
         ModStatistics.setup();
 
-        MinecraftForge.EVENT_BUS.register(new ModServerEvents());
+        new ModServerEvents();
         
 
 
         // Register Dispenser
         DispenseItemBehavior dispenseitembehavior = new OptionalDispenseItemBehavior() {
-            protected ItemStack execute(@Nonnull BlockSource source, @Nonnull ItemStack stack) {
+            @Override
+            protected ItemStack execute(@NotNull BlockSource source, @NotNull ItemStack stack) {
                 this.setSuccess(AbstractRestraintItem.dispenseRestraint(source, stack));
                 if(this.isSuccess())
                     stack.shrink(1);
                 return stack;
             }
         };
-        DispenserBlock.registerBehavior(ModItems.HANDCUFFS.get(), dispenseitembehavior);
-        DispenserBlock.registerBehavior(ModItems.FUZZY_HANDCUFFS.get(), dispenseitembehavior);
-        DispenserBlock.registerBehavior(ModItems.SHACKLES.get(), dispenseitembehavior);
+        DispenserBlock.registerBehavior(ModItems.HANDCUFFS, dispenseitembehavior);
+        DispenserBlock.registerBehavior(ModItems.FUZZY_HANDCUFFS, dispenseitembehavior);
+        DispenserBlock.registerBehavior(ModItems.SHACKLES, dispenseitembehavior);
         DispenserBlock.registerBehavior(Items.BUNDLE, dispenseitembehavior);
     }
 
-    private void registerSounds(RegisterEvent event) {
-        if (event.getRegistryKey().equals(Keys.SOUND_EVENTS)) {
-            LOGGER.info("Registering sound for Cuffed");
-            ModSounds.register(event);
-        }
+    private void registerSounds() {
+        LOGGER.info("Registering sound for Cuffed");
+        ModSounds.register();
 
-        IForgeRegistry<?> r = event.getForgeRegistry();
-        if(r != null && r.getValues().size() > 0 && r.getValues().toArray()[0] instanceof AbstractRestraint) {
-            LOGGER.info("Cuffed has found a foreign restraint registry, registering with Restraint API");
-            RestraintAPI.Registries.register(r);
-        }
+        // TODO
+//        IForgeRegistry<?> r = event.getForgeRegistry();
+//        if(r != null && r.getValues().size() > 0 && r.getValues().toArray()[0] instanceof AbstractRestraint) {
+//            LOGGER.info("Cuffed has found a foreign restraint registry, registering with Restraint API");
+//            RestraintAPI.Registries.register(r);
+//        }
     }
 
-    private void registerCaps(RegisterCapabilitiesEvent event) {
-        LOGGER.info("Registering Capabilities for Cuffed");
-        event.register(RestrainableCapability.class);
+    public void registerCommands() {
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            new HandcuffCommand(dispatcher, registryAccess);
+            new CuffedDebugCommand(dispatcher, registryAccess);
+
+//            ConfigCommand.register(event.getDispatcher());
+        });
     }
 
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        LOGGER.info("Running server setup for Cuffed");
-    }
-
-    @SubscribeEvent
-    public void registerCommands(RegisterCommandsEvent event) {
-        new HandcuffCommand(event.getDispatcher(), event.getBuildContext());
-        new CuffedDebugCommand(event.getDispatcher(), event.getBuildContext());
-
-        ConfigCommand.register(event.getDispatcher());
-    }
-
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
+        public static void onClientSetup() {
             LOGGER.info("Running client setup for Cuffed");
 
             ItemProperties.register(ModItems.KEY_RING.get(),
@@ -269,38 +247,43 @@ public class CuffedMod {
                         return PosterType.getfromItem(stack).toInt();
                     });
 
-            event.enqueueWork(() -> {
-                MenuScreens.register(ModMenuTypes.FRISKING_MENU.get(), FriskingScreen::new);
+            MenuScreens.register(ModMenuTypes.FRISKING_MENU, FriskingScreen::new);
+
+            new ModClientEvents();
+        }
+
+        static {
+            registerTooltip();
+            onRegisterLayers();
+            onRegisterParticles();
+            onRegisterRenderers();
+        }
+
+        public static void registerTooltip() {
+            TooltipComponentCallback.EVENT.register(data -> {
+                if (data instanceof PossessionsBoxTooltip || data instanceof TrayTooltip)
+                    return (ClientTooltipComponent) data;
+
+                return null;
             });
-
-            MinecraftForge.EVENT_BUS.register(new ModClientEvents());
         }
 
-        @SubscribeEvent
-        public static void registerTooltip(RegisterClientTooltipComponentFactoriesEvent event) {
-            event.register(PossessionsBoxTooltip.class, Function.identity());
-            event.register(TrayTooltip.class, Function.identity());
+        public static void onRegisterLayers() {
+            ModModelLayers.registerLayers();
         }
 
-        @SubscribeEvent
-        public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-            ModModelLayers.registerLayers(event);
+        public static void onRegisterParticles() {
+            ModParticleTypes.registerSprites();
         }
 
-        @SubscribeEvent
-        public static void onRegisterParticles(RegisterParticleProvidersEvent event) {
-            ModParticleTypes.registerSprites(event);
-        }
-        
-        @SubscribeEvent
-        public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            event.registerEntityRenderer(ModEntityTypes.CHAIN_KNOT.get(), ChainKnotEntityRenderer::new);
-            event.registerEntityRenderer(ModEntityTypes.PADLOCK.get(), PadlockEntityRenderer::new);
-            event.registerEntityRenderer(ModEntityTypes.WEIGHTED_ANCHOR.get(), WeightedAnchorEntityRenderer::new);
-            event.registerEntityRenderer(ModEntityTypes.CRUMBLING_BLOCK.get(), CrumblingBlockRenderer::new);
+        public static void onRegisterRenderers() {
+            EntityRendererRegistry.register(ModEntityTypes.CHAIN_KNOT, ChainKnotEntityRenderer::new);
+            EntityRendererRegistry.register(ModEntityTypes.PADLOCK, PadlockEntityRenderer::new);
+            EntityRendererRegistry.register(ModEntityTypes.WEIGHTED_ANCHOR, WeightedAnchorEntityRenderer::new);
+            EntityRendererRegistry.register(ModEntityTypes.CRUMBLING_BLOCK, CrumblingBlockRenderer::new);
 
-            event.registerBlockEntityRenderer(ModBlockEntities.GUILLOTINE.get(), GuillotineBlockEntityRenderer::new);
-            event.registerBlockEntityRenderer(ModBlockEntities.TRAY.get(), TrayBlockEntityRenderer::new);
+            BlockEntityRenderers.register(ModBlockEntities.GUILLOTINE, GuillotineBlockEntityRenderer::new);
+            BlockEntityRenderers.register(ModBlockEntities.TRAY, TrayBlockEntityRenderer::new);
             //event.registerBlockEntityRenderer(ModBlockEntities.TOILET.get(), ToiletBlockEntityRenderer::new);
         }
     }

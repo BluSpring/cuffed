@@ -1,0 +1,24 @@
+{
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${mod_version}",
+    "name": "${mod_name}",
+    "description": "${mod_description}",
+    "authors": [
+        "${mod_authors}"
+    ],
+    "license": "${mod_license}",
+    "icon": "icon.png",
+    "environment": "*",
+    "mixins": [
+        "mixins.${mod_id}.json"
+    ],
+    "depends": {
+        "minecraft": "${minecraft_version}",
+        "fabric-api": "*"
+    },
+    "entrypoints": {
+        "main": ["com.lazrproductions.cuffed.CuffedMod"],
+        "client": ["com.lazrproductions.cuffed.client.CuffedModClient"]
+    }
+}

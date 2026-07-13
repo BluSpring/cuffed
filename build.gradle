@@ -2,11 +2,8 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'fabric-loom' version '1.17-SNAPSHOT'
 }
-
-
 
 version = mod_version
 group = mod_group_id
@@ -15,64 +12,11 @@ base {
     archivesName = mod_id
 }
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
-
-    copyIdeResources = true
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-        	arg '--mixin.config'
-			arg 'mixins.cuffed.json'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-            arg '--mixin.config'
-			arg 'mixins.cuffed.json'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
+fabricApi {
+    configureDataGeneration {
+        client = true
     }
 }
 
@@ -86,51 +30,65 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        // forRepositories(fg.repository) // Uncomment when using ForgeGradle
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
+
+    maven {
+        name = "Fuzs Mod Resources"
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+    }
 }
 
 dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_snapshot}@zip")
+    }
 
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    modImplementation "net.fabricmc:fabric-loader:$loader_version"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_version"
+
+    modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:21.1.6")
 
     // Require Lazr's Lib
-    implementation fg.deobf("curse.maven:lazrs-lib-${lazrslib_maven}")
+//    implementation fg.deobf("curse.maven:lazrs-lib-${lazrslib_maven}")
 
     // Optional Dependencies
 
-    compileOnly fg.deobf("curse.maven:better-combat-by-daedelus-639842:5065424") // Better Combat
-    compileOnly fg.deobf("curse.maven:epic-fight-mod-405076:7185742") // Epic Fight
-    compileOnly fg.deobf("curse.maven:parcool-482378:4944983") // Parcool
-    compileOnly fg.deobf("curse.maven:elenai-dodge-2-442962:4814313") // elenai dodge 2
+    modCompileOnly("maven.modrinth:better-combat:2.3.2+1.21.1-fabric") // Better Combat
+//    modCompileOnly("curse.maven:epic-fight-mod-405076:7185742") // Epic Fight
+//    modCompileOnly("curse.maven:parcool-482378:4944983") // Parcool
+//    modCompileOnly("curse.maven:elenai-dodge-2-442962:4814313") // elenai dodge 2
     
-    compileOnly fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:5377916") // Iron spell n' spellbooks
-    compileOnly fg.deobf("curse.maven:ars-nouveau-401955:5371927") // Ars Nouveau
-    compileOnly fg.deobf("curse.maven:mana-and-artifice-406360:6847805") // Mana and Artifice
-    compileOnly fg.deobf("curse.maven:knights-of-britannia-1111064:7377347") // Knights of Britannia
+//    modCompileOnly("curse.maven:irons-spells-n-spellbooks-855414:5377916") // Iron spell n' spellbooks
+//    modCompileOnly("curse.maven:ars-nouveau-401955:5371927") // Ars Nouveau
+//    modCompileOnly("curse.maven:mana-and-artifice-406360:6847805") // Mana and Artifice
+//    modCompileOnly("curse.maven:knights-of-britannia-1111064:7377347") // Knights of Britannia
 
-    compileOnly fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6654541") // TacZ
+    modCompileOnly("maven.modrinth:tacz-refabricated:1.21.1-0.7.0-forge1.1.8-hotfix") // TacZ
 
-    compileOnly files('libs/playerrevive.jar') // Player Revive
+//    modCompileOnly('libs/playerrevive.jar') // Player Revive
 
-    compileOnly fg.deobf("curse.maven:simple-voice-chat-416089:5605428") // Simple Voice Chat
-
-    // Apply Mixin AP
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    modCompileOnly("maven.modrinth:simple-voice-chat:fabric-1.21.1-2.6.20") // Simple Voice Chat
 }
 
-
-mixin {
-    add sourceSets.main, 'mixin.cuffed.refmap.json'
-    config 'mixins.cuffed.json'
-}
-
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+def resourceTargets = ['fabric.mod.json']
 def replaceProperties = [
-        minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-        forge_version: forge_version, forge_version_range: forge_version_range,
-        loader_version_range: loader_version_range,
+        minecraft_version: minecraft_version,
         mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-        mod_authors: mod_authors, mod_description: mod_description, lazrslib_maven:lazrslib_maven,
-        lazrslib_version_range: lazrslib_version_range
+        mod_authors: mod_authors, mod_description: mod_description
 ]
 
 processResources {

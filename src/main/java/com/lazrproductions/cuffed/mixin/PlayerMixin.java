@@ -1,8 +1,5 @@
 package com.lazrproductions.cuffed.mixin;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.util.HashMap;
 import java.util.Map.Entry;
 
