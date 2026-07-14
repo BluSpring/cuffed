@@ -6,10 +6,6 @@ import com.lazrproductions.cuffed.items.TrayItem;
 import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
 import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -17,6 +13,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public record TrayTooltip(NonNullList<ItemStack> items) implements ClientTooltipComponent, TooltipComponent {
     public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID,
@@ -104,7 +101,7 @@ public record TrayTooltip(NonNullList<ItemStack> items) implements ClientTooltip
         return c;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     enum Texture {
         SLOT(0, 0, 18, 20),
         BORDER_VERTICAL(0, 18, 1, 20),

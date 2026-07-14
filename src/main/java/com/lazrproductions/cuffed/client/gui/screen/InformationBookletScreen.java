@@ -1,8 +1,5 @@
 package com.lazrproductions.cuffed.client.gui.screen;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.lazrslib.client.font.FontUtilities;
 import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
@@ -13,11 +10,6 @@ import com.lazrproductions.lazrslib.client.ui.Alignment;
 import com.lazrproductions.lazrslib.client.ui.UIUtilities;
 import com.lazrproductions.lazrslib.client.ui.element.*;
 import com.mojang.blaze3d.platform.Window;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
-import org.joml.Vector2i;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -28,8 +20,13 @@ import net.minecraft.util.FastColor.ARGB32;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2i;
 
-@OnlyIn(Dist.CLIENT)
+import java.util.ArrayList;
+import java.util.HashMap;
+
+@Environment(EnvType.CLIENT)
 public class InformationBookletScreen extends GenericScreen {
 
     public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID,

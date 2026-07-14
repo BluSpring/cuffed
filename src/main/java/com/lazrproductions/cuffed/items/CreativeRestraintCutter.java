@@ -1,12 +1,8 @@
 package com.lazrproductions.cuffed.items;
 
-import java.util.List;
-
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.RestrainableCapability;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,6 +13,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class CreativeRestraintCutter extends Item {
     public CreativeRestraintCutter(Properties p) {
@@ -30,9 +29,9 @@ public class CreativeRestraintCutter extends Item {
             if (entity instanceof Player other) {
                 RestrainableCapability cap = (RestrainableCapability)CuffedAPI.Capabilities.getRestrainableCapability(other);
                 if(cap != null && cap.isRestrained()) {
-                    cap.TryUnequipRestraint((ServerPlayer)other, (ServerPlayer)player, RestraintType.Head);
-                    cap.TryUnequipRestraint((ServerPlayer)other, (ServerPlayer)player, RestraintType.Arm);
-                    cap.TryUnequipRestraint((ServerPlayer)other, (ServerPlayer)player, RestraintType.Leg);
+                    cap.TryUnequipRestraint((ServerPlayer)other, (ServerPlayer)player, RestraintType.HEAD);
+                    cap.TryUnequipRestraint((ServerPlayer)other, (ServerPlayer)player, RestraintType.ARM);
+                    cap.TryUnequipRestraint((ServerPlayer)other, (ServerPlayer)player, RestraintType.LEG);
                     return InteractionResult.sidedSuccess(player.level().isClientSide());
                 }
             }

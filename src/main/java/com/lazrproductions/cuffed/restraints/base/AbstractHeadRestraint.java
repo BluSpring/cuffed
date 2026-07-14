@@ -1,13 +1,10 @@
 package com.lazrproductions.cuffed.restraints.base;
 
-import java.util.ArrayList;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
 import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.mojang.blaze3d.platform.Window;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -15,6 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.ArrayList;
 
 public abstract class AbstractHeadRestraint extends AbstractRestraint {
 
@@ -28,7 +27,7 @@ public abstract class AbstractHeadRestraint extends AbstractRestraint {
     }
 
     public RestraintType getType() {
-        return RestraintType.Head;
+        return RestraintType.HEAD;
     }
 
     public ArrayList<Integer> getBlockedKeyCodes() {

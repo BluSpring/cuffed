@@ -1,10 +1,6 @@
 package com.lazrproductions.cuffed.inventory.tooltip;
 
 import com.lazrproductions.cuffed.CuffedMod;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -13,6 +9,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public record PossessionsBoxTooltip(NonNullList<ItemStack> items) implements ClientTooltipComponent, TooltipComponent {
     public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID,
@@ -87,7 +84,7 @@ public record PossessionsBoxTooltip(NonNullList<ItemStack> items) implements Cli
         return (int) Math.ceil(((double) this.items.size() + 1.0D) / (double) this.gridSizeX());
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     enum Texture {
         SLOT(0, 0, 18, 20),
         BORDER_VERTICAL(0, 18, 1, 20),

@@ -7,9 +7,11 @@ import com.lazrproductions.cuffed.blocks.entity.renderer.TrayBlockEntityRenderer
 import com.lazrproductions.cuffed.client.gui.screen.FriskingScreen;
 import com.lazrproductions.cuffed.command.CuffedDebugCommand;
 import com.lazrproductions.cuffed.command.HandcuffCommand;
+import com.lazrproductions.cuffed.command.argument.RestraintTypeArgument;
 import com.lazrproductions.cuffed.compat.BetterCombatCompat;
 import com.lazrproductions.cuffed.compat.SimpleVoiceChatCompat;
 import com.lazrproductions.cuffed.compat.TacZCompat;
+import com.lazrproductions.cuffed.component.CuffedDataComponents;
 import com.lazrproductions.cuffed.config.CuffedServerConfig;
 import com.lazrproductions.cuffed.entity.renderer.ChainKnotEntityRenderer;
 import com.lazrproductions.cuffed.entity.renderer.CrumblingBlockRenderer;
@@ -20,19 +22,21 @@ import com.lazrproductions.cuffed.event.ModServerEvents;
 import com.lazrproductions.cuffed.init.*;
 import com.lazrproductions.cuffed.inventory.tooltip.PossessionsBoxTooltip;
 import com.lazrproductions.cuffed.inventory.tooltip.TrayTooltip;
-import com.lazrproductions.cuffed.items.KeyRingItem;
 import com.lazrproductions.cuffed.items.PossessionsBox;
 import com.lazrproductions.cuffed.items.TrayItem;
 import com.lazrproductions.cuffed.items.base.AbstractRestraintItem;
+import com.lazrproductions.cuffed.network.CuffedServerNetworking;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
@@ -85,9 +89,14 @@ public class CuffedMod implements ModInitializer {
         ModStatistics.register();
         ModMenuTypes.register();
         ModRestraints.register();
+        ModLockpickableTypes.register();
+
+        ArgumentTypeRegistry.registerArgumentType(id("restraint_type"), RestraintTypeArgument.class, SingletonArgumentInfo.contextFree(RestraintTypeArgument::restraintType));
+
+        CuffedServerNetworking.init();
 
 //        this.registerCaps();
-        this.registerSounds();
+        ModSounds.register();
         registerCommands();
         ModEntityTypes.registerAttributes();
 
@@ -164,18 +173,6 @@ public class CuffedMod implements ModInitializer {
         DispenserBlock.registerBehavior(Items.BUNDLE, dispenseitembehavior);
     }
 
-    private void registerSounds() {
-        LOGGER.info("Registering sound for Cuffed");
-        ModSounds.register();
-
-        // TODO
-//        IForgeRegistry<?> r = event.getForgeRegistry();
-//        if(r != null && r.getValues().size() > 0 && r.getValues().toArray()[0] instanceof AbstractRestraint) {
-//            LOGGER.info("Cuffed has found a foreign restraint registry, registering with Restraint API");
-//            RestraintAPI.Registries.register(r);
-//        }
-    }
-
     public void registerCommands() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             new HandcuffCommand(dispatcher, registryAccess);
@@ -190,12 +187,8 @@ public class CuffedMod implements ModInitializer {
             LOGGER.info("Running client setup for Cuffed");
 
             ItemProperties.register(ModItems.KEY_RING,
-                    ResourceLocation.fromNamespaceAndPath(MODID, "keys"), (stack, level, living, id) -> {
-                        var tag = stack.getTag();
-                        if (tag != null && tag.contains(KeyRingItem.TAG_KEYS))
-                            return tag.getInt(KeyRingItem.TAG_KEYS);
-                        return 0;
-                    });
+                    ResourceLocation.fromNamespaceAndPath(MODID, "keys"), (stack, level, living, id) ->
+                        stack.getOrDefault(CuffedDataComponents.KEY_COUNT, 0));
             ItemProperties.register(ModItems.POSSESSIONSBOX,
                     ResourceLocation.fromNamespaceAndPath(MODID, "filled"), (stack, level, living, id) -> {
                         CompoundTag compoundtag = stack.getOrCreateTag();

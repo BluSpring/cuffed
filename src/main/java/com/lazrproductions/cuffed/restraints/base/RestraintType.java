@@ -1,28 +1,28 @@
 package com.lazrproductions.cuffed.restraints.base;
 
-public enum RestraintType {
-    Arm,
-    Leg,
-    Head;
+import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ByIdMap;
+import net.minecraft.util.StringRepresentable;
 
-    public int toInteger() {
-        switch (this) {
-            case Arm:
-                return 0;
-            case Leg:
-                return 1;         
-            default:
-                return 2;
-        }
+public enum RestraintType implements StringRepresentable {
+    ARM("arm"),
+    LEG("leg"),
+    HEAD("head");
+
+    public static final Codec<RestraintType> CODEC = StringRepresentable.fromEnum(RestraintType::values);
+    public static final StreamCodec<ByteBuf, RestraintType> STREAM_CODEC = ByteBufCodecs.idMapper(ByIdMap.continuous(RestraintType::ordinal, RestraintType.values(), ByIdMap.OutOfBoundsStrategy.CLAMP), RestraintType::ordinal);
+
+    private final String serializedName;
+
+    RestraintType(String name) {
+        this.serializedName = name;
     }
-    public static RestraintType fromInteger(int value) {
-        switch (value) {
-            case 0:
-                return Arm;
-            case 1:
-                return Leg;
-            default:
-                return Head;
-        }
+
+    @Override
+    public String getSerializedName() {
+        return this.serializedName;
     }
 }

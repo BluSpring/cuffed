@@ -53,7 +53,7 @@ public class RestraintAPI {
                 AbstractRestraint otherWithSameItem = get(restraint.getItem(), restraint.getType());
                 if(otherWithSameItem != null && otherWithSameItem.getType() == restraint.getType()) {
                     ConflictingRestraintItemAndTypeException ex = new ConflictingRestraintItemAndTypeException(key, otherWithSameItem.getType());
-                    CuffedMod.LOGGER.error("The Restraint Registry already contains a restraint for " + key + " with the same restraint type of " + otherWithSameItem.getType(), ex);
+                    CuffedMod.LOGGER.error("The Restraint Registry already contains a restraint for " + key + " with the same restraint restraintType of " + otherWithSameItem.getType(), ex);
                     throw ex;
                 }
             }
@@ -102,7 +102,7 @@ public class RestraintAPI {
          * Get the restraint from the registry with the given restraint item.
          * 
          * @param restraintItem The item to get a restraint from
-         * @param type The type of restraint to look for
+         * @param type The restraintType of restraint to look for
          */
         public static AbstractRestraint get(Item restraintItem, RestraintType type) {
             List<Pair<Item, AbstractRestraint>> pairs = getAllRestraintItemsAndTheirRestraints();
@@ -187,12 +187,12 @@ public class RestraintAPI {
 
         public static class ConflictingRestraintItemAndTypeException extends RuntimeException {
             public ConflictingRestraintItemAndTypeException() {
-                super("The Restraint Registry already contains a restraint for this item with the same restraint type!");
+                super("The Restraint Registry already contains a restraint for this item with the same restraint restraintType!");
 
             }
 
             public ConflictingRestraintItemAndTypeException(ResourceLocation key, RestraintType type) {
-                super("The Restraint Registry already contains a restraint for " + key + " with the same restraint type of " + type);
+                super("The Restraint Registry already contains a restraint for " + key + " with the same restraint restraintType of " + type);
             }
         }
     }
@@ -269,8 +269,8 @@ public class RestraintAPI {
      * @param stack The stack to check
      */
     public static boolean IsHeadRestraintItem(ItemStack stack) {
-        AbstractRestraint r = Registries.get(stack.getItem(), RestraintType.Head);
-        return r != null && r.getType() == RestraintType.Head;
+        AbstractRestraint r = Registries.get(stack.getItem(), RestraintType.HEAD);
+        return r != null && r.getType() == RestraintType.HEAD;
     }
 
     /**
@@ -278,8 +278,8 @@ public class RestraintAPI {
      * @param stack The stack to check
      */
     public static boolean IsArmRestraintItem(ItemStack stack) {
-        AbstractRestraint r = Registries.get(stack.getItem(),RestraintType.Arm);
-        return r != null && r.getType() == RestraintType.Arm;
+        AbstractRestraint r = Registries.get(stack.getItem(),RestraintType.ARM);
+        return r != null && r.getType() == RestraintType.ARM;
     }
     
     /**
@@ -287,14 +287,14 @@ public class RestraintAPI {
      * @param stack The stack to check
      */
     public static boolean IsLegRestraintItem(ItemStack stack) {
-        AbstractRestraint r = Registries.get(stack.getItem(), RestraintType.Leg);
-        return r != null && r.getType() == RestraintType.Leg;
+        AbstractRestraint r = Registries.get(stack.getItem(), RestraintType.LEG);
+        return r != null && r.getType() == RestraintType.LEG;
     }
 
     /**
      * Get whether or not the given item stack can be equipped as a restraint.
      * @param stack The item stack of the restraint to check
-     * @param type The type of restraint to check for
+     * @param type The restraintType of restraint to check for
      * @param player The player being restrained
      * @param captor The player restraining
      * @return Whether or not the restraint item can be equipped

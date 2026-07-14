@@ -11,10 +11,6 @@ import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
 import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.mojang.blaze3d.platform.Window;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -26,6 +22,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class PilloryRestraint extends AbstractHeadRestraint {
 
@@ -195,7 +192,7 @@ public class PilloryRestraint extends AbstractHeadRestraint {
     }
 
     @NotNull
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     @Override
     public RestraintModelInterface getModelInterface() {
         return new PilloryRestraintModelInterface();
@@ -204,7 +201,7 @@ public class PilloryRestraint extends AbstractHeadRestraint {
 
     // #endregion
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static class PilloryRestraintModelInterface extends RestraintModelInterface { 
         static final Class<? extends HumanoidModel<? extends LivingEntity>> MODEL_CLASS = null;
         static final ModelLayerLocation MODEL_LAYER = null;

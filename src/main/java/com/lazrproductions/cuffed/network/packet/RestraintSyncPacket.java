@@ -1,19 +1,16 @@
-package com.lazrproductions.cuffed.packet;
-
-import java.util.UUID;
-import java.util.function.Supplier;
+package com.lazrproductions.cuffed.network.packet;
 
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
-import com.lazrproductions.lazrslib.common.network.packet.ParameterizedLazrPacket;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.network.NetworkEvent;
+
+import java.util.UUID;
+import java.util.function.Supplier;
 
 public class RestraintSyncPacket extends ParameterizedLazrPacket {
     int playerId;

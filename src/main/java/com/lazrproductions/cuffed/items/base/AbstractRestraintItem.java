@@ -1,21 +1,14 @@
 package com.lazrproductions.cuffed.items.base;
 
-import java.util.List;
-import java.util.function.Predicate;
-
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.RestrainableCapability;
 import com.lazrproductions.cuffed.cap.base.IRestrainableCapability;
 import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.restraints.RestraintAPI;
-import com.lazrproductions.cuffed.restraints.base.AbstractArmRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractHeadRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
-import com.lazrproductions.cuffed.restraints.base.RestraintType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import com.lazrproductions.cuffed.restraints.base.*;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -26,19 +19,16 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BundleItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.item.v1.EnchantingContext;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class AbstractRestraintItem extends Item {
     public AbstractRestraintItem(Properties p) {
@@ -78,24 +68,24 @@ public class AbstractRestraintItem extends Item {
         
         
         Predicate<Entity> restraintSelector = new PlayerCanEquipArmRestraintEntitySelector(stack);
-        RestraintType typeToEquip = RestraintType.Arm;
+        RestraintType typeToEquip = RestraintType.ARM;
         boolean isAmbiguousRestraint = false;
 
         if(stack.getItem() instanceof AbstractHeadRestraintItem) {
             restraintSelector = new PlayerCanEquipHeadRestraintEntitySelector(stack);
-            typeToEquip = RestraintType.Head;
+            typeToEquip = RestraintType.HEAD;
         } else if(stack.getItem() instanceof AbstractArmRestraintItem) {
             restraintSelector = new PlayerCanEquipArmRestraintEntitySelector(stack);
-            typeToEquip = RestraintType.Arm;
+            typeToEquip = RestraintType.ARM;
         } else if(stack.getItem() instanceof AbstractLegRestraintItem) {
             restraintSelector = new PlayerCanEquipLegRestraintEntitySelector(stack);
-            typeToEquip = RestraintType.Leg;
+            typeToEquip = RestraintType.LEG;
         } else if(stack.getItem() instanceof AbstractRestraintItem) {
             restraintSelector = new PlayerEntitySelector(stack);
             isAmbiguousRestraint = true;
         } else if(stack.is(Items.BUNDLE) && BundleItem.getFullnessDisplay(stack) <= 0) {
             restraintSelector = new PlayerCanEquipHeadRestraintEntitySelector(stack);
-            typeToEquip = RestraintType.Head;
+            typeToEquip = RestraintType.HEAD;
         }
 
 
@@ -111,30 +101,30 @@ public class AbstractRestraintItem extends Item {
             if(isAmbiguousRestraint) {
                 if((player.position().y() + 1d) > (double)blockpos.getY())  {
                     // dispenser is lower than player's waist
-                    typeToEquip = RestraintType.Leg;
+                    typeToEquip = RestraintType.LEG;
                 } else {
                     // dispenser is higher than player's waist
-                    typeToEquip = RestraintType.Arm;
+                    typeToEquip = RestraintType.ARM;
                 }
 
                 AbstractRestraint restraint = RestraintAPI.getRestraintFromStack(itemstack, typeToEquip, player, player);
 
-                if(typeToEquip == RestraintType.Arm && restraint instanceof AbstractArmRestraint && !entity.armsRestrained())
+                if(typeToEquip == RestraintType.ARM && restraint instanceof AbstractArmRestraint && !entity.armsRestrained())
                     return entity.TryEquipRestraint(player, player, (AbstractArmRestraint)restraint);
-                else if(typeToEquip == RestraintType.Leg && restraint instanceof AbstractLegRestraint && !entity.legsRestrained())
+                else if(typeToEquip == RestraintType.LEG && restraint instanceof AbstractLegRestraint && !entity.legsRestrained())
                     return entity.TryEquipRestraint(player, player, (AbstractLegRestraint)restraint);
 
                 return false;
             }
-            else if(typeToEquip == RestraintType.Arm && !entity.armsRestrained()) {
+            else if(typeToEquip == RestraintType.ARM && !entity.armsRestrained()) {
                 AbstractRestraint restraint = RestraintAPI.getRestraintFromStack(itemstack, typeToEquip, player, player);
                 return entity.TryEquipRestraint(player, player, (AbstractArmRestraint)restraint);
             }
-            else if(typeToEquip == RestraintType.Leg && !entity.legsRestrained()) {
+            else if(typeToEquip == RestraintType.LEG && !entity.legsRestrained()) {
                 AbstractRestraint restraint = RestraintAPI.getRestraintFromStack(itemstack, typeToEquip, player, player);
                 return entity.TryEquipRestraint(player, player, (AbstractLegRestraint)restraint);
             }
-            else if(typeToEquip == RestraintType.Head && !entity.headRestrained()) {
+            else if(typeToEquip == RestraintType.HEAD && !entity.headRestrained()) {
                 AbstractRestraint restraint = RestraintAPI.getRestraintFromStack(itemstack, typeToEquip, player, player);
                 return entity.TryEquipRestraint(player, player, (AbstractHeadRestraint)restraint);
             }

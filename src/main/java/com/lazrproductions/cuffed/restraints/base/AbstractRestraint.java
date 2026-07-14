@@ -1,9 +1,5 @@
 package com.lazrproductions.cuffed.restraints.base;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.UUID;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.compat.ArsNouveauCompat;
 import com.lazrproductions.cuffed.compat.IronsSpellsnSpellbooksCompat;
@@ -14,11 +10,6 @@ import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.restraints.client.RestraintModelInterface;
 import com.mojang.blaze3d.platform.Window;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
@@ -34,6 +25,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.UUID;
 
 public abstract class AbstractRestraint {
 
@@ -245,7 +242,7 @@ public abstract class AbstractRestraint {
     }
 
     @NotNull
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public abstract RestraintModelInterface getModelInterface();
 
     //#endregion

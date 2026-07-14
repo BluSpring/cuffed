@@ -1,7 +1,4 @@
-package com.lazrproductions.cuffed.packet;
-
-import java.util.UUID;
-import java.util.function.Supplier;
+package com.lazrproductions.cuffed.network.packet;
 
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
@@ -13,15 +10,17 @@ import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
 import com.lazrproductions.lazrslib.common.network.packet.ParameterizedLazrPacket;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraftforge.network.NetworkEvent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * A packet to sync the equipping and unequipping of restraints to the
@@ -92,7 +91,7 @@ public class RestraintEquippedPacket extends ParameterizedLazrPacket {
                     CompoundTag oldTag = oldData.equalsIgnoreCase("null") ? null : TagParser.parseTag(oldData);
                     Player captor = !captorUUID.equals("null") ? arg0.level().getPlayerByUUID(UUID.fromString(captorUUID)) : null;
     
-                    if (type == RestraintType.Arm.toInteger()) {
+                    if (type == RestraintType.ARM.toInteger()) {
                         // Sets the client-side version of the restraint AND sends onEquippedClient &
                         // onUnequipped events
                         if (!newData.equalsIgnoreCase("null")) {
@@ -105,7 +104,7 @@ public class RestraintEquippedPacket extends ParameterizedLazrPacket {
                             AbstractArmRestraint oldRestraint = (AbstractArmRestraint) RestraintAPI.getRestraintFromTag(oldTag);
                             oldRestraint.onUnequippedClient(arg0);
                         }
-                    } else if(type == RestraintType.Leg.toInteger()) {
+                    } else if(type == RestraintType.LEG.toInteger()) {
                         // Sets the client-side version of the restraint AND sends onEquippedClient &
                         // onUnequipped events
                         if (!newData.equalsIgnoreCase("null")) {
@@ -117,7 +116,7 @@ public class RestraintEquippedPacket extends ParameterizedLazrPacket {
                             AbstractLegRestraint oldRestraint = (AbstractLegRestraint) RestraintAPI.getRestraintFromTag(oldTag);
                             oldRestraint.onUnequippedClient(arg0);
                         }
-                    }  else if(type == RestraintType.Head.toInteger())  {
+                    }  else if(type == RestraintType.HEAD.toInteger())  {
                         // Sets the client-side version of the restraint AND sends onEquippedClient &
                         // onUnequipped events
                         if (!newData.equalsIgnoreCase("null")) {

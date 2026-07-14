@@ -3,7 +3,6 @@ package com.lazrproductions.cuffed.restraints.client;
 import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
 import com.lazrproductions.cuffed.restraints.base.IBreakableRestraint;
 import com.mojang.blaze3d.platform.Window;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.HumanoidModel;
@@ -11,10 +10,8 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public abstract class ClientsideAbstractRestraintHandler {
     public final AbstractRestraint parent;
     

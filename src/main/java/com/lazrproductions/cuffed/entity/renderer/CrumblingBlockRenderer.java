@@ -5,18 +5,15 @@ import com.lazrproductions.cuffed.entity.CrumblingBlockEntity;
 import com.lazrproductions.cuffed.entity.model.CrumblingBlockModel;
 import com.lazrproductions.cuffed.init.ModModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class CrumblingBlockRenderer extends EntityRenderer<CrumblingBlockEntity> {
     public static ResourceLocation TEXTURE_LOCATION_1 = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID,
             "textures/entity/crumbling_block_1.png");

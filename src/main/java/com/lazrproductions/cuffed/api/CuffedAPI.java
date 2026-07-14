@@ -1,58 +1,48 @@
 package com.lazrproductions.cuffed.api;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 import com.lazrproductions.cuffed.CuffedMod;
+import com.lazrproductions.cuffed.api.lock.Lockpickable;
 import com.lazrproductions.cuffed.blocks.PilloryBlock;
 import com.lazrproductions.cuffed.blocks.base.ILockableBlock;
 import com.lazrproductions.cuffed.cap.RestrainableCapability;
 import com.lazrproductions.cuffed.cap.base.IRestrainableCapability;
 import com.lazrproductions.cuffed.client.gui.screen.LockpickingScreen;
 import com.lazrproductions.cuffed.entity.PadlockEntity;
-import com.lazrproductions.cuffed.init.ModItems;
-import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.init.ModTags;
-import com.lazrproductions.cuffed.packet.LockpickBlockPacket;
-import com.lazrproductions.cuffed.packet.LockpickLockPacket;
-import com.lazrproductions.cuffed.packet.LockpickRestraintPacket;
-import com.lazrproductions.cuffed.packet.RestraintEquippedPacket;
-import com.lazrproductions.cuffed.packet.RestraintSyncPacket;
-import com.lazrproductions.cuffed.packet.RestraintUtilityPacket;
+import com.lazrproductions.cuffed.lock.CellDoorLockpickable;
+import com.lazrproductions.cuffed.lock.LockLockpickable;
+import com.lazrproductions.cuffed.lock.RestraintLockpickable;
+import com.lazrproductions.cuffed.network.packet.RestraintEquippedPacket;
+import com.lazrproductions.cuffed.network.packet.RestraintSyncPacket;
+import com.lazrproductions.cuffed.network.packet.RestraintUtilityPacket;
+import com.lazrproductions.cuffed.network.packet.clientbound.ClientLockpickLockPacket;
+import com.lazrproductions.cuffed.network.packet.serverbound.ServerLockpickLockPacket;
 import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
-import com.lazrproductions.lazrslib.common.network.LazrNetwork;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.server.ServerLifecycleHooks;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class CuffedAPI {
     public static class Networking {
-
-        public static final LazrNetwork NETWORK = new LazrNetwork(ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "main"), 1);
-
-
         public static void sendRestraintSyncPacket(@NotNull ServerPlayer client) {
             IRestrainableCapability cap = Capabilities.getRestrainableCapability(client);
             RestraintSyncPacket packet = new RestraintSyncPacket(client.getId(), client.getUUID().toString(),
@@ -86,38 +76,31 @@ public class CuffedAPI {
         }
 
         
-        public static void sendLockpickFinishPickingLockPacketToServer(boolean wasFailed, int lockId, UUID playerUUID) {
-            LockpickLockPacket packet = new LockpickLockPacket(wasFailed, lockId, playerUUID.toString());
-            Networking.NETWORK.sendToServer(packet);
+        public static void sendLockpickFinishPickingLockPacketToServer(boolean wasFailed, int lockId) {
+            ClientPlayNetworking.send(new ServerLockpickLockPacket(wasFailed, new LockLockpickable(lockId)));
         }
-        public static void sendLockpickFinishPickingRestraintPacketToServer(boolean wasFailed, String restrainedUUID, int restraintType, UUID playerUUID) {
-            LockpickRestraintPacket packet = new LockpickRestraintPacket(wasFailed, restrainedUUID, restraintType, playerUUID.toString());
-            Networking.NETWORK.sendToServer(packet);
+        public static void sendLockpickFinishPickingRestraintPacketToServer(boolean wasFailed, UUID restrained, RestraintType restraintType) {
+            ClientPlayNetworking.send(new ServerLockpickLockPacket(wasFailed, new RestraintLockpickable(restrained, restraintType)));
         }
-        public static void sendLockpickFinishPickingCellDoorPacketToServer(boolean wasFailed, BlockPos pos, UUID playerUUID) {
-            LockpickBlockPacket packet = new LockpickBlockPacket(wasFailed, pos, playerUUID.toString());
-            Networking.NETWORK.sendToServer(packet);
+        public static void sendLockpickFinishPickingCellDoorPacketToServer(boolean wasFailed, BlockPos pos) {
+            ClientPlayNetworking.send(new ServerLockpickLockPacket(wasFailed, new CellDoorLockpickable(pos)));
         }
 
 
         public static void sendLockpickBeginPickingLockPacketToClient(@NotNull ServerPlayer player, int lockId, int speedIncreasePerPhase, int progressPerPick) {
-            LockpickLockPacket packet = new LockpickLockPacket(lockId, speedIncreasePerPhase, progressPerPick, player.getUUID().toString());
-            Networking.NETWORK.sendTo(packet, player);
+            ServerPlayNetworking.send(player, new ClientLockpickLockPacket(speedIncreasePerPhase, progressPerPick, new LockLockpickable(lockId)));
         }
-        public static void sendLockpickBeginPickingRestraintPacketToClient(@NotNull ServerPlayer player, String restrainedUUID, int restraintType, int speedIncreasePerPhase, int progressPerPick) {
-            LockpickRestraintPacket packet = new LockpickRestraintPacket(restrainedUUID, restraintType, speedIncreasePerPhase, progressPerPick, player.getUUID().toString());
-            Networking.NETWORK.sendTo(packet, player);
+        public static void sendLockpickBeginPickingRestraintPacketToClient(@NotNull ServerPlayer player, UUID restrained, RestraintType restraintType, int speedIncreasePerPhase, int progressPerPick) {
+            ServerPlayNetworking.send(player, new ClientLockpickLockPacket(speedIncreasePerPhase, progressPerPick, new RestraintLockpickable(restrained, restraintType)));
         }
         public static void sendLockpickBeginPickingCellDoorPacketToClient(@NotNull ServerPlayer player, BlockPos pos, int speedIncreasePerPhase, int progressPerPick) {
-            LockpickBlockPacket packet = new LockpickBlockPacket(pos, speedIncreasePerPhase, progressPerPick, player.getUUID().toString());
-            Networking.NETWORK.sendTo(packet, player);
+            ServerPlayNetworking.send(player, new ClientLockpickLockPacket(speedIncreasePerPhase, progressPerPick, new CellDoorLockpickable(pos)));
         }
 
 
         public static void registerPackets() {
-            NETWORK.registerPacket(LockpickLockPacket.class, LockpickLockPacket::new);
-            NETWORK.registerPacket(LockpickRestraintPacket.class, LockpickRestraintPacket::new);
-            NETWORK.registerPacket(LockpickBlockPacket.class, LockpickBlockPacket::new);
+            PayloadTypeRegistry.playC2S().register(ServerLockpickLockPacket.TYPE, ServerLockpickLockPacket.CODEC);
+            PayloadTypeRegistry.playS2C().register(ClientLockpickLockPacket.TYPE, ClientLockpickLockPacket.CODEC);
 
             NETWORK.registerPacket(RestraintSyncPacket.class, RestraintSyncPacket::new);
             NETWORK.registerPacket(RestraintEquippedPacket.class, RestraintEquippedPacket::new);
@@ -126,135 +109,13 @@ public class CuffedAPI {
     }
 
     public static class Lockpicking {
-        public static void finishLockpickingLock(boolean wasFailed, int lockId, @NotNull UUID lockpickerUUID) {
-            ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(lockpickerUUID);
-            if (player != null) {
-                Level level = player.level();
-                if (level != null) {
-                    if (!level.isClientSide()) {
-                        ItemStack itemstack = player.getItemInHand(InteractionHand.MAIN_HAND);
-                        player.getCooldowns().addCooldown(ModItems.LOCKPICK, 20);
-                        if (wasFailed) {
-                            itemstack.hurtAndBreak(1, player, (p) -> {
-                                p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
-                            });
-
-                            player.awardStat(ModStatistics.LOCKPICKS_BROKEN);
-                        } else {
-                            level.playLocalSound((float) player.position().x, (float) player.position().y,
-                                    (float) player.position().z, SoundEvents.CHAIN_BREAK, SoundSource.PLAYERS,
-                                    1, 1,
-                                    true);
-
-                            itemstack.hurtAndBreak(1, player, (p) -> {
-                                p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
-                            });
-                            if (level.getEntity(lockId) instanceof PadlockEntity e) {
-                                player.awardStat(ModStatistics.SUCCESSFUL_LOCKPICKS);
-                                e.RemoveLock();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        public static void finishLockpickingRestraint(boolean wasFailed, RestraintType restraintType, @NotNull UUID restrainedPlayerUUID, @NotNull UUID lockpickerUUID) {
-            ServerPlayer lockpicker = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(lockpickerUUID);
-            ServerPlayer restrained = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(restrainedPlayerUUID);
-            if (lockpicker != null && restrained != null) {
-                Level level = lockpicker.level();
-                if (level != null && !level.isClientSide()) {
-                        ItemStack itemstack = lockpicker.getItemInHand(InteractionHand.MAIN_HAND);
-                        lockpicker.getCooldowns().addCooldown(ModItems.LOCKPICK, 20);
-                        if (wasFailed) {
-                            itemstack.hurtAndBreak(1, lockpicker, (p) -> {
-                                p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
-                            });
-
-                            lockpicker.awardStat(ModStatistics.LOCKPICKS_BROKEN);
-                        } else {
-                            level.playLocalSound((float) restrained.position().x, (float) restrained.position().y,
-                                    (float) restrained.position().z, SoundEvents.CHAIN_BREAK, SoundSource.PLAYERS,
-                                    1, 1,
-                                    true);
-
-                            itemstack.hurtAndBreak(1, lockpicker, (p) -> {
-                                p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
-                            });
-
-                            lockpicker.awardStat(ModStatistics.SUCCESSFUL_LOCKPICKS);
-                            RestrainableCapability cap = (RestrainableCapability)Capabilities.getRestrainableCapability(restrained);
-                            cap.TryUnequipRestraint(restrained, lockpicker, restraintType);
-                        }
-                    }
-                }
-            
-        }
-        public static void finishLockpickingCellDoor(boolean wasFailed, @NotNull BlockPos pos, UUID lockpickerUUID) {
-            ServerPlayer lockpicker = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(lockpickerUUID);
-            if (lockpicker != null) {
-                Level level = lockpicker.level();
-                if (level != null) {
-                    if (!level.isClientSide()) {
-                        ItemStack itemstack = lockpicker.getItemInHand(InteractionHand.MAIN_HAND);
-                        lockpicker.getCooldowns().addCooldown(ModItems.LOCKPICK, 20);
-                        if (wasFailed) {
-                            itemstack.hurtAndBreak(1, lockpicker, (p) -> {
-                                p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
-                            });
-
-                            lockpicker.awardStat(ModStatistics.LOCKPICKS_BROKEN);
-                        } else {
-                            level.playLocalSound((float) lockpicker.position().x, (float) lockpicker.position().y,
-                                    (float) lockpicker.position().z, SoundEvents.CHAIN_BREAK, SoundSource.PLAYERS,
-                                    1, 1,
-                                    true);
-
-                            lockpicker.awardStat(ModStatistics.SUCCESSFUL_LOCKPICKS);
-
-                            itemstack.hurtAndBreak(1, lockpicker, (p) -> {
-                                p.broadcastBreakEvent(InteractionHand.MAIN_HAND);
-                            });
-                            
-                            level.destroyBlock(pos, true);
-                        }
-                    }
-                }
-            }
-        }         
-
-
-        @OnlyIn(Dist.CLIENT)
-        public static void beginLockpickingLock(@NotNull Minecraft instance, int lockId, int speedIncreasePerPhase, int progressPerPick) {
+        @Environment(EnvType.CLIENT)
+        public static void beginLockpicking(@NotNull Minecraft instance, int speedIncreasePerPhase, int progressPerPick, Lockpickable lockpickable) {
             LockpickingScreen overlay = new LockpickingScreen(instance);
             overlay.speedIncreasePerPhase = speedIncreasePerPhase;
             overlay.progressPerPick = progressPerPick;
             
-            overlay.type = 0;
-            overlay.lockId = lockId;
-            
-            instance.setScreen(overlay);
-        }
-        @OnlyIn(Dist.CLIENT)
-        public static void beginLockpickingRestraint(@NotNull Minecraft instance, String restrainedUUID, int restraintType, int speedIncreasePerPhase, int progressPerPick) {
-            LockpickingScreen overlay = new LockpickingScreen(instance);
-            overlay.speedIncreasePerPhase = speedIncreasePerPhase;
-            overlay.progressPerPick = progressPerPick;
-
-            overlay.type = 1;
-            overlay.restrainedUUID = restrainedUUID;
-            overlay.restraintType = restraintType;
-            
-            instance.setScreen(overlay);
-        }
-        @OnlyIn(Dist.CLIENT)
-        public static void beginLockpickingCellDoor(@NotNull Minecraft instance, BlockPos pos, int speedIncreasePerPhase, int progressPerPick) {
-            LockpickingScreen overlay = new LockpickingScreen(instance);
-            overlay.speedIncreasePerPhase = speedIncreasePerPhase;
-            overlay.progressPerPick = progressPerPick;
-
-            overlay.type = 2;
-            overlay.doorPos = pos;
+            overlay.lockpickable = lockpickable;
             
             instance.setScreen(overlay);
         }

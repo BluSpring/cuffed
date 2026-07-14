@@ -1,14 +1,7 @@
 package com.lazrproductions.cuffed.cap.base;
 
-import com.lazrproductions.cuffed.restraints.base.AbstractArmRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractHeadRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractLegRestraint;
-import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
-import com.lazrproductions.cuffed.restraints.base.RestraintType;
+import com.lazrproductions.cuffed.restraints.base.*;
 import com.mojang.blaze3d.platform.Window;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -18,13 +11,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface IRestrainableCapability {
 
     //#region Server-Side operations
 
     /**
-     * Copy data from another capability to this one, the given capabilit must be the same type to copy it's data.
+     * Copy data from another capability to this one, the given capabilit must be the same restraintType to copy it's data.
      * @param cap The other capability to copy from
      */
     void copyFrom(CompoundTag tag, ServerLevel level);
@@ -87,7 +82,7 @@ public interface IRestrainableCapability {
     boolean legsRestrained();
     /** Get whether or not this player is restrained in any way. */
     boolean isRestrained();
-    /** Get whether or not this player is restrained with the given type. */
+    /** Get whether or not this player is restrained with the given restraintType. */
     boolean isRestrained(RestraintType type);
     /** Get the id of this player's head restraint. */
     ResourceLocation getHeadRestraintId();
@@ -95,7 +90,7 @@ public interface IRestrainableCapability {
     ResourceLocation getArmRestraintId();
     /** Get the id of this player's leg restraint. */
     ResourceLocation getLegRestraintId();
-    /** Get the id of this player's restraint with the given type. */
+    /** Get the id of this player's restraint with the given restraintType. */
     ResourceLocation getRestraintId(RestraintType type);
     /** Get this player's head restraint */
     @Nullable
@@ -106,7 +101,7 @@ public interface IRestrainableCapability {
     /** Get this player's leg restraint */
     @Nullable
     AbstractLegRestraint getLegRestraint();
-    /** Get this player's restraint with the given type */
+    /** Get this player's restraint with the given restraintType */
     @Nullable
     AbstractRestraint getRestraint(RestraintType type);
     /** Set this player's leg restraint without sending any events. */
@@ -115,7 +110,7 @@ public interface IRestrainableCapability {
     void setArmRestraintWithoutWarning(@NotNull ServerPlayer player, @Nullable AbstractArmRestraint newValue);
     /** Set this player's leg restraint without sending any events. */
     void setLegRestraintWithoutWarning(@NotNull ServerPlayer player, @Nullable AbstractLegRestraint newValue);
-    /** Set this player's restraint with the given type without sending any events. */
+    /** Set this player's restraint with the given restraintType without sending any events. */
     void setRestraintWithoutWarning(@NotNull ServerPlayer player, @NotNull AbstractRestraint newValue, RestraintType type);
 
     //#endregion

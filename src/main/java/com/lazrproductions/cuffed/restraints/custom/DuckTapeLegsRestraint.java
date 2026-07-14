@@ -1,7 +1,5 @@
 package com.lazrproductions.cuffed.restraints.custom;
 
-import java.util.Random;
-
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
 import com.lazrproductions.cuffed.cap.base.IRestrainableCapability;
@@ -20,10 +18,6 @@ import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
 import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
 import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.mojang.blaze3d.platform.Window;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.HumanoidModel;
@@ -39,6 +33,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Random;
 
 public class DuckTapeLegsRestraint extends AbstractLegRestraint implements IBreakableRestraint {
 
@@ -212,7 +209,7 @@ public class DuckTapeLegsRestraint extends AbstractLegRestraint implements IBrea
     }
 
     @NotNull
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     @Override
     public RestraintModelInterface getModelInterface() {
         return new DuckTapeLegsRestraintModelInterface();
@@ -314,7 +311,7 @@ public class DuckTapeLegsRestraint extends AbstractLegRestraint implements IBrea
         }
                 
         IRestrainableCapability cap = CuffedAPI.Capabilities.getRestrainableCapability(player);
-        if (getType() == RestraintType.Arm) {
+        if (getType() == RestraintType.ARM) {
             cap.setArmRestraintWithoutWarning(player, null);
         } else
             cap.setLegRestraintWithoutWarning(player, null);
@@ -325,7 +322,7 @@ public class DuckTapeLegsRestraint extends AbstractLegRestraint implements IBrea
 
     // #endregion
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static class DuckTapeLegsRestraintModelInterface extends RestraintModelInterface { 
         @SuppressWarnings("unchecked")
         static final Class<? extends HumanoidModel<? extends LivingEntity>> MODEL_CLASS = (Class<? extends HumanoidModel<? extends LivingEntity>>) DuckTapeLegsModel.class;

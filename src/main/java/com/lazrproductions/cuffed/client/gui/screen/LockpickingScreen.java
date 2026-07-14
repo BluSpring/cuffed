@@ -2,26 +2,21 @@ package com.lazrproductions.cuffed.client.gui.screen;
 
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.api.CuffedAPI;
-import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
-import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
-import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
-import com.lazrproductions.lazrslib.common.math.MathUtilities;
+import com.lazrproductions.cuffed.api.lock.Lockpickable;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
-import org.joml.Random;
-
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Random;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class LockpickingScreen extends GenericScreen{
 
     static final float TARGET_BUFFER = 5;
@@ -30,17 +25,7 @@ public class LockpickingScreen extends GenericScreen{
     public int speedIncreasePerPhase = 10;
     public int progressPerPick = 8;
 
-
-    public int type = 0;
-
-
-    public int lockId = -1; // used only when picking a padlock
-
-    public String restrainedUUID; // used only when picking a restrained player
-    public int restraintType;
-    
-    public BlockPos doorPos = null; // used only when picking a cell door
-
+    public Lockpickable lockpickable;
 
     int currentPhase = 0;
 
