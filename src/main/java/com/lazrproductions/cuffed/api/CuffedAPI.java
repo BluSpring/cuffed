@@ -19,6 +19,9 @@ import com.lazrproductions.cuffed.network.packet.clientbound.ClientLockpickLockP
 import com.lazrproductions.cuffed.network.packet.serverbound.ServerLockpickLockPacket;
 import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

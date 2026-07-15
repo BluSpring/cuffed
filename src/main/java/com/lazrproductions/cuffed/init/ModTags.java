@@ -26,6 +26,9 @@ public class ModTags {
     }
     public static class Items {
         public static final TagKey<Item> CAN_REINFORCE_PADLOCK = tag("can_reinforce_padlock");
+        public static final TagKey<Item> RESTRAINTS = tag("restraints");
+
+        public static final TagKey<Item> SUPPORTS_IMBUE = tag("enchantment/supports_imbue");
         
         public static TagKey<Item> tag(String name) {
             return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, name));

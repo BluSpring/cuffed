@@ -5,6 +5,7 @@ import com.lazrproductions.cuffed.init.ModItems;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,7 +27,7 @@ public class PrisonerTagItem extends Item {
 
             other.awardStat(ModStatistics.TIMES_NICKNAMED, 1);
 
-            if (stack.hasCustomHoverName())
+            if (stack.has(DataComponents.CUSTOM_NAME))
                nicknamable.setNickname(stack.getHoverName());
             else
                nicknamable.setNickname(null);

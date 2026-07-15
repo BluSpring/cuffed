@@ -10,6 +10,9 @@ import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.restraints.client.RestraintModelInterface;
 import com.mojang.blaze3d.platform.Window;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
@@ -36,7 +39,7 @@ public abstract class AbstractRestraint {
 
     private ServerPlayer s_player;
     private Player c_player;
-    private CompoundTag itemData;
+    private ItemStack itemData;
     @NotNull private UUID captor;
 
 
@@ -46,10 +49,9 @@ public abstract class AbstractRestraint {
         //this.onEquippedServer(player, captor);
 
         if(this instanceof IEnchantableRestraint enchantable)
-            enchantable.setEnchantments(stack.getEnchantmentTags());
+            enchantable.setEnchantments(stack.getEnchantments());
         
-        itemData = new CompoundTag();
-        stack.save(itemData);
+        this.itemData = stack.copy();
         
         this.captor = captor.getUUID();    
     } 
