@@ -1,6 +1,8 @@
 package com.lazrproductions.cuffed.inventory.tooltip;
 
 import com.lazrproductions.cuffed.CuffedMod;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

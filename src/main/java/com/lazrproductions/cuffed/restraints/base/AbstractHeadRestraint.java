@@ -1,9 +1,6 @@
 package com.lazrproductions.cuffed.restraints.base;
 
 import com.lazrproductions.cuffed.CuffedMod;
-import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
-import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
-import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

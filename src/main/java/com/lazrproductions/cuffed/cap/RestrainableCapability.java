@@ -11,15 +11,16 @@ import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.items.base.AbstractRestraintKeyItem;
 import com.lazrproductions.cuffed.restraints.RestraintAPI;
 import com.lazrproductions.cuffed.restraints.base.*;
-import com.lazrproductions.lazrslib.common.math.MathUtilities;
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -48,6 +49,19 @@ public class RestrainableCapability implements IRestrainableCapability {
     private boolean markedForSync = false;
 
     // #region Server Side Stuff
+
+    private static Vec3 getPositionFromTowardsRotationInDegrees(Vec3 from, float yaw, float pitch, float distance) {
+        return getPositionFromTowardsRotation(from, yaw * Mth.DEG_TO_RAD, pitch * Mth.DEG_TO_RAD, distance);
+    }
+
+    private static Vec3 getPositionFromTowardsRotation(Vec3 from, float yawRad, float pitchRad, float distance) {
+        float f = Mth.cos(-yawRad - Mth.PI);
+        float f1 = Mth.sin(-yawRad - Mth.PI);
+        float f2 = Mth.cos(-pitchRad);
+        float f3 = Mth.sin(-pitchRad);
+
+        return new Vec3((f1 * f2) * distance, f3 * distance, (f * f2) * distance).add(from);
+    }
 
     public void tickServer(ServerPlayer player) {
         if (headRestraint != null)
@@ -88,8 +102,8 @@ public class RestrainableCapability implements IRestrainableCapability {
             player.sendSystemMessage(
                     Component.translatable("info.cuffed.escorting.getting").append(playerEscortingMe.getDisplayName()), true);
 
-            Vec3 escortPivot = MathUtilities.GetPositionFromTowardsRotationInDegrees(playerEscortingMe.position(), playerEscortingMe.getYRot() + 90, 0, 0.45f);
-            Vec3 escortTarget = MathUtilities.GetPositionFromTowardsRotationInDegrees(escortPivot, playerEscortingMe.getYRot(), 0, 0.9f);
+            Vec3 escortPivot = getPositionFromTowardsRotationInDegrees(playerEscortingMe.position(), playerEscortingMe.getYRot() + 90, 0, 0.45f);
+            Vec3 escortTarget = getPositionFromTowardsRotationInDegrees(escortPivot, playerEscortingMe.getYRot(), 0, 0.9f);
             
             //TODO: this implementation is desynced
             //player.connection.teleport(escortTarget.x(), escortTarget.y(), escortTarget.z(), playerEscortingMe.getYRot(), player.getXRot(), RelativeMovement.ROTATION);
@@ -212,29 +226,29 @@ public class RestrainableCapability implements IRestrainableCapability {
                         }
             }
         } else if (stack.is(ModItems.LOCKPICK)) {
-            int lockpickType = -1;
+            RestraintType lockpickType = null;
             if (interactionHeight > 1.5f && headRestrained() && headRestraint.getLockpickable())
-                lockpickType = RestraintType.HEAD.toInteger();
+                lockpickType = RestraintType.HEAD;
             else if (interactionHeight > 0.33f && interactionHeight <= 1.5f && armsRestrained()
                     && armRestraint.getLockpickable())
-                lockpickType = RestraintType.ARM.toInteger();
+                lockpickType = RestraintType.ARM;
             else if (interactionHeight <= 0.33f && legsRestrained() && legRestraint.getLockpickable())
-                lockpickType = RestraintType.LEG.toInteger();
+                lockpickType = RestraintType.LEG;
 
-            if (lockpickType > -1) {
-                int speedIncreasePerPick = lockpickType == RestraintType.LEG.toInteger()
+            if (lockpickType != null) {
+                int speedIncreasePerPick = lockpickType == RestraintType.LEG
                         ? getLegRestraint().getLockpickingSpeedIncreasePerPick()
-                        : lockpickType == RestraintType.ARM.toInteger()
+                        : lockpickType == RestraintType.ARM
                                 ? getArmRestraint().getLockpickingSpeedIncreasePerPick()
                                 : getHeadRestraint().getLockpickingSpeedIncreasePerPick();
-                int progressPerPick = lockpickType == RestraintType.LEG.toInteger()
+                int progressPerPick = lockpickType == RestraintType.LEG
                         ? getLegRestraint().getLockpickingProgressPerPick()
-                        : lockpickType == RestraintType.ARM.toInteger()
+                        : lockpickType == RestraintType.ARM
                                 ? getArmRestraint().getLockpickingProgressPerPick()
                                 : getHeadRestraint().getLockpickingProgressPerPick();
 
                 CuffedAPI.Networking.sendLockpickBeginPickingRestraintPacketToClient(other,
-                        player.getUUID().toString(), lockpickType, speedIncreasePerPick, progressPerPick);
+                        player.getUUID(), lockpickType, speedIncreasePerPick, progressPerPick);
                 return true;
             }
         } else if (stack.isEmpty() && other.isCrouching()) {
@@ -738,7 +752,7 @@ public class RestrainableCapability implements IRestrainableCapability {
 
             boolean shouldUnequip = true;
             if (headRestraint instanceof IEnchantableRestraint e)
-                if(e.hasEnchantment(Enchantments.BINDING_CURSE))
+                if(e.hasEnchantment(player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.BINDING_CURSE)))
                     shouldUnequip = false;
             if(shouldUnequip)
                 TryUnequipRestraint(player, null, RestraintType.HEAD);
@@ -748,7 +762,7 @@ public class RestrainableCapability implements IRestrainableCapability {
 
             boolean shouldUnequip = true;
             if (armRestraint instanceof IEnchantableRestraint e)
-                if(e.hasEnchantment(Enchantments.BINDING_CURSE))
+                if(e.hasEnchantment(player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.BINDING_CURSE)))
                     shouldUnequip = false;
             if(shouldUnequip)
                 TryUnequipRestraint(player, null, RestraintType.ARM);
@@ -758,7 +772,7 @@ public class RestrainableCapability implements IRestrainableCapability {
             
             boolean shouldUnequip = true;
             if (legRestraint instanceof IEnchantableRestraint e)
-                if(e.hasEnchantment(Enchantments.BINDING_CURSE))
+                if(e.hasEnchantment(player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.BINDING_CURSE)))
                     shouldUnequip = false;
             if(shouldUnequip)
                 TryUnequipRestraint(player, null, RestraintType.LEG);
