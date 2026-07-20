@@ -37,5 +37,70 @@ public class CuffedEnchantmentsGen {
             )
                 .build(ModEnchantments.IMBUE.location())
         );
+
+        context.register(ModEnchantments.FAMINE, Enchantment.enchantment(
+            new Enchantment.EnchantmentDefinition(
+                itemLookup.getOrThrow(ModTags.Items.SUPPORTS_FAMINE),
+                restraintsSet.map(Function.identity()),
+                2, // rare
+                1, // max level
+                new Enchantment.Cost(1, 0),
+                new Enchantment.Cost(51, 0),
+                3, // anvil cost
+                List.of(EquipmentSlotGroup.MAINHAND)
+            )
+        ).build(ModEnchantments.FAMINE.location()));
+
+        context.register(ModEnchantments.SHROUD, Enchantment.enchantment(
+            new Enchantment.EnchantmentDefinition(
+                itemLookup.getOrThrow(ModTags.Items.SUPPORTS_SHROUD),
+                restraintsSet.map(Function.identity()),
+                2, // rare
+                1, // max level
+                new Enchantment.Cost(2, 0),
+                new Enchantment.Cost(52, 0),
+                3, // anvil cost
+                List.of(EquipmentSlotGroup.MAINHAND)
+            )
+        ).build(ModEnchantments.SHROUD.location()));
+
+        context.register(ModEnchantments.EXHAUST, Enchantment.enchantment(
+            new Enchantment.EnchantmentDefinition(
+                itemLookup.getOrThrow(ModTags.Items.SUPPORTS_EXHAUST),
+                restraintsSet.map(Function.identity()),
+                2, // rare
+                1, // max level
+                new Enchantment.Cost(1, 0),
+                new Enchantment.Cost(51, 0),
+                3, // anvil cost
+                List.of(EquipmentSlotGroup.MAINHAND)
+            )
+        ).build(ModEnchantments.EXHAUST.location()));
+
+        context.register(ModEnchantments.SILENCE, Enchantment.enchantment(
+            new Enchantment.EnchantmentDefinition(
+                itemLookup.getOrThrow(ModTags.Items.SUPPORTS_SILENCE),
+                restraintsSet.map(Function.identity()),
+                2, // rare
+                1, // max level
+                new Enchantment.Cost(1, 0),
+                new Enchantment.Cost(51, 0),
+                3, // anvil cost
+                List.of(EquipmentSlotGroup.MAINHAND)
+            )
+        ).build(ModEnchantments.SILENCE.location()));
+
+        context.register(ModEnchantments.BUOYANT, Enchantment.enchantment(
+            new Enchantment.EnchantmentDefinition(
+                itemLookup.getOrThrow(ModTags.Items.SUPPORTS_BUOYANT),
+                restraintsSet.map(Function.identity()),
+                2, // rare
+                1, // max level
+                new Enchantment.Cost(1, 0),
+                new Enchantment.Cost(51, 0),
+                3, // anvil cost
+                List.of(EquipmentSlotGroup.MAINHAND)
+            )
+        ).build(ModEnchantments.BUOYANT.location()));
     }
 }

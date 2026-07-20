@@ -29,6 +29,11 @@ public class ModTags {
         public static final TagKey<Item> RESTRAINTS = tag("restraints");
 
         public static final TagKey<Item> SUPPORTS_IMBUE = tag("enchantment/supports_imbue");
+        public static final TagKey<Item> SUPPORTS_FAMINE = tag("enchantment/supports_famine");
+        public static final TagKey<Item> SUPPORTS_SHROUD = tag("enchantment/supports_shroud");
+        public static final TagKey<Item> SUPPORTS_EXHAUST = tag("enchantment/supports_exhaust");
+        public static final TagKey<Item> SUPPORTS_SILENCE = tag("enchantment/supports_silence");
+        public static final TagKey<Item> SUPPORTS_BUOYANT = tag("enchantment/supports_buoyant");
         
         public static TagKey<Item> tag(String name) {
             return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, name));

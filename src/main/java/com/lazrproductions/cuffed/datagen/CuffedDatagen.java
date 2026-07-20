@@ -8,8 +8,10 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
 public class CuffedDatagen implements DataGeneratorEntrypoint {
     @Override
-    public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
-
+    public void onInitializeDataGenerator(FabricDataGenerator generator) {
+        var pack = generator.createPack();
+        pack.addProvider(CuffedItemTagGen::new);
+        pack.addProvider(CuffedRegistryGen::new);
     }
 
     @Override
