@@ -10,13 +10,14 @@ import com.lazrproductions.cuffed.init.ModEnchantments;
 import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.restraints.client.RestraintModelInterface;
 import com.mojang.blaze3d.platform.Window;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import com.mojang.datafixers.util.Pair;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,10 +29,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 import java.util.UUID;
 
@@ -89,7 +91,7 @@ public abstract class AbstractRestraint {
     /** Get the lockpick progress per pick for this restraint. */
     public abstract int getLockpickingProgressPerPick();
 
-    public abstract ArrayList<Integer> getBlockedKeyCodes();
+    public abstract Collection<String> getBlockedKeyIds();
 
 
     public abstract ArmRestraintAnimationFlags getArmAnimationFlags();
@@ -139,20 +141,22 @@ public abstract class AbstractRestraint {
         ModStatistics.awardTimeSpentRestrained(player, this);
 
         if(this instanceof IEnchantableRestraint e) {
-            if(e.getEnchantmentLevel(ModEnchantments.FAMINE) >= 1)
+            var enchLookup = player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+
+            if(e.getEnchantmentLevel(enchLookup.getOrThrow(ModEnchantments.FAMINE)) >= 1)
                 if(!player.hasEffect(MobEffects.HUNGER))
                     player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 100, 1));
 
-            if(e.getEnchantmentLevel(ModEnchantments.SHROUD) >= 1)
+            if(e.getEnchantmentLevel(enchLookup.getOrThrow(ModEnchantments.SHROUD)) >= 1)
                 if(!player.hasEffect(MobEffects.BLINDNESS))
                     player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 1));
                     
-            if(e.getEnchantmentLevel(ModEnchantments.EXHAUST) >= 1) {
+            if(e.getEnchantmentLevel(enchLookup.getOrThrow(ModEnchantments.EXHAUST)) >= 1) {
                 if(!player.hasEffect(MobEffects.DIG_SLOWDOWN)) player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, 1));
                 if(!player.hasEffect(MobEffects.WEAKNESS)) player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1));
             }     
 
-            if(e.getEnchantmentLevel(ModEnchantments.SILENCE) >= 1) {
+            if(e.getEnchantmentLevel(enchLookup.getOrThrow(ModEnchantments.SILENCE)) >= 1) {
                 double drainPercentage = 0.005D; // 0.5% per tick, so drains 10% per second TODO: make this a config option
                 if(CuffedMod.ArsNouveauInstalled) ArsNouveauCompat.DrainMana(player, drainPercentage);
                 if(CuffedMod.IronsSpellsnSpellbooksInstalled) IronsSpellsnSpellbooksCompat.DrainMana(player, drainPercentage);
@@ -256,29 +260,28 @@ public abstract class AbstractRestraint {
         tag.putString("Id", getId().toString());
         tag.putString("Type", getType().toString());
         if(this instanceof IEnchantableRestraint ench)
-            tag.put("Enchantments", ench.getEnchantments());
+            tag.put("Enchantments", ItemEnchantments.CODEC.encodeStart(NbtOps.INSTANCE, ench.getEnchantments()).getOrThrow());
 
         tag.putUUID("Captor", captor);
-        tag.put("ItemData", itemData);
+        tag.put("ItemData", ItemStack.OPTIONAL_CODEC.encodeStart(NbtOps.INSTANCE, itemData).getOrThrow());
         return tag;
     }
     public void deserializeNBT(CompoundTag nbt) {
         if(this instanceof IEnchantableRestraint ench) {
-            ListTag t = nbt.getList("Enchantments", 10);
-            ench.setEnchantments(t);
+            ench.setEnchantments(ItemEnchantments.CODEC.decode(NbtOps.INSTANCE, nbt.getCompound("Enchantments")).result().map(Pair::getFirst).orElse(ItemEnchantments.EMPTY));
         }
         this.captor = nbt.getUUID("Captor");
-        this.itemData = nbt.getCompound("ItemData");
+        this.itemData = ItemStack.OPTIONAL_CODEC.decode(NbtOps.INSTANCE, nbt.getCompound("ItemData")).result().map(Pair::getFirst).orElse(ItemStack.EMPTY);
     }
 
     /** Save this restraint to an item stack */
     public ItemStack saveToItemStack() {
-        ItemStack stack = ItemStack.of(itemData);
+        ItemStack stack = this.itemData.copy();
         stack.setCount(1);
         if(this instanceof IBreakableRestraint breakable)
             stack.setDamageValue(breakable.getMaxDurability() - breakable.getDurability());
         if(this instanceof IEnchantableRestraint enchantable)
-            EnchantmentHelper.setEnchantments(EnchantmentHelper.deserializeEnchantments(enchantable.getEnchantments()), stack);
+            EnchantmentHelper.setEnchantments(stack, enchantable.getEnchantments());
         return stack;
     }
 

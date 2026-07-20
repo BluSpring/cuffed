@@ -11,6 +11,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public abstract class AbstractHeadRestraint extends AbstractRestraint {
 
@@ -27,9 +29,9 @@ public abstract class AbstractHeadRestraint extends AbstractRestraint {
         return RestraintType.HEAD;
     }
 
-    public ArrayList<Integer> getBlockedKeyCodes() {
-        ArrayList<Integer> b = new ArrayList<Integer>();
-        return b; // head restraints dont block key codes silly!
+    @Override
+    public Collection<String> getBlockedKeyIds() {
+        return List.of(); // head restraints dont block key codes silly!
     }
 
 

@@ -45,7 +45,7 @@ public class FuzzyHandcuffsRestraint extends AbstractArmRestraint implements IBr
 
     static final ResourceLocation CUFFED_WIDGETS = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/gui/widgets.png");
 
-    static final ScreenTexture CHAIN_ICON = new ScreenTexture(CUFFED_WIDGETS, 92, 24, 16, 16, 192, 192);
+    static final ScreenTexture CHAIN_ICON = new ScreenTexture(CUFFED_WIDGETS, 92, 24, 16, 16, 192, 192); // golden chain
     
     public FuzzyHandcuffsRestraint() {
         enchantments = new ListTag();

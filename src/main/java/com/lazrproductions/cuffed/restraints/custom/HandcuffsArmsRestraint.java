@@ -12,11 +12,9 @@ import com.lazrproductions.cuffed.restraints.base.IEnchantableRestraint;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
 import com.lazrproductions.cuffed.restraints.client.RestraintModelInterface;
 import com.lazrproductions.cuffed.restraints.client.model.HandcuffsModel;
-import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
-import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
-import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
-import com.lazrproductions.lazrslib.common.math.MathUtilities;
 import com.mojang.blaze3d.platform.Window;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.HumanoidModel;
@@ -188,6 +186,8 @@ public class HandcuffsArmsRestraint extends AbstractArmRestraint implements IBre
     // #region Client-Side operations
 
     int lastBarIndex = 0;
+
+    @Environment(EnvType.CLIENT)
     public void renderOverlay(Player player, GuiGraphics graphics, float partialTick, Window window) {
         super.renderOverlay(player, graphics, partialTick, window);
         // Display Icon and chain overlay

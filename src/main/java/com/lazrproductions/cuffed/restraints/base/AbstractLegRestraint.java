@@ -1,11 +1,7 @@
 package com.lazrproductions.cuffed.restraints.base;
 
 import com.lazrproductions.cuffed.CuffedMod;
-import com.lazrproductions.lazrslib.client.screen.ScreenUtilities;
-import com.lazrproductions.lazrslib.client.screen.base.BlitCoordinates;
-import com.lazrproductions.lazrslib.client.screen.base.ScreenTexture;
 import com.mojang.blaze3d.platform.Window;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -15,6 +11,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public abstract class AbstractLegRestraint extends AbstractRestraint {
 
@@ -31,70 +29,34 @@ public abstract class AbstractLegRestraint extends AbstractRestraint {
         return RestraintType.LEG;
     }
 
-    public ArrayList<Integer> getBlockedKeyCodes() {
-        ArrayList<Integer> b = new ArrayList<Integer>();
+    @Override
+    public Collection<String> getBlockedKeyIds() {
         Minecraft inst = Minecraft.getInstance();
-        if(inst == null || inst.options == null)
-            return b;
 
-        b.add(inst.options.keyUp.getKey().getValue());
-        b.add(inst.options.keyDown.getKey().getValue());
-        b.add(inst.options.keyLeft.getKey().getValue());
-        b.add(inst.options.keyRight.getKey().getValue());
-        b.add(inst.options.keyJump.getKey().getValue());
-        b.add(inst.options.keySprint.getKey().getValue());
-        
-        for (KeyMapping mapping : inst.options.keyMappings) {
-            switch (mapping.getName()) {
-                case "key.parcool.Crawl":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.parcool.Breakfall":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.parcool.WallSlide":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.parcool.Dodge":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.parcool.Vault":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.parcool.Flipping":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.parcool.FastRun":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.parcool.ClingToCliff":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.parcool.HangDown":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.parcool.WallJump":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.parcool.QuickTurn":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.parcool.HorizontalWallRun":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.elenaidodge2.dodge":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "keybinds.combatroll.roll":
-                    b.add(mapping.getKey().getValue());
-                    break;
-                case "key.epicfight.dodge":
-                    b.add(mapping.getKey().getValue());
-                    break;
-            }
-        }
+        return List.of(
+            inst.options.keyUp.getName(),
+            inst.options.keyDown.getName(),
+            inst.options.keyLeft.getName(),
+            inst.options.keyRight.getName(),
+            inst.options.keyJump.getName(),
+            inst.options.keySprint.getName(),
 
-        return b;
+            "key.parcool.Crawl",
+            "key.parcool.Breakfall",
+            "key.parcool.WallSlide",
+            "key.parcool.Dodge",
+            "key.parcool.Vault",
+            "key.parcool.Flipping",
+            "key.parcool.FastRun",
+            "key.parcool.ClingToCliff",
+            "key.parcool.HangDown",
+            "key.parcool.WallJump",
+            "key.parcool.QuickTurn",
+            "key.parcool.HorizontalWallRun",
+            "key.elenaidodge2.dodge",
+            "keybinds.combatroll.roll",
+            "key.epicfight.dodge"
+        );
     }
 
 
