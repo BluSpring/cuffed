@@ -1,9 +1,15 @@
 package com.lazrproductions.cuffed.restraints.base;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import com.google.common.base.Suppliers;
 import com.lazrproductions.cuffed.CuffedMod;
 import com.mojang.blaze3d.platform.Window;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,23 +18,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Stream;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public abstract class AbstractArmRestraint extends AbstractRestraint {
-    public AbstractArmRestraint(){}
-    public AbstractArmRestraint(ItemStack stack, ServerPlayer player, ServerPlayer captor) {
-        super(stack, player, captor);
-    }
-
-    public RestraintType getType() {
-        return RestraintType.ARM;
-    }
-
-    @Override
-    public Collection<String> getBlockedKeyIds() {
+    public static final Supplier<Collection<String>> BLOCKED_KEY_IDS = Suppliers.memoize(() -> {
         Minecraft inst = Minecraft.getInstance();
 
         return Stream.concat(
@@ -52,6 +46,20 @@ public abstract class AbstractArmRestraint extends AbstractRestraint {
             ),
             Arrays.stream(inst.options.keyHotbarSlots).map(KeyMapping::getName)
         ).toList();
+    });
+
+    public AbstractArmRestraint(){}
+    public AbstractArmRestraint(ItemStack stack, ServerPlayer player, ServerPlayer captor) {
+        super(stack, player, captor);
+    }
+
+    public RestraintType getType() {
+        return RestraintType.ARM;
+    }
+
+    @Override
+    public Collection<String> getBlockedKeyIds() {
+        return BLOCKED_KEY_IDS.get();
     }
 
     @Environment(EnvType.CLIENT)

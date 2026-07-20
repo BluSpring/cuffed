@@ -1,7 +1,14 @@
 package com.lazrproductions.cuffed.restraints.base;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Supplier;
+
+import com.google.common.base.Suppliers;
 import com.lazrproductions.cuffed.CuffedMod;
 import com.mojang.blaze3d.platform.Window;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -10,27 +17,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 public abstract class AbstractLegRestraint extends AbstractRestraint {
-
-    static final ResourceLocation WIDGETS = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/gui/widgets.png");
-
-    static final ScreenTexture ARMS_ICON = new ScreenTexture(WIDGETS, 60, 24, 16, 16, 192, 192);
-
-    public AbstractLegRestraint(){}
-    public AbstractLegRestraint(ItemStack stack, ServerPlayer player, ServerPlayer captor) {
-        super(stack, player, captor);
-    }
-
-    public RestraintType getType() {
-        return RestraintType.LEG;
-    }
-
-    @Override
-    public Collection<String> getBlockedKeyIds() {
+    public static final Supplier<Collection<String>> BLOCKED_KEY_IDS = Suppliers.memoize(() -> {
         Minecraft inst = Minecraft.getInstance();
 
         return List.of(
@@ -57,6 +45,24 @@ public abstract class AbstractLegRestraint extends AbstractRestraint {
             "keybinds.combatroll.roll",
             "key.epicfight.dodge"
         );
+    });
+
+    static final ResourceLocation WIDGETS = ResourceLocation.fromNamespaceAndPath(CuffedMod.MODID, "textures/gui/widgets.png");
+
+    static final ScreenTexture ARMS_ICON = new ScreenTexture(WIDGETS, 60, 24, 16, 16, 192, 192);
+
+    public AbstractLegRestraint(){}
+    public AbstractLegRestraint(ItemStack stack, ServerPlayer player, ServerPlayer captor) {
+        super(stack, player, captor);
+    }
+
+    public RestraintType getType() {
+        return RestraintType.LEG;
+    }
+
+    @Override
+    public Collection<String> getBlockedKeyIds() {
+        return BLOCKED_KEY_IDS.get();
     }
 
 

@@ -1,7 +1,12 @@
 package com.lazrproductions.cuffed.utils;
 
+import java.util.Random;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import org.joml.Math;
+import org.joml.Matrix4f;
+
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -10,12 +15,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Math;
-import org.joml.Matrix4f;
 
-import java.util.Random;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class ChainUtils {
+    @Environment(EnvType.CLIENT)
 	public static void renderChainTo(Entity entity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, Entity entityFrom) {
 		if(entityFrom == null)
 			return;
@@ -30,6 +35,7 @@ public class ChainUtils {
 		renderHorizontalTo(entity, partialTicks, poseStack, bufferSource, entityFrom, distance);
 	}
 
+    @Environment(EnvType.CLIENT)
 	public static void renderChainFrom(Entity entity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, Entity entityTo) {
 		if(entityTo == null)
 			return;
@@ -43,6 +49,7 @@ public class ChainUtils {
 	}
 
 
+    @Environment(EnvType.CLIENT)
 	public static void renderVerticalFrom(Entity entityTo, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, Entity entityFrom, float distance) {
 		if(entityTo == null)
 			return;
@@ -86,7 +93,8 @@ public class ChainUtils {
 		}
 		poseStack.popPose();
 	}
-	
+
+    @Environment(EnvType.CLIENT)
 	public static void renderHorizontalFrom(Entity entityTo, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, Entity entityFrom, float distance) {
 		if(entityTo == null)
 			return;
@@ -131,7 +139,8 @@ public class ChainUtils {
 		poseStack.popPose();
 	}
 
-	
+
+    @Environment(EnvType.CLIENT)
 	public static void renderVerticalTo(Entity entityFrom, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, Entity entityTo, float distance) {
 		if(entityTo == null)
 			return;
@@ -179,7 +188,8 @@ public class ChainUtils {
 		}
 		poseStack.popPose();
 	}
-	
+
+    @Environment(EnvType.CLIENT)
 	public static void renderHorizontalTo(Entity entityFrom, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, Entity entityTo, float distance) {
 		if(entityTo == null)
 			return;
@@ -232,6 +242,7 @@ public class ChainUtils {
 	/**
 	* Creates a pair of vertex in the consumer given for a chain-like leash.
 	*/
+    @Environment(EnvType.CLIENT)
 	private static void addChainLink(VertexConsumer vertexConsumer, Matrix4f pose, float _x, float _y, float _z,
 		int mobLightLevel, int holderLightLevel, int mobBrightness, int holderBrightness, float endHeight,
 		float startHeight, float xWidth, float zWidth, int index, boolean alternate, float distance) {
@@ -268,35 +279,35 @@ public class ChainUtils {
 		float height = startHeight * 2;
 		float eHeight = endHeight * 2;
 
-		vertexConsumer.vertex(pose,
+		vertexConsumer.addVertex(pose,
 			vertX - xWidth1,
 			vertY + height,
-			vertZ + zWidth1).color(r, g, b, 0).uv2(lightmap).endVertex();
+			vertZ + zWidth1).setColor(r, g, b, 0).setLight(lightmap);
 		if ((index % 2) == (alternate ? 1 : 0)) {
-			vertexConsumer.vertex(pose,
+			vertexConsumer.addVertex(pose,
 				vertX - xWidth1,
 				vertY + height,
-				vertZ + zWidth1).color(r, g, b, 0).uv2(lightmap).endVertex();
+				vertZ + zWidth1).setColor(r, g, b, 0).setLight(lightmap);
 
-			vertexConsumer.vertex(pose,
+			vertexConsumer.addVertex(pose,
 					vertX + xWidth1,
 					vertY + eHeight - height,
-					vertZ - zWidth1).color(r, g, b, 0).uv2(lightmap).endVertex();
+					vertZ - zWidth1).setColor(r, g, b, 0).setLight(lightmap);
 
-			vertexConsumer.vertex(pose,
+			vertexConsumer.addVertex(pose,
 				vertX1 - xWidth1,
 				vertY1 + height,
-				vertZ1 + zWidth1).color(r, g, b, 0).uv2(lightmap).endVertex();
-			vertexConsumer.vertex(pose,
+				vertZ1 + zWidth1).setColor(r, g, b, 0).setLight(lightmap);
+			vertexConsumer.addVertex(pose,
 				vertX1 + xWidth1,
 				vertY1 + eHeight - height,
-				vertZ1 - zWidth1).color(r, g, b, 0).uv2(lightmap).endVertex();
+				vertZ1 - zWidth1).setColor(r, g, b, 0).setLight(lightmap);
 		} else  {
 			//Skip a link (make this "face" invisible )
-			vertexConsumer.vertex(pose,
+			vertexConsumer.addVertex(pose,
 				vertX - xWidth1,
 				vertY + height,
-				vertZ + zWidth1).color(r, g, b, 0).uv2(lightmap).endVertex();
+				vertZ + zWidth1).setColor(r, g, b, 0).setLight(lightmap);
 			
 		}
 	}

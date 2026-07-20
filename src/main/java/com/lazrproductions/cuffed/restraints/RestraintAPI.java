@@ -1,27 +1,44 @@
 package com.lazrproductions.cuffed.restraints;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+
 import com.lazrproductions.cuffed.CuffedMod;
 import com.lazrproductions.cuffed.entity.animation.ArmRestraintAnimationFlags;
 import com.lazrproductions.cuffed.entity.animation.LegRestraintAnimationFlags;
 import com.lazrproductions.cuffed.restraints.base.AbstractRestraint;
 import com.lazrproductions.cuffed.restraints.base.RestraintType;
 import com.mojang.datafixers.util.Pair;
+import org.jetbrains.annotations.ApiStatus;
+
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.IForgeRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RestraintAPI {
     /**
      * Where all restraint registries found by Cuffed are kept and accessed.
      */
     public static final class Registries {
-        static final ArrayList<IForgeRegistry<AbstractRestraint>> RESTRAINT_REGISTRIES = new ArrayList<IForgeRegistry<AbstractRestraint>>();
+        static final Collection<Registry<AbstractRestraint>> RESTRAINT_REGISTRIES = new HashSet<>();
+
+        static {
+            discoverRegistries();
+        }
+
+        @ApiStatus.Internal
+        public static void discoverRegistries() {
+            for (Registry<?> registry : BuiltInRegistries.REGISTRY) {
+                if (registry.size() > 0 && registry.getAny().orElseThrow().value() instanceof AbstractRestraint)
+                    RESTRAINT_REGISTRIES.add((Registry<AbstractRestraint>) registry);
+            }
+        }
 
         /**
          * !! NOT TO BE USED BY MOD AUTHORS !!
@@ -33,17 +50,17 @@ public class RestraintAPI {
          * mods.
          */
         @SuppressWarnings("unchecked")
-        public static void register(IForgeRegistry<?> registry) {
-            IForgeRegistry<AbstractRestraint> r = registry;
+        public static void register(Registry<?> registry) {
+            Registry<AbstractRestraint> r = (Registry<AbstractRestraint>) registry;
 
-            for (ResourceLocation key : r.getKeys()) {
+            for (ResourceLocation key : r.keySet()) {
                 if (containsKey(key)) {
                     RestraintRegistryContainsKeyException ex = new RestraintRegistryContainsKeyException(key);
                     CuffedMod.LOGGER.error("The Restraint Registry already contains the key " + key, ex);
                     throw ex;
                 }
 
-                AbstractRestraint restraint = r.getValue(key);
+                AbstractRestraint restraint = r.get(key);
                 if(containsValue(restraint)) {
                     RestraintRegistryContainsRestraintException ex = new RestraintRegistryContainsRestraintException(key);
                     CuffedMod.LOGGER.error("The Restraint Registry already contains the restraint " + key, ex);
@@ -68,7 +85,7 @@ public class RestraintAPI {
          * @param key The key to check for
          */
         public static boolean containsKey(ResourceLocation key) {
-            for (IForgeRegistry<?> i : RESTRAINT_REGISTRIES)
+            for (Registry<?> i : RESTRAINT_REGISTRIES)
                 if (i.containsKey(key))
                     return true;
             return false;
@@ -80,8 +97,8 @@ public class RestraintAPI {
          * @param restraint The restraint to check for
          */
         public static boolean containsValue(AbstractRestraint restraint) {
-            for (IForgeRegistry<AbstractRestraint> i : RESTRAINT_REGISTRIES)
-                if (i.containsValue(restraint))
+            for (Registry<AbstractRestraint> i : RESTRAINT_REGISTRIES)
+                if (i.getKey(restraint) != null)
                     return true;
             return false;
         }
@@ -92,9 +109,9 @@ public class RestraintAPI {
          * @param key The key of the restraint to get
          */
         public static AbstractRestraint get(ResourceLocation key) {
-            for (IForgeRegistry<AbstractRestraint> i : RESTRAINT_REGISTRIES)
+            for (Registry<AbstractRestraint> i : RESTRAINT_REGISTRIES)
                 if (i.containsKey(key))
-                    return i.getValue(key);
+                    return i.get(key);
             return null;
         }
 
@@ -119,8 +136,8 @@ public class RestraintAPI {
          */
         public static List<AbstractRestraint> getAllRestraints() {
             ArrayList<AbstractRestraint> res = new ArrayList<>();
-            for (IForgeRegistry<AbstractRestraint> reg : RESTRAINT_REGISTRIES)
-                for (AbstractRestraint ent : reg.getValues())
+            for (Registry<AbstractRestraint> reg : RESTRAINT_REGISTRIES)
+                for (AbstractRestraint ent : reg)
                     res.add(ent);
             return res;
         }
@@ -130,8 +147,8 @@ public class RestraintAPI {
          */
         public static List<Item> getAllRestraintItems() {
             ArrayList<Item> res = new ArrayList<>();
-            for (IForgeRegistry<AbstractRestraint> reg : RESTRAINT_REGISTRIES)
-                for (AbstractRestraint ent : reg.getValues())
+            for (Registry<AbstractRestraint> reg : RESTRAINT_REGISTRIES)
+                for (AbstractRestraint ent : reg)
                     res.add(ent.getItem());
             return res;
         }
@@ -142,9 +159,9 @@ public class RestraintAPI {
          */
         public static List<Pair<Item, AbstractRestraint>> getAllRestraintItemsAndTheirRestraints() {
             ArrayList<Pair<Item, AbstractRestraint>> pairs = new ArrayList<>();
-            for (IForgeRegistry<AbstractRestraint> reg : RESTRAINT_REGISTRIES)
-                for (AbstractRestraint ent : reg.getValues())
-                    pairs.add(new Pair<Item, AbstractRestraint>(ent.getItem(), ent));
+            for (Registry<AbstractRestraint> reg : RESTRAINT_REGISTRIES)
+                for (AbstractRestraint ent : reg)
+                    pairs.add(new Pair<>(ent.getItem(), ent));
             return pairs;
         }
 
@@ -160,8 +177,8 @@ public class RestraintAPI {
          */
         public static int total() {
             int total = 0;
-            for (IForgeRegistry<AbstractRestraint> i : RESTRAINT_REGISTRIES)
-                total += i.getValues().size();
+            for (Registry<AbstractRestraint> i : RESTRAINT_REGISTRIES)
+                total += i.size();
             return total;
         }
 

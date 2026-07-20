@@ -19,19 +19,30 @@ import com.lazrproductions.cuffed.entity.renderer.PadlockEntityRenderer;
 import com.lazrproductions.cuffed.entity.renderer.WeightedAnchorEntityRenderer;
 import com.lazrproductions.cuffed.event.ModClientEvents;
 import com.lazrproductions.cuffed.event.ModServerEvents;
-import com.lazrproductions.cuffed.init.*;
+import com.lazrproductions.cuffed.init.ModBlockEntities;
+import com.lazrproductions.cuffed.init.ModBlocks;
+import com.lazrproductions.cuffed.init.ModCreativeTabs;
+import com.lazrproductions.cuffed.init.ModEffects;
+import com.lazrproductions.cuffed.init.ModEnchantments;
+import com.lazrproductions.cuffed.init.ModEntityTypes;
+import com.lazrproductions.cuffed.init.ModItems;
+import com.lazrproductions.cuffed.init.ModLockpickableTypes;
+import com.lazrproductions.cuffed.init.ModMenuTypes;
+import com.lazrproductions.cuffed.init.ModModelLayers;
+import com.lazrproductions.cuffed.init.ModParticleTypes;
+import com.lazrproductions.cuffed.init.ModRecipes;
+import com.lazrproductions.cuffed.init.ModRestraints;
+import com.lazrproductions.cuffed.init.ModSounds;
+import com.lazrproductions.cuffed.init.ModStatistics;
 import com.lazrproductions.cuffed.inventory.tooltip.PossessionsBoxTooltip;
 import com.lazrproductions.cuffed.inventory.tooltip.TrayTooltip;
-import com.lazrproductions.cuffed.items.PossessionsBox;
 import com.lazrproductions.cuffed.items.TrayItem;
 import com.lazrproductions.cuffed.items.base.AbstractRestraintItem;
 import com.lazrproductions.cuffed.network.CuffedServerNetworking;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
-import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.loader.api.FabricLoader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -40,15 +51,17 @@ import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DispenserBlock;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
+
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.loader.api.FabricLoader;
 
 public class CuffedMod implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(CuffedMod.MODID);
@@ -74,7 +87,7 @@ public class CuffedMod implements ModInitializer {
     @Override
     public void onInitialize() {
         this.commonSetup();
-        
+
         SERVER_CONFIG.registerConfig();
 
         ModEntityTypes.register();
@@ -154,16 +167,15 @@ public class CuffedMod implements ModInitializer {
         ModStatistics.setup();
 
         new ModServerEvents();
-        
-
 
         // Register Dispenser
         DispenseItemBehavior dispenseitembehavior = new OptionalDispenseItemBehavior() {
             @Override
             protected ItemStack execute(@NotNull BlockSource source, @NotNull ItemStack stack) {
                 this.setSuccess(AbstractRestraintItem.dispenseRestraint(source, stack));
-                if(this.isSuccess())
+                if (this.isSuccess()) {
                     stack.shrink(1);
+                }
                 return stack;
             }
         };
@@ -186,28 +198,26 @@ public class CuffedMod implements ModInitializer {
         public static void onClientSetup() {
             LOGGER.info("Running client setup for Cuffed");
 
-            ItemProperties.register(ModItems.KEY_RING,
-                    ResourceLocation.fromNamespaceAndPath(MODID, "keys"), (stack, level, living, id) ->
-                        stack.getOrDefault(CuffedDataComponents.KEY_COUNT, 0));
-            ItemProperties.register(ModItems.POSSESSIONSBOX,
-                    ResourceLocation.fromNamespaceAndPath(MODID, "filled"), (stack, level, living, id) -> {
-                        CompoundTag compoundtag = stack.getOrCreateTag();
-                        if (!compoundtag.contains(PossessionsBox.TAG_ITEMS)) {
-                            return 0;
-                        } else {
-                            ListTag listtag = compoundtag.getList(PossessionsBox.TAG_ITEMS, 10);
-                            return listtag.size() > 0 ? 1 : 0;
-                        }
-                    });
-            ItemProperties.register(ModItems.TRAY,
-                    ResourceLocation.fromNamespaceAndPath(MODID, "filled"), (stack, level, living, id) -> {
-                        return TrayItem.trayHasFoodItem(stack) || TrayItem.trayHasSpoon(stack)
-                                || TrayItem.trayHasFork(stack) || TrayItem.trayHasKnife(stack) ? 1 : 0;
-                    });
-            ItemProperties.register(ModItems.POSTER_ITEM,
-                    ResourceLocation.fromNamespaceAndPath(MODID, "poster"), (stack, level, living, id) -> {
-                        return PosterType.getfromItem(stack).toInt();
-                    });
+            ItemProperties.register(ModItems.KEY_RING, ResourceLocation.fromNamespaceAndPath(MODID, "keys"), (stack, level, living, id) ->
+                stack.getOrDefault(CuffedDataComponents.KEY_COUNT, 0)
+            );
+
+            ItemProperties.register(ModItems.POSSESSIONSBOX, ResourceLocation.fromNamespaceAndPath(MODID, "filled"), (stack, level, living, id) -> {
+                var items = stack.get(CuffedDataComponents.POSSESSIONS_ITEMS);
+                if (items == null)
+                    return 0;
+
+                return items.size();
+            });
+
+            ItemProperties.register(ModItems.TRAY, ResourceLocation.fromNamespaceAndPath(MODID, "filled"), (stack, level, living, id) ->
+                TrayItem.trayHasFoodItem(stack) || TrayItem.trayHasSpoon(stack)
+                    || TrayItem.trayHasFork(stack) || TrayItem.trayHasKnife(stack) ? 1 : 0
+            );
+
+            ItemProperties.register(ModItems.POSTER_ITEM, ResourceLocation.fromNamespaceAndPath(MODID, "poster"), (stack, level, living, id) ->
+                PosterType.getfromItem(stack).toInt()
+            );
 
             MenuScreens.register(ModMenuTypes.FRISKING_MENU, FriskingScreen::new);
 
@@ -223,8 +233,9 @@ public class CuffedMod implements ModInitializer {
 
         public static void registerTooltip() {
             TooltipComponentCallback.EVENT.register(data -> {
-                if (data instanceof PossessionsBoxTooltip || data instanceof TrayTooltip)
+                if (data instanceof PossessionsBoxTooltip || data instanceof TrayTooltip) {
                     return (ClientTooltipComponent) data;
+                }
 
                 return null;
             });
