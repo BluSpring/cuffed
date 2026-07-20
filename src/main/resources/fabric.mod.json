@@ -19,6 +19,7 @@
     },
     "entrypoints": {
         "main": ["com.lazrproductions.cuffed.CuffedMod"],
-        "client": ["com.lazrproductions.cuffed.client.CuffedModClient"]
+        "client": ["com.lazrproductions.cuffed.client.CuffedModClient"],
+        "fabric-datagen": ["com.lazrproductions.cuffed.datagen.CuffedDatagen"]
     }
 }

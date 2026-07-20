@@ -28,6 +28,10 @@ public class ModTags {
         public static final TagKey<Item> CAN_REINFORCE_PADLOCK = tag("can_reinforce_padlock");
         public static final TagKey<Item> RESTRAINTS = tag("restraints");
 
+        public static final TagKey<Item> HEAD_RESTRAINTS = tag("restraints/head");
+        public static final TagKey<Item> ARM_RESTRAINTS = tag("restraints/arm");
+        public static final TagKey<Item> LEG_RESTRAINTS = tag("restraints/leg");
+
         public static final TagKey<Item> SUPPORTS_IMBUE = tag("enchantment/supports_imbue");
         public static final TagKey<Item> SUPPORTS_FAMINE = tag("enchantment/supports_famine");
         public static final TagKey<Item> SUPPORTS_SHROUD = tag("enchantment/supports_shroud");
